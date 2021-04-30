@@ -1,4 +1,4 @@
-package vista;
+package front.vistas;
 
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
