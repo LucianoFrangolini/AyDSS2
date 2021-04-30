@@ -13,7 +13,7 @@ import java.awt.Font;
 import javax.swing.JScrollPane;
 import javax.swing.JList;
 
-public class VistaMonitor extends JFrame {
+public class VistaPantalla extends JFrame {
 
 	private JPanel contentPane;
 
@@ -24,7 +24,7 @@ public class VistaMonitor extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					VistaMonitor frame = new VistaMonitor();
+					VistaPantalla frame = new VistaPantalla();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -36,8 +36,8 @@ public class VistaMonitor extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public VistaMonitor() {
-		setTitle("Monitor");
+	public VistaPantalla() {
+		setTitle("Pantalla");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();

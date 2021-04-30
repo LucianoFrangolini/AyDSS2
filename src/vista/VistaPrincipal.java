@@ -11,6 +11,7 @@ import javax.swing.JButton;
 import javax.swing.JList;
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
+import javax.swing.border.TitledBorder;
 
 public class VistaPrincipal extends JFrame {
 
@@ -57,8 +58,13 @@ public class VistaPrincipal extends JFrame {
 		JButton btnAbrirPuesto = new JButton("Abrir Puesto");
 		panelBotones.add(btnAbrirPuesto);
 		
+		JPanel panelLista = new JPanel();
+		panelLista.setBorder(new TitledBorder(null, "Lista de puestos", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		contentPane.add(panelLista);
+		panelLista.setLayout(new BorderLayout(0, 0));
+		
 		JScrollPane scrollPaneLista = new JScrollPane();
-		contentPane.add(scrollPaneLista);
+		panelLista.add(scrollPaneLista);
 		
 		JList listaPuestos = new JList();
 		scrollPaneLista.setViewportView(listaPuestos);
