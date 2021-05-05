@@ -7,6 +7,6 @@ public class MainServer{
 		IVistaServer vistaServidor = new VistaServer();
 		ControladorServer controlador = new ControladorServer(vistaServidor);
 		vistaServidor.setListener(controlador);
-		vistaServidor.setVisible(true);
+		vistaServidor.setVisible();
 	}
 }

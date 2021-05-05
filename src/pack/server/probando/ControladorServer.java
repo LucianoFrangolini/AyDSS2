@@ -25,9 +25,12 @@ public class ControladorServer implements ActionListener, PropertyChangeListener
 
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
-		System.out.println("Variation of " + evt.getPropertyName());
+		if (evt.getPropertyName()=="Mensaje") {
+			this.vista.setAreaText(evt.getNewValue().toString());
+		}
+		/*System.out.println("Variation of " + evt.getPropertyName());
 		System.out.println("\t(" + evt.getOldValue() + " -> " + evt.getNewValue() + ")");
-		System.out.println("Property in object " + evt.getSource());
+		System.out.println("Property in object " + evt.getSource());*/
 	}
 
 }

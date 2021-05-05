@@ -6,9 +6,10 @@ public interface IVistaServer {
 
 	static final String ABRIR_PUERTO = "AbrirPuerto";
 	
-	void setVisible(boolean visible);
+	void setVisible();
 	void setListener(ActionListener l);
 	String getIP();
 	int getPuerto();
+	void setAreaText(String texto);
 	
 }

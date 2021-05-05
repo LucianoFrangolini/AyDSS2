@@ -17,14 +17,15 @@ import javax.swing.JButton;
 import javax.swing.SwingConstants;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.JTextPane;
 
 public class VistaServer extends JFrame implements IVistaServer {
 
 	private JPanel contentPane;
 	private JTextField textIP;
 	private JTextField textPuerto;
-	private JTextArea textArea;
 	private JButton btnAbrir;
+	private JTextArea textArea;
 	
 
 	/**
@@ -77,8 +78,9 @@ public class VistaServer extends JFrame implements IVistaServer {
 	}
 
 	@Override
-	public void setVisible(boolean visible) {
-		this.setVisible(visible);
+	public void setVisible() {
+		setBounds(100, 100, 726, 478);
+		setVisible(true);
 	}
 	
 	@Override
@@ -94,6 +96,11 @@ public class VistaServer extends JFrame implements IVistaServer {
 	@Override
 	public int getPuerto() {
 		return Integer.parseInt(this.textPuerto.getText());
+	}
+
+	@Override
+	public void setAreaText(String texto) {
+		this.textArea.setText(texto+"\n");
 	}
 
 }
