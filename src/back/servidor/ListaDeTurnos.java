@@ -13,5 +13,4 @@ public class ListaDeTurnos {
 	public void eliminarTurno(Integer puesto) {
 		this.lista.remove(puesto); 
 	}
-	
 }
