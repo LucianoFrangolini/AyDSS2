@@ -6,40 +6,26 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import front.interfaces.IVistaDisplay;
+
 import java.awt.GridLayout;
+import java.awt.event.ActionListener;
+
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 import java.awt.Font;
 import javax.swing.JScrollPane;
 import javax.swing.JList;
 
-public class VistaPantalla extends JFrame {
+public class VistaDisplay extends JFrame implements IVistaDisplay {
 
+	private static final long serialVersionUID = -638127726284784506L;
 	private JPanel contentPane;
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					VistaPantalla frame = new VistaPantalla();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
-	/**
-	 * Create the frame.
-	 */
-	public VistaPantalla() {
-		setTitle("Pantalla");
+	public VistaDisplay() {
+		setTitle("Display");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -71,6 +57,16 @@ public class VistaPantalla extends JFrame {
 		
 		JList list = new JList();
 		scrollPane.setViewportView(list);
+	}
+
+	@Override
+	public void setActionListener(ActionListener c) {
+	}
+
+	@Override
+	public void abrir() {
+		setBounds(100, 100, 450, 300);
+		setVisible(true);
 	}
 
 }
