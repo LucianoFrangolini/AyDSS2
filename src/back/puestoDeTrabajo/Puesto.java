@@ -17,7 +17,8 @@ public class Puesto implements I_ConexionSocket {
 		this.admin = admin;
 	}
 	
-	@Override
+
+
 	public void enviarMensaje(String host, int puerto, String texto) {
 		Socket skt;
 		try {
@@ -33,6 +34,12 @@ public class Puesto implements I_ConexionSocket {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+
+
+
+	@Override
+	public void enviarMensaje(String texto) {
 	}
 
 }

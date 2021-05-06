@@ -1,6 +1,6 @@
 package main;
 
-import front.controladores.ControladorServidor;
+import back.controladores.ControladorServidor;
 import front.interfaces.IVistaServidor;
 import front.vistas.VistaServidor;
 

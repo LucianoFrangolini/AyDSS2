@@ -1,6 +1,6 @@
 package main;
 
-import front.controladores.ControladorTotem;
+import back.controladores.ControladorTotem;
 import front.interfaces.IVistaTotem;
 import front.vistas.VistaTotem;
 

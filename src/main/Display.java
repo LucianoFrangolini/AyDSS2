@@ -1,6 +1,6 @@
 package main;
 
-import front.controladores.ControladorDisplay;
+import back.controladores.ControladorDisplay;
 import front.interfaces.IVistaDisplay;
 import front.vistas.VistaDisplay;
 

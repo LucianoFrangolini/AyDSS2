@@ -1,16 +1,19 @@
-package front.controladores;
+package back.controladores;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import back.totem.ControladorDeTotem;
 import front.interfaces.IVistaTotem;
 
 public class ControladorTotem implements ActionListener {
 
 	IVistaTotem vista;
+	ControladorDeTotem totem;
 
 	public ControladorTotem(IVistaTotem vista) {
 		this.vista = vista;
+		this.totem = new ControladorDeTotem();
 	}
 
 	@Override
