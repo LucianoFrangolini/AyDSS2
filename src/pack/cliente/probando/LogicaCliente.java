@@ -1,4 +1,4 @@
-package back.puestoDeTrabajo;
+package pack.cliente.probando;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -7,24 +7,29 @@ import java.io.PrintStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
-import back.interfaces.conexiones.I_ConexionSocket;
-import back.servidor.AdministradorDeTurnos;
+import pack.server.probando.LogicaServer;
 
-public class Puesto implements I_ConexionSocket {
-	AdministradorDeTurnos admin;
+public class LogicaCliente {
+
+	private static LogicaCliente instance;
+	String host="localhost";
+	int port=9999;
 	
-	public Puesto(AdministradorDeTurnos admin) {
-		this.admin = admin;
+	public static LogicaCliente getInstance() {
+		if (instance == null)
+			instance = new LogicaCliente();
+		return instance;
 	}
 	
-	@Override
-	public void enviarMensaje(String host, int puerto, String texto) {
+	public void enviarMensaje(String host,int puerto,String texto) {
+		
 		Socket skt;
+		
 		try {
 			skt = new Socket(host,puerto);
-			//myInput necesario?
 			BufferedReader myInput = new BufferedReader(new InputStreamReader(skt.getInputStream()));
 			PrintStream myOutput = new PrintStream(skt.getOutputStream());
+			
 			myOutput.print(texto);
 			myOutput.close();
 			skt.close();
@@ -33,6 +38,7 @@ public class Puesto implements I_ConexionSocket {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		
+		
 	}
-
 }
