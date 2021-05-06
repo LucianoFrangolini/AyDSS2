@@ -2,13 +2,15 @@ package back.servidor;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintStream;
+import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.ArrayList;
 
 import back.servidor.excepciones.colaVaciaException;
-import back.servidor.excepciones.dniExistenteException;
 
 public class AdministradorDeTurnos extends ConexionConServerSocket {
 	private ListaDeTurnos listaDeTurnos = new ListaDeTurnos();
@@ -33,17 +35,18 @@ public class AdministradorDeTurnos extends ConexionConServerSocket {
 		return !this.colaDeEspera.contains(dni);
 	}
 
-	public void añadirDni(String dni) throws dniExistenteException {
+	public Boolean agregarDni(String dni) {
+		Boolean ret = false;
 		if (validarDni(dni)) {
 			this.colaDeEspera.add(dni);
-		} else {
-			throw new dniExistenteException("El DNI ingresado ya se encuentra registrado.");
+			ret = true;
 		}
+		return ret;
 	}
 
-	private void añadirTurno(Integer puesto, String dni) {
+	private void agregarTurno(Integer puesto, String dni) {
 		Turno turno = new Turno(puesto, dni);
-		this.listaDeTurnos.añadirTurno(turno);
+		this.listaDeTurnos.agregarTurno(turno);
 	}
 
 	public void obtenerProximoCliente(Integer puesto) throws colaVaciaException {
@@ -51,7 +54,7 @@ public class AdministradorDeTurnos extends ConexionConServerSocket {
 		if (dniCliente == null) {
 			throw new colaVaciaException("La cola de clientes se encuentra vacia.");
 		} else {
-			this.añadirTurno(puesto, dniCliente);
+			this.agregarTurno(puesto, dniCliente);
 			// handle message
 		}
 	}
@@ -93,11 +96,39 @@ public class AdministradorDeTurnos extends ConexionConServerSocket {
 			public void run() {
 				ServerSocket totemServerSocket;
 				Socket skt;
+				AdministradorDeTurnos admin = AdministradorDeTurnos.getInstance();
+				BufferedReader myInput;
+    			//PrintStream myOutput;
+				PrintWriter myOutput;
+    			String nuevoDni = null;
 				try {
 					totemServerSocket = new ServerSocket(puerto);
-					setMsj("Esperando conexion...");
-					skt = totemServerSocket.accept();
-					setMsj("Conexión establecida con el puerto " + skt.getPort() + "\n");
+					while(true) {	//nuevoDni==null	//true
+					
+						//setMsj("Esperando conexion...");
+						System.out.println("antes del accept");
+						skt = totemServerSocket.accept();
+						//setMsj("Conexión establecida con el puerto " + skt.getPort() + "\n");
+						myInput = new BufferedReader(new InputStreamReader(skt.getInputStream()));
+						//myOutput = new PrintStream(skt.getOutputStream());
+						myOutput = new PrintWriter(skt.getOutputStream(), true);
+						System.out.println("Sevidor0");
+
+						System.out.println("Sevidor0.5");
+	        			nuevoDni = myInput.readLine();
+	        			System.out.println("Sevidor0.9");
+	        			System.out.println("servidor1");
+	        			System.out.println(nuevoDni);
+	        			if(admin.agregarDni(nuevoDni))
+	        				myOutput.println("Registro exitoso");
+	        			else
+	        				myOutput.println("El DNI ya se encuentra registrado.");
+	        			System.out.println("servidor2");
+	        			myInput.close();
+	        			myOutput.close();
+	        			skt.close();
+					}
+
 				} catch (IOException e) {
 					e.printStackTrace();
 				}

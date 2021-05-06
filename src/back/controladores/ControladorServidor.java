@@ -2,15 +2,20 @@ package back.controladores;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.beans.PropertyChangeEvent;
 
+import back.servidor.AdministradorDeTurnos;
 import front.interfaces.IVistaServidor;
 
 public class ControladorServidor implements ActionListener{
 
 	IVistaServidor vista;
+	AdministradorDeTurnos administradorDeTurnos;
 	
 	public ControladorServidor(IVistaServidor vista) {
 		this.vista=vista;
+		administradorDeTurnos = AdministradorDeTurnos.getInstance();
+		administradorDeTurnos.abrirServidor();
 	}
 	
 	@Override
@@ -25,6 +30,10 @@ public class ControladorServidor implements ActionListener{
 			//Agregar mas adelante
 		}
 	}
-
+	
+	public void propertyChange(PropertyChangeEvent evt) {
+		if (evt.getPropertyName()=="Totem") {
+		}
+	}
 	
 }

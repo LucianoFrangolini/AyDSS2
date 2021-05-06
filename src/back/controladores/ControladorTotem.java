@@ -52,7 +52,8 @@ public class ControladorTotem implements ActionListener {
 			actualizarDisplay(IVistaTotem.BACKSPACE);
 			
 		} else if (e.getActionCommand().equalsIgnoreCase(IVistaTotem.ENVIAR)) {
-			// Rellenar cuando conectemos back y front
+			this.totem.enviarMensaje(this.vista.getLabelDisplay());
+			this.vista.setLabelDisplay(this.totem.getEstado());
 		}
 	}
 

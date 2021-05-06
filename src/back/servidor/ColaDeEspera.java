@@ -1,9 +1,12 @@
 package back.servidor;
 
+import java.util.LinkedList;
 import java.util.PriorityQueue;
+import java.util.Queue;
 
 public class ColaDeEspera {
-	private PriorityQueue<String> cola = new PriorityQueue<String>();
+	//private PriorityQueue<String> cola = new PriorityQueue<String>();
+	private Queue<String> cola = new LinkedList<String>();
 	
 	public void add(String dni) {
 		this.cola.add(dni);

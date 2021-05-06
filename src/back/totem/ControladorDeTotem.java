@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
+import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
@@ -16,31 +17,47 @@ public class ControladorDeTotem implements I_ConexionSocket {
 
 	private String host;
 	private int puerto;
+	private String estado = "";
+	BufferedReader myInput = null;
+	PrintWriter myOutput = null;
+	Socket socket;
 
 	public ControladorDeTotem() {
+		this.host = "localhost"; //InetAddress.getLocalHost().getCanonicalHostName();
+		this.puerto = 9000;
+	}
+
+	public String getEstado() {
+		return estado;
+	}
+	private Boolean estadoAceptable() {
+		Boolean ret = false;
+		if(estado.equals("Registro exitoso") || estado.equals("El DNI ya se encuentra registrado."))
+				ret = true;
+		return ret;
 	}
 
 	@Override
 	public void enviarMensaje(String DNI) {
-
-		Socket socket;
+		//myOutput.print(DNI);
+		this.estado = "";
 		try {
-			this.host = InetAddress.getLocalHost().getCanonicalHostName();
-			this.puerto = 9000;
-
-			socket = new Socket(this.host, this.puerto);
-
-			BufferedReader myInput = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-			PrintStream myOutput = new PrintStream(socket.getOutputStream());
-
-			myOutput.print(DNI);
+			this.socket = new Socket(this.host, this.puerto);
+			this.myInput = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+			this.myOutput = new PrintWriter(socket.getOutputStream(), true);
+			myOutput.println(DNI);
+			while (!estadoAceptable()) {
+				System.out.println("chuapala1");
+				this.estado = myInput.readLine();
+				System.out.println("chuapala2");
+				System.out.println(this.estado.toString());
+			}
+			myInput.close();
 			myOutput.close();
 			socket.close();
-
-		} catch (UnknownHostException e) {
-			JOptionPane.showMessageDialog(null, "Error al crear el totem");
 		} catch (IOException e) {
-			JOptionPane.showMessageDialog(null, "Error al enviar o recibir mensaje");
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 
