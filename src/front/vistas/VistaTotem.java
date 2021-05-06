@@ -7,42 +7,41 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import java.awt.GridLayout;
+import java.awt.event.ActionListener;
+
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 import java.awt.Font;
 import javax.swing.JButton;
 import javax.swing.border.TitledBorder;
+
+import front.interfaces.IVistaTotem;
+
 import java.awt.FlowLayout;
 import javax.swing.border.EtchedBorder;
 import java.awt.Color;
 
-public class VistaTotem extends JFrame {
+public class VistaTotem extends JFrame implements IVistaTotem{
 
+	private static final long serialVersionUID = 1072509465610926668L;
 	private JPanel panelPrincipal;
+	private JButton btn0;
+	private JButton btn1;
+	private JButton btn2;
+	private JButton btn3;
+	private JButton btn4;
+	private JButton btn5;
+	private JButton btn6;
+	private JButton btn7;
+	private JButton btn8;
+	private JButton btn9;
+	private JButton btnAceptar;
+	private JButton btnEliminar;
+	private JLabel lblDisplay;
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					VistaTotem frame = new VistaTotem();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
-	/**
-	 * Create the frame.
-	 */
 	public VistaTotem() {
 		setTitle("T\u00F3tem");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 463, 450);
 		panelPrincipal = new JPanel();
 		panelPrincipal.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(panelPrincipal);
@@ -55,7 +54,7 @@ public class VistaTotem extends JFrame {
 		panelTitulo.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, new Color(255, 255, 255), new Color(160, 160, 160)), "Ingrese su DNI", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
 		panelPrincipal.add(panelTitulo);
 		
-		JLabel lblDisplay = new JLabel("[Display]");
+		lblDisplay = new JLabel("");
 		panelTitulo.add(lblDisplay);
 		lblDisplay.setFont(new Font("Tahoma", Font.PLAIN, 28));
 		lblDisplay.setHorizontalAlignment(SwingConstants.CENTER);
@@ -64,15 +63,15 @@ public class VistaTotem extends JFrame {
 		panelPrincipal.add(panelN1);
 		panelN1.setLayout(new GridLayout(1, 3, 0, 0));
 		
-		JButton btn1 = new JButton("1");
+		btn1 = new JButton("1");
 		btn1.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		panelN1.add(btn1);
 		
-		JButton btn2 = new JButton("2");
+		btn2 = new JButton("2");
 		btn2.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		panelN1.add(btn2);
 		
-		JButton btn3 = new JButton("3");
+		btn3 = new JButton("3");
 		btn3.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		panelN1.add(btn3);
 		
@@ -80,15 +79,15 @@ public class VistaTotem extends JFrame {
 		panelPrincipal.add(panelN2);
 		panelN2.setLayout(new GridLayout(1, 3, 0, 0));
 		
-		JButton btn4 = new JButton("4");
+		btn4 = new JButton("4");
 		btn4.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		panelN2.add(btn4);
 		
-		JButton btn5 = new JButton("5");
+		btn5 = new JButton("5");
 		btn5.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		panelN2.add(btn5);
 		
-		JButton btn6 = new JButton("6");
+		btn6 = new JButton("6");
 		btn6.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		panelN2.add(btn6);
 		
@@ -96,15 +95,15 @@ public class VistaTotem extends JFrame {
 		panelPrincipal.add(panelN3);
 		panelN3.setLayout(new GridLayout(1, 3, 0, 0));
 		
-		JButton btn7 = new JButton("7");
+		btn7 = new JButton("7");
 		btn7.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		panelN3.add(btn7);
 		
-		JButton btn8 = new JButton("8");
+		btn8 = new JButton("8");
 		btn8.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		panelN3.add(btn8);
 		
-		JButton btn9 = new JButton("9");
+		btn9 = new JButton("9");
 		btn9.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		panelN3.add(btn9);
 		
@@ -115,7 +114,7 @@ public class VistaTotem extends JFrame {
 		JLabel lblVacia = new JLabel("");
 		panelN4.add(lblVacia);
 		
-		JButton btn0 = new JButton("0");
+		btn0 = new JButton("0");
 		btn0.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		panelN4.add(btn0);
 		
@@ -123,13 +122,76 @@ public class VistaTotem extends JFrame {
 		panelPrincipal.add(panelInferior);
 		panelInferior.setLayout(new GridLayout(1, 2, 0, 0));
 		
-		JButton btnEliminar = new JButton("<-");
+		btnEliminar = new JButton("<-");
 		panelInferior.add(btnEliminar);
 		btnEliminar.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		
-		JButton btnAceptar = new JButton("Aceptar");
+		btnAceptar = new JButton("Aceptar");
+		btnAceptar.setEnabled(false);
 		btnAceptar.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		panelInferior.add(btnAceptar);
+		
+		setActionCommands();
 	}
+
+	@Override
+	public void setActionListener(ActionListener c) {
+		this.btn0.addActionListener(c);
+		this.btn1.addActionListener(c);
+		this.btn2.addActionListener(c);
+		this.btn3.addActionListener(c);
+		this.btn4.addActionListener(c);
+		this.btn5.addActionListener(c);
+		this.btn6.addActionListener(c);
+		this.btn7.addActionListener(c);
+		this.btn8.addActionListener(c);
+		this.btn9.addActionListener(c);
+		this.btnAceptar.addActionListener(c);
+		this.btnEliminar.addActionListener(c);
+	}
+	
+	@Override
+	public void setActionCommands() {
+		this.btn0.setActionCommand(IVistaTotem.CERO);
+		this.btn1.setActionCommand(IVistaTotem.UNO);
+		this.btn2.setActionCommand(IVistaTotem.DOS);
+		this.btn3.setActionCommand(IVistaTotem.TRES);
+		this.btn4.setActionCommand(IVistaTotem.CUATRO);
+		this.btn5.setActionCommand(IVistaTotem.CINCO);
+		this.btn6.setActionCommand(IVistaTotem.SEIS);
+		this.btn7.setActionCommand(IVistaTotem.SIETE);
+		this.btn8.setActionCommand(IVistaTotem.OCHO);
+		this.btn9.setActionCommand(IVistaTotem.NUEVE);
+		this.btnAceptar.setActionCommand(IVistaTotem.ENVIAR);
+		this.btnEliminar.setActionCommand(IVistaTotem.BACKSPACE);
+	}
+
+	@Override
+	public void abrir() {
+		setBounds(100, 100, 463, 450);
+		setVisible(true);
+	}
+
+	@Override
+	public String getLabelDisplay() {
+		return this.lblDisplay.getText();
+	}
+
+	@Override
+	public void setLabelDisplay(String texto) {
+		this.lblDisplay.setText(texto);
+	}
+
+	@Override
+	public void habilitarEnvio() {
+		this.btnAceptar.setEnabled(true);
+	}
+
+	@Override
+	public void deshabilitarEnvio() {
+		this.btnAceptar.setEnabled(false);
+	}
+
+	
 
 }

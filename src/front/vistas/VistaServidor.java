@@ -7,39 +7,29 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import java.awt.GridLayout;
+import java.awt.event.ActionListener;
+
 import javax.swing.JButton;
 import javax.swing.JList;
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.border.TitledBorder;
 
-public class VistaPrincipal extends JFrame {
+import front.interfaces.IVistaServidor;
+import java.awt.event.ActionEvent;
 
+public class VistaServidor extends JFrame implements IVistaServidor {
+
+	private static final long serialVersionUID = -6092145973008650357L;
 	private JPanel contentPane;
+	private JButton btnAgregarPuesto;
+	private JButton btnEliminarPuesto;
+	private JButton btnAbrirPuesto;
+	private JList listaPuestos;
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					VistaPrincipal frame = new VistaPrincipal();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
-	/**
-	 * Create the frame.
-	 */
-	public VistaPrincipal() {
+	public VistaServidor() {
 		setTitle("Gestor de Puestos de Trabajo");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -49,13 +39,13 @@ public class VistaPrincipal extends JFrame {
 		contentPane.add(panelBotones);
 		panelBotones.setLayout(new GridLayout(4, 1, 0, 20));
 		
-		JButton btnAgregarPuesto = new JButton("Agregar Puesto");
+		this.btnAgregarPuesto = new JButton("Agregar Puesto");
 		panelBotones.add(btnAgregarPuesto);
 		
-		JButton btnEliminarPuesto = new JButton("Eliminar Puesto");
+		this.btnEliminarPuesto = new JButton("Eliminar Puesto");
 		panelBotones.add(btnEliminarPuesto);
 		
-		JButton btnAbrirPuesto = new JButton("Abrir Puesto");
+		this.btnAbrirPuesto = new JButton("Abrir Puesto");
 		panelBotones.add(btnAbrirPuesto);
 		
 		JPanel panelLista = new JPanel();
@@ -66,8 +56,31 @@ public class VistaPrincipal extends JFrame {
 		JScrollPane scrollPaneLista = new JScrollPane();
 		panelLista.add(scrollPaneLista);
 		
-		JList listaPuestos = new JList();
+		listaPuestos = new JList();
 		scrollPaneLista.setViewportView(listaPuestos);
+		
+		setActionCommands();
 	}
+
+	@Override
+	public void setActionListener(ActionListener c) {
+		this.btnAbrirPuesto.addActionListener(c);
+		this.btnAgregarPuesto.addActionListener(c);
+		this.btnEliminarPuesto.addActionListener(c);
+	}
+
+	@Override
+	public void setActionCommands() {
+		this.btnAbrirPuesto.setActionCommand(IVistaServidor.ABRIR_PUESTO);
+		this.btnAgregarPuesto.setActionCommand(IVistaServidor.AGREGAR_PUESTO);
+		this.btnEliminarPuesto.setActionCommand(IVistaServidor.ELIMINAR_PUESTO);
+	}
+
+	@Override
+	public void abrir() {
+		setBounds(100, 100, 450, 300);
+		setVisible(true);
+	}
+
 
 }
