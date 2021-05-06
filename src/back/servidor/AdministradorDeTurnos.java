@@ -72,15 +72,31 @@ public class AdministradorDeTurnos extends ConexionConServerSocket {
 	@Override
 	public void abrirServidor() {
 		
-		abrirPuertoTotem(ListaDePuertos.buscarPuerto(ListaDePuertos.PUERTO_TOTEM.getPuerto()));
-		
-		new Thread() {
+		abrirPuertoTotem(ListaDePuertos.PUERTO_TOTEM);
+		/*new Thread() {
 			public void run() {
 				try {
 					Socket skt;
 					myServerSocket = new ServerSocket(puerto);
 					setMsj("Esperando conexion...");
 					skt = myServerSocket.accept();
+					setMsj("Conexión establecida con el puerto " + skt.getPort() + "\n");
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}.start();*/
+	}
+
+	private void abrirPuertoTotem(int puerto) {
+		new Thread() {
+			public void run() {
+				ServerSocket totemServerSocket;
+				Socket skt;
+				try {
+					totemServerSocket = new ServerSocket(puerto);
+					setMsj("Esperando conexion...");
+					skt = totemServerSocket.accept();
 					setMsj("Conexión establecida con el puerto " + skt.getPort() + "\n");
 				} catch (IOException e) {
 					e.printStackTrace();
