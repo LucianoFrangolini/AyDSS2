@@ -26,7 +26,7 @@ public class VistaDisplay extends JFrame implements IVistaDisplay {
 	private static final long serialVersionUID = -638127726284784506L;
 	private JPanel contentPane;
 	JList<Turno> lista;
-	DefaultListModel<Turno> dlm;
+	DefaultListModel<Turno> listModelTurnos;
 
 	public VistaDisplay() {
 		setTitle("Display");
@@ -61,8 +61,8 @@ public class VistaDisplay extends JFrame implements IVistaDisplay {
 		contentPane.add(scrollPane);
 		
 		lista = new JList<Turno>();
-		dlm = new DefaultListModel<Turno>();
-		lista.setModel(dlm);
+		listModelTurnos = new DefaultListModel<Turno>();
+		lista.setModel(listModelTurnos);
 		scrollPane.setViewportView(lista);
 	}
 
@@ -81,7 +81,7 @@ public class VistaDisplay extends JFrame implements IVistaDisplay {
 	public void actualizarLista(ArrayList<Turno> listaDeTurnos) {
 		for(int i=0; i<listaDeTurnos.size(); i++) {
 			Turno turno = listaDeTurnos.get(i);
-			dlm.add(turno.getPuesto(), turno);
+			listModelTurnos.add(turno.getPuesto(), turno);
 		}
 		this.lista.repaint();
 	}

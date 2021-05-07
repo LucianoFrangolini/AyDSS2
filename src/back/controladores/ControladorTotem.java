@@ -8,8 +8,8 @@ import front.interfaces.IVistaTotem;
 
 public class ControladorTotem implements ActionListener {
 
-	IVistaTotem vista;
-	ControladorDeTotem totem;
+	private IVistaTotem vista;
+	private ControladorDeTotem totem;
 
 	public ControladorTotem(IVistaTotem vista) {
 		this.vista = vista;

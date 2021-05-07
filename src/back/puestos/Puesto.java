@@ -10,11 +10,15 @@ import java.net.UnknownHostException;
 import back.interfaces.conexiones.I_ConexionSocket;
 
 public class Puesto implements I_ConexionSocket {
-	int numeroPuesto, puerto;
+	private int numeroPuesto, puerto;
 
 	public Puesto(int numeroPuesto, int puerto) {
 		this.numeroPuesto = numeroPuesto;
 		this.puerto = puerto;
+	}
+
+	public int getNumeroPuesto() {
+		return numeroPuesto;
 	}
 
 	public void enviarMensaje(String host, int puerto, String texto) {
@@ -37,5 +41,12 @@ public class Puesto implements I_ConexionSocket {
 	@Override
 	public void enviarMensaje(String texto) {
 	}
+
+	@Override
+	public String toString() {
+		return "Puesto numero:  " + numeroPuesto;
+	}
+	
+	
 
 }

@@ -1,5 +1,8 @@
 package back.puestos;
 
+import java.util.Iterator;
+import java.util.Map.Entry;
+
 import back.direcciones.ListaDeDirecciones;
 
 
@@ -30,6 +33,11 @@ public class AdministradorDePuestos {
 	}
 	public void eliminarPuestoTrabajo(int numeroPuesto) {
 		//completar
+	}
+	
+	//TAL VEZ NO SE USA
+	public Iterator<Entry<Integer,Puesto>> getItPuestos(){
+		return listaDePuestos.getItPuestos();
 	}
 }
  

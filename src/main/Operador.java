@@ -1,16 +1,18 @@
 package main;
 
 import back.controladores.ControladorOperador;
-import front.interfaces.IVistaOperador;
-import front.vistas.VistaOperador;
+import front.interfaces.IVistaPuesto;
+import front.vistas.VistaPuesto;
 
 public class Operador {
 
-	public static void main(String[] args) {
+	//ELIMINAR
+	
+	/*public static void main(String[] args) {
 		
-		IVistaOperador vista = new VistaOperador();
+		IVistaPuesto vista = new VistaPuesto();
 		ControladorOperador controlador = new ControladorOperador(vista);
 		vista.setActionListener(controlador);
 		vista.abrir();
-	}
+	}*/
 }

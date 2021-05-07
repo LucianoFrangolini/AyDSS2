@@ -9,8 +9,8 @@ import front.interfaces.IVistaAdministradorPuestos;
 
 public class ControladorServidor implements ActionListener{
 
-	IVistaAdministradorPuestos vista;
-	AdministradorDeTurnos administradorDeTurnos;
+	private IVistaAdministradorPuestos vista;
+	private AdministradorDeTurnos administradorDeTurnos;
 	
 	public ControladorServidor(IVistaAdministradorPuestos vista) {
 		this.vista=vista;

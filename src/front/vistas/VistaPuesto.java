@@ -7,7 +7,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import front.interfaces.IVistaOperador;
+import front.interfaces.IVistaPuesto;
 
 import java.awt.GridLayout;
 import java.awt.event.ActionListener;
@@ -17,14 +17,15 @@ import javax.swing.SwingConstants;
 import java.awt.Font;
 import javax.swing.JButton;
 
-public class VistaOperador extends JFrame implements IVistaOperador {
+public class VistaPuesto extends JFrame implements IVistaPuesto {
 
 	private static final long serialVersionUID = 6637668548562303904L;
 	private JPanel mainPanel;
+	private int numeroPuesto;
 
-	public VistaOperador() {
-		setTitle("Operador");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	public VistaPuesto(int numeroPuesto) {
+		setTitle("Puesto "+numeroPuesto);
+		setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 		mainPanel = new JPanel();
 		mainPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(mainPanel);
@@ -46,6 +47,8 @@ public class VistaOperador extends JFrame implements IVistaOperador {
 		JButton btnNewButton_1 = new JButton("Llamar siguiente cliente");
 		btnNewButton_1.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		panelBotones.add(btnNewButton_1);
+		
+		this.numeroPuesto = numeroPuesto;
 	}
 
 	@Override
@@ -56,6 +59,11 @@ public class VistaOperador extends JFrame implements IVistaOperador {
 	public void abrir() {
 		setBounds(100, 100, 450, 300);
 		setVisible(true);
+	}
+	
+	@Override
+	public String toString() {
+		return "Puesto : " + this.numeroPuesto;
 	}
 
 }

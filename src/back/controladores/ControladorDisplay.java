@@ -7,7 +7,7 @@ import front.interfaces.IVistaDisplay;
 
 public class ControladorDisplay implements ActionListener{
 	
-	IVistaDisplay vista;
+	private IVistaDisplay vista;
 
 	public ControladorDisplay(IVistaDisplay vista) {
 		this.vista = vista;

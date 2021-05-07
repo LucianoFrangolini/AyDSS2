@@ -1,15 +1,14 @@
 package main;
 
-import back.controladores.ControladorServidor;
+import back.controladores.ControladorAdministradorPuestos;
 import front.interfaces.IVistaAdministradorPuestos;
 import front.vistas.VistaAdministradorPuestos;
 
-public class SistemaDeTurnos {
+public class AdministradorPuestos {
 
 	public static void main(String[] args) {
-		
 		IVistaAdministradorPuestos vista = new VistaAdministradorPuestos();
-		ControladorServidor controlador = new ControladorServidor(vista);
+		ControladorAdministradorPuestos controlador = new ControladorAdministradorPuestos(vista);
 		vista.setActionListener(controlador);
 		vista.abrir();
 	}

@@ -4,13 +4,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import back.puestos.Puesto;
-import front.interfaces.IVistaOperador;
+import front.interfaces.IVistaPuesto;
 
 public class ControladorOperador implements ActionListener{
 
-	IVistaOperador vista;
+	private IVistaPuesto vista;
 	
-	public ControladorOperador(Puesto puesto, IVistaOperador vista) {
+	public ControladorOperador(Puesto puesto, IVistaPuesto vista) {
 		this.vista = vista;
 	}
 
