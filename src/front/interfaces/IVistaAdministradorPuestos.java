@@ -1,6 +1,6 @@
 package front.interfaces;
 
-public interface IVistaServidor extends IVista{
+public interface IVistaAdministradorPuestos extends IVista{
 
 	static final String ABRIR_PUESTO = "AbrirPuesto";
 	static final String ELIMINAR_PUESTO = "EliminarPuesto";

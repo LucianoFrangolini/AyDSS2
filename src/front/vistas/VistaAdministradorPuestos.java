@@ -15,10 +15,10 @@ import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.border.TitledBorder;
 
-import front.interfaces.IVistaServidor;
+import front.interfaces.IVistaAdministradorPuestos;
 import java.awt.event.ActionEvent;
 
-public class VistaServidor extends JFrame implements IVistaServidor {
+public class VistaAdministradorPuestos extends JFrame implements IVistaAdministradorPuestos {
 
 	private static final long serialVersionUID = -6092145973008650357L;
 	private JPanel contentPane;
@@ -27,7 +27,7 @@ public class VistaServidor extends JFrame implements IVistaServidor {
 	private JButton btnAbrirPuesto;
 	private JList listaPuestos;
 
-	public VistaServidor() {
+	public VistaAdministradorPuestos() {
 		setTitle("Gestor de Puestos de Trabajo");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		contentPane = new JPanel();
@@ -71,9 +71,9 @@ public class VistaServidor extends JFrame implements IVistaServidor {
 
 	@Override
 	public void setActionCommands() {
-		this.btnAbrirPuesto.setActionCommand(IVistaServidor.ABRIR_PUESTO);
-		this.btnAgregarPuesto.setActionCommand(IVistaServidor.AGREGAR_PUESTO);
-		this.btnEliminarPuesto.setActionCommand(IVistaServidor.ELIMINAR_PUESTO);
+		this.btnAbrirPuesto.setActionCommand(IVistaAdministradorPuestos.ABRIR_PUESTO);
+		this.btnAgregarPuesto.setActionCommand(IVistaAdministradorPuestos.AGREGAR_PUESTO);
+		this.btnEliminarPuesto.setActionCommand(IVistaAdministradorPuestos.ELIMINAR_PUESTO);
 	}
 
 	@Override

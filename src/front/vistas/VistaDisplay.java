@@ -77,6 +77,7 @@ public class VistaDisplay extends JFrame implements IVistaDisplay {
 	}
 
 	@Override
+	//REVISAR
 	public void actualizarLista(ArrayList<Turno> listaDeTurnos) {
 		for(int i=0; i<listaDeTurnos.size(); i++) {
 			Turno turno = listaDeTurnos.get(i);

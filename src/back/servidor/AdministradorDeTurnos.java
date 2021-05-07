@@ -15,7 +15,6 @@ import back.servidor.excepciones.colaVaciaException;
 public class AdministradorDeTurnos extends ConexionConServerSocket {
 	private ListaDeTurnos listaDeTurnos = new ListaDeTurnos();
 	private ColaDeEspera colaDeEspera = new ColaDeEspera();
-	//private static int proximoNumeroPuertoDisponible = ListaDePuertos.PUERTO_OPERADOR_BASE;
 	private static AdministradorDeTurnos instance;
 	
 	public static AdministradorDeTurnos getInstance() {

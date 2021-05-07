@@ -1,14 +1,13 @@
 package back.puestos;
 
-import java.beans.PropertyChangeSupport;
+import back.direcciones.ListaDeDirecciones;
 
-import back.servidor.AdministradorDeTurnos;
 
 public class AdministradorDePuestos {
 	private ListaDePuestos listaDePuestos = new ListaDePuestos();
 	private static int proximoNumeroPuestoDisponible = 1;
-	private static int proximoSocketDisponible;
-	private static int socketBase;
+	//private static int proximoSocketDisponible;
+	private static int puerto;
 	private static AdministradorDePuestos instance;
 	
 	public static AdministradorDePuestos getInstance() {
@@ -19,16 +18,18 @@ public class AdministradorDePuestos {
 	}
 
 	private AdministradorDePuestos() {
-		socketBase = 8000;
-		proximoSocketDisponible = socketBase;
+		puerto = ListaDeDirecciones.PUERTO_OPERADORES;
+		//proximoSocketDisponible = socketBase + 1;
 	}
 	
-	public void abrirPuestoTrabajo() {
-		listaDePuestos.agregarPuesto(proximoNumeroPuestoDisponible, 8001);
-		//proximoNumeroPuertoDisponible += 1;
+	public Puesto abrirPuestoTrabajo() {
+		Puesto puesto = listaDePuestos.agregarPuesto(proximoNumeroPuestoDisponible, puerto);
 		proximoNumeroPuestoDisponible += 1;
+		//proximoSocketDisponible += 1;
+		return puesto;
 	}
 	public void eliminarPuestoTrabajo(int numeroPuesto) {
 		//completar
 	}
 }
+ 

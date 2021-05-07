@@ -5,14 +5,14 @@ import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 
 import back.servidor.AdministradorDeTurnos;
-import front.interfaces.IVistaServidor;
+import front.interfaces.IVistaAdministradorPuestos;
 
 public class ControladorServidor implements ActionListener{
 
-	IVistaServidor vista;
+	IVistaAdministradorPuestos vista;
 	AdministradorDeTurnos administradorDeTurnos;
 	
-	public ControladorServidor(IVistaServidor vista) {
+	public ControladorServidor(IVistaAdministradorPuestos vista) {
 		this.vista=vista;
 		administradorDeTurnos = AdministradorDeTurnos.getInstance();
 		administradorDeTurnos.abrirServidor();
@@ -20,13 +20,13 @@ public class ControladorServidor implements ActionListener{
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if (e.getActionCommand().equalsIgnoreCase(IVistaServidor.ABRIR_PUESTO)) {
+		if (e.getActionCommand().equalsIgnoreCase(IVistaAdministradorPuestos.ABRIR_PUESTO)) {
 			//Agregar mas adelante
 		}
-		else if (e.getActionCommand().equalsIgnoreCase(IVistaServidor.AGREGAR_PUESTO)) {
+		else if (e.getActionCommand().equalsIgnoreCase(IVistaAdministradorPuestos.AGREGAR_PUESTO)) {
 			//Agregar mas adelante
 		}
-		else if (e.getActionCommand().equalsIgnoreCase(IVistaServidor.ELIMINAR_PUESTO)) {
+		else if (e.getActionCommand().equalsIgnoreCase(IVistaAdministradorPuestos.ELIMINAR_PUESTO)) {
 			//Agregar mas adelante
 		}
 	}

@@ -11,12 +11,10 @@ import back.interfaces.conexiones.I_ConexionSocket;
 
 public class Puesto implements I_ConexionSocket {
 	int numeroPuesto, puerto;
-	//AdministradorDeTurnos admin;
-	
+
 	public Puesto(int numeroPuesto, int puerto) {
 		this.numeroPuesto = numeroPuesto;
 		this.puerto = puerto;
-		//this.admin = admin;
 	}
 
 	public void enviarMensaje(String host, int puerto, String texto) {
