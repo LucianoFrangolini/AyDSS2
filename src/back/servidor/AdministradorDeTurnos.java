@@ -5,7 +5,6 @@ import java.beans.PropertyChangeSupport;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -104,26 +103,16 @@ public class AdministradorDeTurnos extends ConexionConServerSocket {
 				try {
 					totemServerSocket = new ServerSocket(puerto);
 					while(true) {	//nuevoDni==null	//true
-					
 						//setMsj("Esperando conexion...");
-						System.out.println("antes del accept");
 						skt = totemServerSocket.accept();
 						//setMsj("Conexión establecida con el puerto " + skt.getPort() + "\n");
 						myInput = new BufferedReader(new InputStreamReader(skt.getInputStream()));
-						//myOutput = new PrintStream(skt.getOutputStream());
 						myOutput = new PrintWriter(skt.getOutputStream(), true);
-						System.out.println("Sevidor0");
-
-						System.out.println("Sevidor0.5");
 	        			nuevoDni = myInput.readLine();
-	        			System.out.println("Sevidor0.9");
-	        			System.out.println("servidor1");
-	        			System.out.println(nuevoDni);
 	        			if(admin.agregarDni(nuevoDni))
 	        				myOutput.println("Registro exitoso");
 	        			else
 	        				myOutput.println("El DNI ya se encuentra registrado.");
-	        			System.out.println("servidor2");
 	        			myInput.close();
 	        			myOutput.close();
 	        			skt.close();

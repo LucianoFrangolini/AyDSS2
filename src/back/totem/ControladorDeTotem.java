@@ -47,16 +47,12 @@ public class ControladorDeTotem implements I_ConexionSocket {
 			this.myOutput = new PrintWriter(socket.getOutputStream(), true);
 			myOutput.println(DNI);
 			while (!estadoAceptable()) {
-				System.out.println("chuapala1");
 				this.estado = myInput.readLine();
-				System.out.println("chuapala2");
-				System.out.println(this.estado.toString());
 			}
 			myInput.close();
 			myOutput.close();
 			socket.close();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

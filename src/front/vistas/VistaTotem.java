@@ -191,7 +191,5 @@ public class VistaTotem extends JFrame implements IVistaTotem{
 	public void deshabilitarEnvio() {
 		this.btnAceptar.setEnabled(false);
 	}
-
 	
-
 }

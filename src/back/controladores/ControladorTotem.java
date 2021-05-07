@@ -18,6 +18,9 @@ public class ControladorTotem implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		if(this.vista.getLabelDisplay().length()>8)
+			this.vista.setLabelDisplay("");
+		
 		if (e.getActionCommand().equalsIgnoreCase(IVistaTotem.CERO))
 			actualizarDisplay(IVistaTotem.CERO);
 
@@ -52,8 +55,10 @@ public class ControladorTotem implements ActionListener {
 			actualizarDisplay(IVistaTotem.BACKSPACE);
 			
 		} else if (e.getActionCommand().equalsIgnoreCase(IVistaTotem.ENVIAR)) {
+			this.vista.deshabilitarEnvio();
 			this.totem.enviarMensaje(this.vista.getLabelDisplay());
 			this.vista.setLabelDisplay(this.totem.getEstado());
+			//this.vista.limpiarTotemDisplay(3500);
 		}
 	}
 
