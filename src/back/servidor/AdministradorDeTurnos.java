@@ -9,11 +9,13 @@ import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+import back.direcciones.ListaDeDirecciones;
 import back.servidor.excepciones.colaVaciaException;
 
 public class AdministradorDeTurnos extends ConexionConServerSocket {
 	private ListaDeTurnos listaDeTurnos = new ListaDeTurnos();
 	private ColaDeEspera colaDeEspera = new ColaDeEspera();
+	//private static int proximoNumeroPuertoDisponible = ListaDePuertos.PUERTO_OPERADOR_BASE;
 	private static AdministradorDeTurnos instance;
 	
 	public static AdministradorDeTurnos getInstance() {
@@ -74,7 +76,8 @@ public class AdministradorDeTurnos extends ConexionConServerSocket {
 	@Override
 	public void abrirServidor() {
 		
-		abrirPuertoTotem(ListaDePuertos.PUERTO_TOTEM);
+		abrirPuertoTotem(ListaDeDirecciones.PUERTO_TOTEM);
+
 		/*new Thread() {
 			public void run() {
 				try {
@@ -124,4 +127,5 @@ public class AdministradorDeTurnos extends ConexionConServerSocket {
 			}
 		}.start();
 	}
+	
 }

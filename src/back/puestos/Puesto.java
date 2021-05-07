@@ -1,4 +1,4 @@
-package back.puestoDeTrabajo;
+package back.puestos;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -8,16 +8,16 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 
 import back.interfaces.conexiones.I_ConexionSocket;
-import back.servidor.AdministradorDeTurnos;
 
 public class Puesto implements I_ConexionSocket {
-	AdministradorDeTurnos admin;
+	int numeroPuesto, puerto;
+	//AdministradorDeTurnos admin;
 	
-	public Puesto(AdministradorDeTurnos admin) {
-		this.admin = admin;
+	public Puesto(int numeroPuesto, int puerto) {
+		this.numeroPuesto = numeroPuesto;
+		this.puerto = puerto;
+		//this.admin = admin;
 	}
-	
-
 
 	public void enviarMensaje(String host, int puerto, String texto) {
 		Socket skt;
@@ -35,8 +35,6 @@ public class Puesto implements I_ConexionSocket {
 			e.printStackTrace();
 		}
 	}
-
-
 
 	@Override
 	public void enviarMensaje(String texto) {

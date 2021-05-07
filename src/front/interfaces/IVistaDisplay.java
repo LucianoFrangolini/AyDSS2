@@ -1,5 +1,9 @@
 package front.interfaces;
 
-public interface IVistaDisplay extends IVista{
+import java.util.ArrayList;
 
+import back.servidor.Turno;
+
+public interface IVistaDisplay extends IVista{
+	void actualizarLista(ArrayList<Turno> listaDeTurnos);
 }
