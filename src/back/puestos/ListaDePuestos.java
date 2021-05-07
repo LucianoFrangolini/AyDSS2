@@ -4,13 +4,11 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map.Entry;
 
-import back.servidor.AdministradorDeTurnos;
-
 public class ListaDePuestos {
 	private HashMap<Integer,Puesto> puestos = new HashMap<Integer,Puesto>();
 	
-	public Puesto agregarPuesto(int numeroPuesto, int puerto) {
-		Puesto puesto = new Puesto(numeroPuesto, puerto);
+	public Puesto agregarPuesto(int numeroPuesto) {
+		Puesto puesto = new Puesto(numeroPuesto);
 		this.puestos.put(numeroPuesto, puesto);
 		return puesto;
 	}

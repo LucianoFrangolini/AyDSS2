@@ -1,7 +1,6 @@
 package front.interfaces;
 
 import java.util.Iterator;
-import front.vistas.VistaPuesto;
 
 public interface IVistaAdministradorPuestos extends IVista{
 

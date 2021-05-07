@@ -1,6 +1,6 @@
 package main;
 
-import back.controladores.ControladorOperador;
+import back.controladores.ControladorPuesto;
 import front.interfaces.IVistaPuesto;
 import front.vistas.VistaPuesto;
 

@@ -10,7 +10,7 @@ public class AdministradorDePuestos {
 	private ListaDePuestos listaDePuestos = new ListaDePuestos();
 	private static int proximoNumeroPuestoDisponible = 1;
 	//private static int proximoSocketDisponible;
-	private static int puerto;
+	//private static int puerto;
 	private static AdministradorDePuestos instance;
 	
 	public static AdministradorDePuestos getInstance() {
@@ -21,12 +21,12 @@ public class AdministradorDePuestos {
 	}
 
 	private AdministradorDePuestos() {
-		puerto = ListaDeDirecciones.PUERTO_OPERADORES;
+		//puerto = ListaDeDirecciones.PUERTO_PUESTOS;
 		//proximoSocketDisponible = socketBase + 1;
 	}
 	
 	public Puesto abrirPuestoTrabajo() {
-		Puesto puesto = listaDePuestos.agregarPuesto(proximoNumeroPuestoDisponible, puerto);
+		Puesto puesto = listaDePuestos.agregarPuesto(proximoNumeroPuestoDisponible);
 		proximoNumeroPuestoDisponible += 1;
 		//proximoSocketDisponible += 1;
 		return puesto;

@@ -22,6 +22,9 @@ public class VistaPuesto extends JFrame implements IVistaPuesto {
 	private static final long serialVersionUID = 6637668548562303904L;
 	private JPanel mainPanel;
 	private int numeroPuesto;
+	private JLabel lblDisplay;
+	private JButton btnEliminar;
+	private JButton btnLlamar;
 
 	public VistaPuesto(int numeroPuesto) {
 		setTitle("Puesto "+numeroPuesto);
@@ -31,28 +34,38 @@ public class VistaPuesto extends JFrame implements IVistaPuesto {
 		setContentPane(mainPanel);
 		mainPanel.setLayout(new GridLayout(2, 0, 0, 0));
 		
-		JLabel lblNewLabel = new JLabel("[DNI cliente actual]");
-		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		mainPanel.add(lblNewLabel);
+		lblDisplay = new JLabel("[DNI cliente actual]");
+		lblDisplay.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		lblDisplay.setHorizontalAlignment(SwingConstants.CENTER);
+		mainPanel.add(lblDisplay);
 		
 		JPanel panelBotones = new JPanel();
 		mainPanel.add(panelBotones);
 		panelBotones.setLayout(new GridLayout(0, 2, 0, 0));
 		
-		JButton btnNewButton = new JButton("Eliminar cliente actual");
-		btnNewButton.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		panelBotones.add(btnNewButton);
+		btnEliminar = new JButton("Eliminar cliente actual");
+		btnEliminar.setEnabled(false);
+		btnEliminar.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		panelBotones.add(btnEliminar);
 		
-		JButton btnNewButton_1 = new JButton("Llamar siguiente cliente");
-		btnNewButton_1.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		panelBotones.add(btnNewButton_1);
+		btnLlamar = new JButton("Llamar siguiente cliente");
+		btnLlamar.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		panelBotones.add(btnLlamar);
 		
 		this.numeroPuesto = numeroPuesto;
+		
+		setActionCommands();
 	}
 
+	private void setActionCommands() {
+		this.btnEliminar.setActionCommand(IVistaPuesto.ELIMINAR);
+		this.btnLlamar.setActionCommand(IVistaPuesto.LLAMAR);
+	}
+	
 	@Override
 	public void setActionListener(ActionListener c) {
+		this.btnLlamar.addActionListener(c);
+		this.btnEliminar.addActionListener(c);
 	}
 
 	@Override
@@ -64,6 +77,11 @@ public class VistaPuesto extends JFrame implements IVistaPuesto {
 	@Override
 	public String toString() {
 		return "Puesto : " + this.numeroPuesto;
+	}
+
+	@Override
+	public void setDisplay(String clienteActual) {
+		this.lblDisplay.setText(clienteActual);
 	}
 
 }

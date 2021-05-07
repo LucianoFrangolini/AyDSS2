@@ -1,5 +1,9 @@
 package back.servidor.excepciones;
 
+//NO SE USA 
+
+
+
 /**
  * @author Grupo12
  *<br>

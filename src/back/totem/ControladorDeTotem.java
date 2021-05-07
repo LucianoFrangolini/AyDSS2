@@ -6,17 +6,12 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 
+import back.conexiones.ConexionSocket;
 import back.direcciones.ListaDeDirecciones;
-import back.interfaces.conexiones.I_ConexionSocket;
 
-public class ControladorDeTotem implements I_ConexionSocket {
+public class ControladorDeTotem extends ConexionSocket {
 
-	private String host;
-	private int puerto;
 	private String estado = "";
-	BufferedReader myInput = null;
-	PrintWriter myOutput = null;
-	Socket socket;
 
 	public ControladorDeTotem() {
 		this.host = ListaDeDirecciones.HOST; //"localhost" //InetAddress.getLocalHost().getCanonicalHostName();
@@ -33,7 +28,6 @@ public class ControladorDeTotem implements I_ConexionSocket {
 		return ret;
 	}
 
-	@Override
 	public void enviarMensaje(String DNI) {
 		//myOutput.print(DNI);
 		this.estado = "";

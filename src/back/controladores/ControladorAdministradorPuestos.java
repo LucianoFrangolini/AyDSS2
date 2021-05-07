@@ -43,7 +43,7 @@ public class ControladorAdministradorPuestos implements ActionListener{
 	private void agregarPuesto() {
 		Puesto puesto = admin.abrirPuestoTrabajo();
 		IVistaPuesto vistaPuesto = new VistaPuesto(puesto.getNumeroPuesto());
-		ControladorOperador controlador = new ControladorOperador(puesto,vistaPuesto);
+		ControladorPuesto controlador = new ControladorPuesto(puesto,vistaPuesto);
 		vistaPuesto.setActionListener(controlador);
 		this.listaPuestos.add(vistaPuesto);
 	}

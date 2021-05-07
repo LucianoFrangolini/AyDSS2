@@ -16,7 +16,7 @@ public class AdministradorDeTurnos extends ConexionConServerSocket {
 	private ListaDeTurnos listaDeTurnos = new ListaDeTurnos();
 	private ColaDeEspera colaDeEspera = new ColaDeEspera();
 	private static AdministradorDeTurnos instance;
-	
+
 	public static AdministradorDeTurnos getInstance() {
 		if (instance == null) {
 			instance = new AdministradorDeTurnos();
@@ -26,9 +26,9 @@ public class AdministradorDeTurnos extends ConexionConServerSocket {
 
 	private AdministradorDeTurnos() {
 		this.pcs = new PropertyChangeSupport(this);
-		/*for (Puerto x: ListaDePuertos.puertos) {
-			this.puertos.add(x);
-		}*/
+		/*
+		 * for (Puerto x: ListaDePuertos.puertos) { this.puertos.add(x); }
+		 */
 	}
 
 	private Boolean validarDni(String dni) {
@@ -44,21 +44,20 @@ public class AdministradorDeTurnos extends ConexionConServerSocket {
 		return ret;
 	}
 
-	private void agregarTurno(Integer puesto, String dni) {
-		Turno turno = new Turno(puesto, dni);
-		this.listaDeTurnos.agregarTurno(turno);
-	}
-
-	public void obtenerProximoCliente(Integer puesto) throws colaVaciaException {
-		String dniCliente = this.colaDeEspera.poll();
-		if (dniCliente == null) {
-			throw new colaVaciaException("La cola de clientes se encuentra vacia.");
-		} else {
-			this.agregarTurno(puesto, dniCliente);
-			// handle message
+	private Boolean agregarTurno(Integer puesto, String dni) {
+		Boolean ret = false;
+		if (dni != null) {
+			Turno turno = new Turno(puesto, dni);
+			this.listaDeTurnos.agregarTurno(turno);
+			ret = true;
 		}
+		return ret;
 	}
 
+	public String obtenerProximoCliente(){
+		return this.colaDeEspera.poll();
+
+	}
 
 	@Override
 	public void setMsj(String nuevoMensaje) {
@@ -74,50 +73,80 @@ public class AdministradorDeTurnos extends ConexionConServerSocket {
 
 	@Override
 	public void abrirServidor() {
-		
-		abrirPuertoTotem(ListaDeDirecciones.PUERTO_TOTEM);
 
-		/*new Thread() {
+		abrirPuertoTotem(ListaDeDirecciones.PUERTO_TOTEM);
+		abrirPuertoPuestos(ListaDeDirecciones.PUERTO_PUESTOS);
+
+		/*
+		 * new Thread() { public void run() { try { Socket skt; myServerSocket = new
+		 * ServerSocket(puerto); setMsj("Esperando conexion..."); skt =
+		 * myServerSocket.accept(); setMsj("Conexión establecida con el puerto " +
+		 * skt.getPort() + "\n"); } catch (IOException e) { e.printStackTrace(); } }
+		 * }.start();
+		 */
+	}
+
+	private void abrirPuertoPuestos(int puertoPuestos) {
+		new Thread() {
 			public void run() {
+				ServerSocket puestosServerSocket;
+				Socket socket;
+				AdministradorDeTurnos admin = AdministradorDeTurnos.getInstance();
+				BufferedReader myInput;
+				PrintWriter myOutput;
+				int numeroPuesto;
+				String dni;
 				try {
-					Socket skt;
-					myServerSocket = new ServerSocket(puerto);
-					setMsj("Esperando conexion...");
-					skt = myServerSocket.accept();
-					setMsj("Conexión establecida con el puerto " + skt.getPort() + "\n");
+					puestosServerSocket = new ServerSocket(puertoPuestos);
+					while (true) {
+						socket = puestosServerSocket.accept();
+						myInput = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+						myOutput = new PrintWriter(socket.getOutputStream(), true);
+						numeroPuesto = Integer.parseInt(myInput.readLine());
+						dni = admin.obtenerProximoCliente();
+						if (admin.agregarTurno(numeroPuesto,dni))
+							myOutput.println(dni);
+						else
+							myOutput.println("No hay clientes en espera");
+						myInput.close();
+						myOutput.close();
+						socket.close();
+					}
+
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
 			}
-		}.start();*/
+		}.start();
+
 	}
 
 	private void abrirPuertoTotem(int puerto) {
 		new Thread() {
 			public void run() {
 				ServerSocket totemServerSocket;
-				Socket skt;
+				Socket socket;
 				AdministradorDeTurnos admin = AdministradorDeTurnos.getInstance();
 				BufferedReader myInput;
-    			//PrintStream myOutput;
+				// PrintStream myOutput;
 				PrintWriter myOutput;
-    			String nuevoDni = null;
+				String nuevoDni = null;
 				try {
 					totemServerSocket = new ServerSocket(puerto);
-					while(true) {	//nuevoDni==null	//true
-						//setMsj("Esperando conexion...");
-						skt = totemServerSocket.accept();
-						//setMsj("Conexión establecida con el puerto " + skt.getPort() + "\n");
-						myInput = new BufferedReader(new InputStreamReader(skt.getInputStream()));
-						myOutput = new PrintWriter(skt.getOutputStream(), true);
-	        			nuevoDni = myInput.readLine();
-	        			if(admin.agregarDni(nuevoDni))
-	        				myOutput.println("Registro exitoso");
-	        			else
-	        				myOutput.println("El DNI ya se encuentra registrado.");
-	        			myInput.close();
-	        			myOutput.close();
-	        			skt.close();
+					while (true) { // nuevoDni==null //true
+						// setMsj("Esperando conexion...");
+						socket = totemServerSocket.accept();
+						// setMsj("Conexión establecida con el puerto " + skt.getPort() + "\n");
+						myInput = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+						myOutput = new PrintWriter(socket.getOutputStream(), true);
+						nuevoDni = myInput.readLine();
+						if (admin.agregarDni(nuevoDni))
+							myOutput.println("Registro exitoso");
+						else
+							myOutput.println("El DNI ya se encuentra registrado.");
+						myInput.close();
+						myOutput.close();
+						socket.close();
 					}
 
 				} catch (IOException e) {
@@ -126,5 +155,5 @@ public class AdministradorDeTurnos extends ConexionConServerSocket {
 			}
 		}.start();
 	}
-	
+
 }
