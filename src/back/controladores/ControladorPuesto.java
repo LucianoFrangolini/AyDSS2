@@ -3,6 +3,7 @@ package back.controladores;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import back.constantes.ListaDeAcciones;
 import back.puestos.Puesto;
 import front.interfaces.IVistaPuesto;
 
@@ -19,14 +20,14 @@ public class ControladorPuesto implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getActionCommand().equalsIgnoreCase(IVistaPuesto.LLAMAR)) {
-			this.puesto.enviarMensaje();
+			this.puesto.enviarMensaje(ListaDeAcciones.LLAMAR);
 			if (this.puesto.getClienteActual().length()==8)
 				this.vista.setDisplay("Atendiendo cliente: "+ this.puesto.getClienteActual());
 			else
 				this.vista.setDisplay(this.puesto.getClienteActual());
 		} else if (e.getActionCommand().equalsIgnoreCase(IVistaPuesto.ELIMINAR)) {
-
+			
 		}
-	}
+	} 
 
 }

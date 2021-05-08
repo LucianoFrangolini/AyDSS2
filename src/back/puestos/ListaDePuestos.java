@@ -15,6 +15,9 @@ public class ListaDePuestos {
 	public void eliminarPuesto(int numeroPuesto) {
 		this.puestos.remove(numeroPuesto); 
 	}
+	public Puesto getPuesto(int numeroPuesto) {
+		return this.puestos.get(numeroPuesto);
+	}
 	
 	
 	//TAL VEZ NO SE USA

@@ -1,21 +1,30 @@
 package back.servidor;
 
+import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.UnknownHostException;
 
-import back.direcciones.ListaDeDirecciones;
-import back.servidor.excepciones.colaVaciaException;
+import back.constantes.ListaDeAcciones;
+import back.constantes.ListaDeDirecciones;
 
-public class AdministradorDeTurnos extends ConexionConServerSocket {
+//REVISAR IMPLEMENTS
+
+public class AdministradorDeTurnos extends ConexionConServerSocket implements PropertyChangeListener  {
 	private ListaDeTurnos listaDeTurnos = new ListaDeTurnos();
 	private ColaDeEspera colaDeEspera = new ColaDeEspera();
 	private static AdministradorDeTurnos instance;
+	private PropertyChangeSupport pcs;
+	
+	//REVISAR
+	private String hostPantalla = "localhost";
 
 	public static AdministradorDeTurnos getInstance() {
 		if (instance == null) {
@@ -26,9 +35,7 @@ public class AdministradorDeTurnos extends ConexionConServerSocket {
 
 	private AdministradorDeTurnos() {
 		this.pcs = new PropertyChangeSupport(this);
-		/*
-		 * for (Puerto x: ListaDePuertos.puertos) { this.puertos.add(x); }
-		 */
+		this.pcs.addPropertyChangeListener(this);
 	}
 
 	private Boolean validarDni(String dni) {
@@ -49,34 +56,56 @@ public class AdministradorDeTurnos extends ConexionConServerSocket {
 		if (dni != null) {
 			Turno turno = new Turno(puesto, dni);
 			this.listaDeTurnos.agregarTurno(turno);
+			//this.setTurno(turno);	//Es necesario para el patron PropertyChangeSupport/Listener
+			pcs.firePropertyChange("turnoNuevo", null, turno);
 			ret = true;
 		}
 		return ret;
 	}
-
-	public String obtenerProximoCliente(){
-		return this.colaDeEspera.poll();
-
+	
+	private void eliminarTurno(Integer puesto) {
+		//Boolean ret = false;
+		this.listaDeTurnos.eliminarTurno(puesto);
+		pcs.firePropertyChange("eliminarTurno", null, null);
+		//return ret;
 	}
-
+	
+	public String obtenerProximoCliente() {
+		return this.colaDeEspera.poll();
+	}
+	
+	public void setTurno(Turno turno) {
+		Turno oldValue = null;
+		pcs.firePropertyChange("turnoNuevo", null, turno);
+	}
+	
+	@Override
+	public void propertyChange(PropertyChangeEvent arg0) {
+		if(arg0.getPropertyName().equals("turnoNuevo")) {
+			abrirPuertoDisplay(ListaDeDirecciones.PUERTO_DISPLAY);
+		} else if(arg0.getPropertyName().equals("eliminarTurno")) {
+			abrirPuertoDisplay(ListaDeDirecciones.PUERTO_DISPLAY);
+		}
+	}
+/*
 	@Override
 	public void setMsj(String nuevoMensaje) {
 		String oldMsj = this.msj;
 		this.msj = nuevoMensaje;
 		this.pcs.firePropertyChange("Mensaje", oldMsj, this.msj);
-	}
-
+	}*/
+	/*
 	@Override
 	public void addPropertyChangeListener(PropertyChangeListener listener) {
 		pcs.addPropertyChangeListener(listener);
-	}
+	}*/
 
 	@Override
 	public void abrirServidor() {
 
 		abrirPuertoTotem(ListaDeDirecciones.PUERTO_TOTEM);
 		abrirPuertoPuestos(ListaDeDirecciones.PUERTO_PUESTOS);
-
+		//abrirPuertoDisplay(ListaDeDirecciones.PUERTO_DISPLAY);
 		/*
 		 * new Thread() { public void run() { try { Socket skt; myServerSocket = new
 		 * ServerSocket(puerto); setMsj("Esperando conexion..."); skt =
@@ -85,6 +114,65 @@ public class AdministradorDeTurnos extends ConexionConServerSocket {
 		 * }.start();
 		 */
 	}
+
+	/*
+	private void abrirPuertoDisplay(int puertoDisplay) {
+		new Thread() {
+			public void run() {
+				ServerSocket puestosServerSocket;
+				Socket socket;
+				AdministradorDeTurnos admin = AdministradorDeTurnos.getInstance();
+				BufferedReader myInput;
+				PrintWriter myOutput;
+				int numeroPuesto;
+				String dni;
+				
+				
+				ObjectOutputStream myObjectOutput;
+				int tamañoLista = -1;
+				try {
+					puestosServerSocket = new ServerSocket(puertoDisplay);
+					socket = puestosServerSocket.accept();
+					while(admin.listaDeTurnos.size()!=tamañoLista) {
+						tamañoLista = admin.listaDeTurnos.size();
+						myObjectOutput = new ObjectOutputStream(socket.getOutputStream());
+						//myInput = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+						//myOutput = new PrintWriter(socket.getOutputStream(), true);
+						while(admin.listaDeTurnos.size()==tamañoLista) {
+							
+						}
+						myObjectOutput.writeObject(listaDeTurnos);
+						//myInput.close();
+						myObjectOutput.close();
+						//socket.close();
+					}
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}.start();
+	}*/
+	
+	public void abrirPuertoDisplay(int puertoDisplay) {
+		try {
+			Socket socket = new Socket(this.hostPantalla, puertoDisplay);
+			// this.myInput = new BufferedReader(new
+			// InputStreamReader(socket.getInputStream()));
+			//ObjectInputStream myObjectInputStream = new ObjectInputStream(socket.getInputStream());
+			// this.myOutput = new PrintWriter(socket.getOutputStream(), true);
+			ObjectOutputStream myObjectOutput = new ObjectOutputStream(socket.getOutputStream());
+			myObjectOutput.writeObject(listaDeTurnos);
+			myObjectOutput.close();
+			// myOutput.close();
+			// myInput.close();
+			socket.close();
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
 
 	private void abrirPuertoPuestos(int puertoPuestos) {
 		new Thread() {
@@ -95,21 +183,27 @@ public class AdministradorDeTurnos extends ConexionConServerSocket {
 				BufferedReader myInput;
 				PrintWriter myOutput;
 				int numeroPuesto;
-				String dni;
+				String dni, accion;
 				try {
 					puestosServerSocket = new ServerSocket(puertoPuestos);
 					while (true) {
 						socket = puestosServerSocket.accept();
 						myInput = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-						myOutput = new PrintWriter(socket.getOutputStream(), true);
+						accion = myInput.readLine();
 						numeroPuesto = Integer.parseInt(myInput.readLine());
-						dni = admin.obtenerProximoCliente();
-						if (admin.agregarTurno(numeroPuesto,dni))
-							myOutput.println(dni);
-						else
-							myOutput.println("No hay clientes en espera");
+						if(accion.equals(ListaDeAcciones.LLAMAR)) {
+							dni = admin.obtenerProximoCliente();
+							myOutput = new PrintWriter(socket.getOutputStream(), true);
+							if (admin.agregarTurno(numeroPuesto, dni)) {
+								myOutput.println(dni);
+							} else
+								myOutput.println("No hay clientes en espera");
+							myOutput.close();
+						}
+						else if(accion.equals(ListaDeAcciones.ELIMINAR)) {
+							admin.eliminarTurno(numeroPuesto);
+						}
 						myInput.close();
-						myOutput.close();
 						socket.close();
 					}
 
@@ -121,7 +215,7 @@ public class AdministradorDeTurnos extends ConexionConServerSocket {
 
 	}
 
-	private void abrirPuertoTotem(int puerto) {
+	private void abrirPuertoTotem(int puertoTotem) {
 		new Thread() {
 			public void run() {
 				ServerSocket totemServerSocket;
@@ -132,7 +226,7 @@ public class AdministradorDeTurnos extends ConexionConServerSocket {
 				PrintWriter myOutput;
 				String nuevoDni = null;
 				try {
-					totemServerSocket = new ServerSocket(puerto);
+					totemServerSocket = new ServerSocket(puertoTotem);
 					while (true) { // nuevoDni==null //true
 						// setMsj("Esperando conexion...");
 						socket = totemServerSocket.accept();
@@ -155,5 +249,4 @@ public class AdministradorDeTurnos extends ConexionConServerSocket {
 			}
 		}.start();
 	}
-
 }

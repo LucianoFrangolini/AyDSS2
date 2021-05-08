@@ -7,7 +7,7 @@ import java.io.PrintWriter;
 import java.net.Socket;
 
 import back.conexiones.ConexionSocket;
-import back.direcciones.ListaDeDirecciones;
+import back.constantes.ListaDeDirecciones;
 
 public class ControladorDeTotem extends ConexionSocket {
 

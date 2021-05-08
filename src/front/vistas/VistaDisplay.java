@@ -14,6 +14,8 @@ import front.interfaces.IVistaDisplay;
 import java.awt.GridLayout;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.Map.Entry;
 
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
@@ -25,8 +27,8 @@ public class VistaDisplay extends JFrame implements IVistaDisplay {
 
 	private static final long serialVersionUID = -638127726284784506L;
 	private JPanel contentPane;
-	JList<Turno> lista;
-	DefaultListModel<Turno> listModelTurnos;
+	JList<String> lista;
+	DefaultListModel<String> listModelTurnos;
 
 	public VistaDisplay() {
 		setTitle("Display");
@@ -60,10 +62,12 @@ public class VistaDisplay extends JFrame implements IVistaDisplay {
 		JScrollPane scrollPane = new JScrollPane();
 		contentPane.add(scrollPane);
 		
-		lista = new JList<Turno>();
-		listModelTurnos = new DefaultListModel<Turno>();
+		lista = new JList<String>();
+		listModelTurnos = new DefaultListModel<String>();
 		lista.setModel(listModelTurnos);
 		scrollPane.setViewportView(lista);
+		
+		this.setResizable(false);
 	}
 
 	@Override
@@ -75,16 +79,26 @@ public class VistaDisplay extends JFrame implements IVistaDisplay {
 		setBounds(100, 100, 450, 300);
 		setVisible(true);
 	}
-
-	@Override
-	//REVISAR
-	public void actualizarLista(ArrayList<Turno> listaDeTurnos) {
-		for(int i=0; i<listaDeTurnos.size(); i++) {
-			Turno turno = listaDeTurnos.get(i);
-			listModelTurnos.add(turno.getPuesto(), turno);
-		}
-		this.lista.repaint();
-	}
 	
-
+	@Override
+	public void actualizarLista(Iterator<Entry<Integer,String>> it) {
+		this.listModelTurnos.clear();
+		Entry<Integer,String> entry;
+		while (it.hasNext()) {
+			entry = it.next();
+			StringBuilder sb = new StringBuilder();
+			for(int i=0 ; i<10 ; i++) {
+				sb.append(" ");
+			}
+			
+			//ACOMODAR DISPOSICION
+			sb.append(entry.getKey().toString());
+			for(int i=0 ; i<10 ; i++) {
+				sb.append(" ");
+			}
+			sb.append(entry.getValue());
+			this.listModelTurnos.addElement(sb.toString());
+		}		
+		this.repaint();
+	}
 }

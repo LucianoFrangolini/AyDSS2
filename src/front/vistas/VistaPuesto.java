@@ -1,8 +1,5 @@
 package front.vistas;
 
-import java.awt.BorderLayout;
-import java.awt.EventQueue;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
@@ -56,6 +53,10 @@ public class VistaPuesto extends JFrame implements IVistaPuesto {
 		
 		setActionCommands();
 	}
+	
+	public int getNumeroPuesto() {
+		return this.numeroPuesto;
+	}
 
 	private void setActionCommands() {
 		this.btnEliminar.setActionCommand(IVistaPuesto.ELIMINAR);
@@ -83,5 +84,8 @@ public class VistaPuesto extends JFrame implements IVistaPuesto {
 	public void setDisplay(String clienteActual) {
 		this.lblDisplay.setText(clienteActual);
 	}
-
+	@Override
+	public void dispose() {
+		super.dispose();
+	}
 }

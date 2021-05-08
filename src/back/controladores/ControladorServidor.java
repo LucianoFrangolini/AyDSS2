@@ -9,6 +9,8 @@ import front.interfaces.IVistaAdministradorPuestos;
 
 public class ControladorServidor implements ActionListener{
 
+	
+	//NO SE USA - POSIBLE BORRAR
 	private IVistaAdministradorPuestos vista;
 	private AdministradorDeTurnos administradorDeTurnos;
 	

@@ -1,4 +1,4 @@
-package back.direcciones;
+package back.constantes;
 
 public class ListaDeDirecciones {
 

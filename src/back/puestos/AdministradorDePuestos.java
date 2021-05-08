@@ -3,7 +3,7 @@ package back.puestos;
 import java.util.Iterator;
 import java.util.Map.Entry;
 
-import back.direcciones.ListaDeDirecciones;
+import back.constantes.ListaDeDirecciones;
 
 
 public class AdministradorDePuestos {
@@ -32,7 +32,10 @@ public class AdministradorDePuestos {
 		return puesto;
 	}
 	public void eliminarPuestoTrabajo(int numeroPuesto) {
-		//completar
+		this.listaDePuestos.eliminarPuesto(numeroPuesto);
+	}
+	public Puesto getPuesto(int numeroPuesto) {
+		return this.listaDePuestos.getPuesto(numeroPuesto);
 	}
 	
 	//TAL VEZ NO SE USA

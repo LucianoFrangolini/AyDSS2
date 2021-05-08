@@ -1,10 +1,9 @@
 package front.interfaces;
 
-import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.Map.Entry;
 
-import back.servidor.Turno;
 
 public interface IVistaDisplay extends IVista{
-	//revisar
-	void actualizarLista(ArrayList<Turno> listaDeTurnos);
+	void actualizarLista(Iterator<Entry<Integer,String>> it);
 }

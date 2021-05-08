@@ -6,4 +6,6 @@ public interface IVistaPuesto extends IVista {
 	static final String ELIMINAR = "Eliminar";
 	
 	void setDisplay(String clienteActual);
+	int getNumeroPuesto();
+	void dispose();
 }
