@@ -17,7 +17,7 @@ import back.constantes.ListaDeDirecciones;
 
 //REVISAR IMPLEMENTS
 
-public class AdministradorDeTurnos extends ConexionConServerSocket implements PropertyChangeListener  {
+public class AdministradorDeTurnos implements PropertyChangeListener  {
 	private ListaDeTurnos listaDeTurnos = new ListaDeTurnos();
 	private ColaDeEspera colaDeEspera = new ColaDeEspera();
 	private static AdministradorDeTurnos instance;
@@ -85,8 +85,6 @@ public class AdministradorDeTurnos extends ConexionConServerSocket implements Pr
 		}*/
 	}
 
-
-	@Override
 	public void abrirServidor() {
 		abrirPuertoTotem(ListaDeDirecciones.PUERTO_TOTEM);
 		abrirPuertoPuestos(ListaDeDirecciones.PUERTO_PUESTOS);
