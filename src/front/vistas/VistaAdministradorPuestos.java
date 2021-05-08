@@ -1,22 +1,19 @@
 package front.vistas;
 
 import java.awt.BorderLayout;
-
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
 import java.awt.GridLayout;
 import java.awt.event.ActionListener;
 import java.util.Iterator;
-import java.util.Map.Entry;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JList;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 
-import back.puestos.Puesto;
 import front.interfaces.IVistaAdministradorPuestos;
 import front.interfaces.IVistaPuesto;
 
