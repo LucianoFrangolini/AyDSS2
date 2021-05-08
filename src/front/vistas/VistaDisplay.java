@@ -1,32 +1,28 @@
 package front.vistas;
 
-import java.awt.BorderLayout;
-import java.awt.EventQueue;
+import java.awt.Font;
+import java.awt.GridLayout;
+import java.awt.event.ActionListener;
+import java.util.Iterator;
+import java.util.Map.Entry;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
-import back.servidor.Turno;
 import front.interfaces.IVistaDisplay;
-
-import java.awt.GridLayout;
-import java.awt.event.ActionListener;
-import java.util.ArrayList;
-
-import javax.swing.JLabel;
-import javax.swing.SwingConstants;
-import java.awt.Font;
-import javax.swing.JScrollPane;
-import javax.swing.JList;
 
 public class VistaDisplay extends JFrame implements IVistaDisplay {
 
 	private static final long serialVersionUID = -638127726284784506L;
 	private JPanel contentPane;
-	JList<Turno> lista;
-	DefaultListModel<Turno> dlm;
+	JList<String> lista;
+	DefaultListModel<String> listModelTurnos;
 
 	public VistaDisplay() {
 		setTitle("Display");
@@ -60,10 +56,12 @@ public class VistaDisplay extends JFrame implements IVistaDisplay {
 		JScrollPane scrollPane = new JScrollPane();
 		contentPane.add(scrollPane);
 		
-		lista = new JList<Turno>();
-		dlm = new DefaultListModel<Turno>();
-		lista.setModel(dlm);
+		lista = new JList<String>();
+		listModelTurnos = new DefaultListModel<String>();
+		lista.setModel(listModelTurnos);
 		scrollPane.setViewportView(lista);
+		
+		this.setResizable(false);
 	}
 
 	@Override
@@ -75,16 +73,24 @@ public class VistaDisplay extends JFrame implements IVistaDisplay {
 		setBounds(100, 100, 450, 300);
 		setVisible(true);
 	}
-
-	@Override
-	//REVISAR
-	public void actualizarLista(ArrayList<Turno> listaDeTurnos) {
-		for(int i=0; i<listaDeTurnos.size(); i++) {
-			Turno turno = listaDeTurnos.get(i);
-			dlm.add(turno.getPuesto(), turno);
-		}
-		this.lista.repaint();
-	}
 	
-
+	@Override
+	public void actualizarLista(Iterator<Entry<Integer,String>> it) {
+		this.listModelTurnos.clear();
+		Entry<Integer,String> entry;
+		while (it.hasNext()) {
+			entry = it.next();
+			StringBuilder sb = new StringBuilder();
+			for(int i=0 ; i<27 ; i++) {
+				sb.append(" ");
+			}
+			sb.append(entry.getValue());
+			for(int i=0 ; i<58 ; i++) {
+				sb.append(" ");
+			} 
+			sb.append(entry.getKey().toString());
+			this.listModelTurnos.addElement(sb.toString());
+		}		
+		this.repaint();
+	}
 }

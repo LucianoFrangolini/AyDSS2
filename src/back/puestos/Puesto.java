@@ -1,41 +1,68 @@
 package back.puestos;
 
+import java.awt.Toolkit;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.PrintStream;
+import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
-import back.interfaces.conexiones.I_ConexionSocket;
+import javax.swing.JOptionPane;
 
-public class Puesto implements I_ConexionSocket {
-	int numeroPuesto, puerto;
+import back.conexiones.ConexionSocket;
+import back.constantes.ListaDeAcciones;
+import back.constantes.ListaDeDirecciones;
 
-	public Puesto(int numeroPuesto, int puerto) {
+public class Puesto extends ConexionSocket {
+
+	private int numeroPuesto;
+	private String clienteActual;
+
+	public Puesto(int numeroPuesto) {
 		this.numeroPuesto = numeroPuesto;
-		this.puerto = puerto;
+		this.puerto = ListaDeDirecciones.PUERTO_PUESTOS;
+		this.host = ListaDeDirecciones.HOST;
 	}
 
-	public void enviarMensaje(String host, int puerto, String texto) {
-		Socket skt;
+	public int getNumeroPuesto() {
+		return numeroPuesto;
+	}
+	
+	public void enviarMensaje(String accion) {
 		try {
-			skt = new Socket(host,puerto);
-			//myInput necesario?
-			BufferedReader myInput = new BufferedReader(new InputStreamReader(skt.getInputStream()));
-			PrintStream myOutput = new PrintStream(skt.getOutputStream());
-			myOutput.print(texto);
+			this.socket = new Socket(this.host,this.puerto);
+			this.myInput = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+			this.myOutput = new PrintWriter(socket.getOutputStream(), true);
+			
+			myOutput.println(accion);
+			if(accion.equals(ListaDeAcciones.LLAMAR)) {
+				myOutput.println(this.numeroPuesto);
+				this.clienteActual = myInput.readLine();
+				myInput.close();
+			}
+			else if(accion.equals(ListaDeAcciones.ELIMINAR)) {
+				myOutput.println(this.numeroPuesto);
+			}
 			myOutput.close();
-			skt.close();
+			socket.close();
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
-			e.printStackTrace();
+			Toolkit.getDefaultToolkit().beep();
+			JOptionPane.showMessageDialog(null, ConexionSocket.MENSAJE_SIN_CONEXION);
 		}
+	}
+	
+	public String getClienteActual() {
+		return clienteActual;
 	}
 
 	@Override
-	public void enviarMensaje(String texto) {
+	public String toString() {
+		return "Puesto numero:  " + numeroPuesto;
 	}
+	
+	
 
 }

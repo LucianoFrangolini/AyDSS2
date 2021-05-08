@@ -1,22 +1,21 @@
 package front.vistas;
 
 import java.awt.BorderLayout;
-import java.awt.EventQueue;
-
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
 import java.awt.GridLayout;
 import java.awt.event.ActionListener;
+import java.util.Iterator;
 
+import javax.swing.DefaultListModel;
 import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JList;
-import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 
 import front.interfaces.IVistaAdministradorPuestos;
-import java.awt.event.ActionEvent;
+import front.interfaces.IVistaPuesto;
 
 public class VistaAdministradorPuestos extends JFrame implements IVistaAdministradorPuestos {
 
@@ -25,7 +24,8 @@ public class VistaAdministradorPuestos extends JFrame implements IVistaAdministr
 	private JButton btnAgregarPuesto;
 	private JButton btnEliminarPuesto;
 	private JButton btnAbrirPuesto;
-	private JList listaPuestos;
+	private JList<IVistaPuesto> listaPuestos;
+	private DefaultListModel<IVistaPuesto> listModelPuestos;
 
 	public VistaAdministradorPuestos() {
 		setTitle("Gestor de Puestos de Trabajo");
@@ -56,7 +56,9 @@ public class VistaAdministradorPuestos extends JFrame implements IVistaAdministr
 		JScrollPane scrollPaneLista = new JScrollPane();
 		panelLista.add(scrollPaneLista);
 		
-		listaPuestos = new JList();
+		listaPuestos = new JList<IVistaPuesto>();
+		this.listModelPuestos = new DefaultListModel<IVistaPuesto>();
+		listaPuestos.setModel(listModelPuestos);
 		scrollPaneLista.setViewportView(listaPuestos);
 		
 		setActionCommands();
@@ -69,8 +71,7 @@ public class VistaAdministradorPuestos extends JFrame implements IVistaAdministr
 		this.btnEliminarPuesto.addActionListener(c);
 	}
 
-	@Override
-	public void setActionCommands() {
+	private void setActionCommands() {
 		this.btnAbrirPuesto.setActionCommand(IVistaAdministradorPuestos.ABRIR_PUESTO);
 		this.btnAgregarPuesto.setActionCommand(IVistaAdministradorPuestos.AGREGAR_PUESTO);
 		this.btnEliminarPuesto.setActionCommand(IVistaAdministradorPuestos.ELIMINAR_PUESTO);
@@ -78,9 +79,23 @@ public class VistaAdministradorPuestos extends JFrame implements IVistaAdministr
 
 	@Override
 	public void abrir() {
-		setBounds(100, 100, 450, 300);
+		setBounds(700, 100, 450, 300);
 		setVisible(true);
 	}
+	
+	@Override
+	public void actualizarLista(Iterator<IVistaPuesto> it) {
+		this.listModelPuestos.clear();
+		while (it.hasNext()) {
+			this.listModelPuestos.addElement(it.next());
+		}		
+		this.repaint();
+	}
 
+	@Override
+	public IVistaPuesto getPuestoSeleccionado() {
+		return this.listaPuestos.getSelectedValue();
+	}	
+	
 
 }

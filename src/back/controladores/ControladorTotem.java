@@ -8,8 +8,8 @@ import front.interfaces.IVistaTotem;
 
 public class ControladorTotem implements ActionListener {
 
-	IVistaTotem vista;
-	ControladorDeTotem totem;
+	private IVistaTotem vista;
+	private ControladorDeTotem totem;
 
 	public ControladorTotem(IVistaTotem vista) {
 		this.vista = vista;
@@ -58,7 +58,6 @@ public class ControladorTotem implements ActionListener {
 			this.vista.deshabilitarEnvio();
 			this.totem.enviarMensaje(this.vista.getLabelDisplay());
 			this.vista.setLabelDisplay(this.totem.getEstado());
-			//this.vista.limpiarTotemDisplay(3500);
 		}
 	}
 

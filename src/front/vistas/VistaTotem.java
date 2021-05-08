@@ -1,25 +1,21 @@
 package front.vistas;
 
-import java.awt.BorderLayout;
-import java.awt.EventQueue;
-
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
+import java.awt.Color;
+import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionListener;
 
-import javax.swing.JLabel;
-import javax.swing.SwingConstants;
-import java.awt.Font;
 import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.SwingConstants;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 
 import front.interfaces.IVistaTotem;
-
-import java.awt.FlowLayout;
-import javax.swing.border.EtchedBorder;
-import java.awt.Color;
 
 public class VistaTotem extends JFrame implements IVistaTotem{
 
@@ -168,7 +164,7 @@ public class VistaTotem extends JFrame implements IVistaTotem{
 
 	@Override
 	public void abrir() {
-		setBounds(100, 100, 463, 450);
+		setBounds(100, 400, 463, 450);
 		setVisible(true);
 	}
 

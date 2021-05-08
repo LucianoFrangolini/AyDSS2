@@ -1,41 +1,39 @@
 package back.totem;
 
+import java.awt.Toolkit;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 
-import back.direcciones.ListaDeDirecciones;
-import back.interfaces.conexiones.I_ConexionSocket;
+import javax.swing.JOptionPane;
 
-public class ControladorDeTotem implements I_ConexionSocket {
+import back.conexiones.ConexionSocket;
+import back.constantes.ListaDeDirecciones;
 
-	private String host;
-	private int puerto;
-	private String estado = "";
-	BufferedReader myInput = null;
-	PrintWriter myOutput = null;
-	Socket socket;
+public class ControladorDeTotem extends ConexionSocket {
+
+	private String estado;
 
 	public ControladorDeTotem() {
-		this.host = ListaDeDirecciones.HOST; //"localhost" //InetAddress.getLocalHost().getCanonicalHostName();
+		this.host = ListaDeDirecciones.HOST;
 		this.puerto = ListaDeDirecciones.PUERTO_TOTEM;
+		this.estado = "";
 	}
 
 	public String getEstado() {
 		return estado;
 	}
+
 	private Boolean estadoAceptable() {
 		Boolean ret = false;
-		if(estado.equals("Registro exitoso") || estado.equals("El DNI ya se encuentra registrado."))
-				ret = true;
+		if (estado.equals("Registro exitoso") || estado.equals("El DNI ya se encuentra registrado."))
+			ret = true;
 		return ret;
 	}
 
-	@Override
 	public void enviarMensaje(String DNI) {
-		//myOutput.print(DNI);
 		this.estado = "";
 		try {
 			this.socket = new Socket(this.host, this.puerto);
@@ -49,7 +47,8 @@ public class ControladorDeTotem implements I_ConexionSocket {
 			myOutput.close();
 			socket.close();
 		} catch (IOException e) {
-			e.printStackTrace();
+			Toolkit.getDefaultToolkit().beep();
+			JOptionPane.showMessageDialog(null, ConexionSocket.MENSAJE_SIN_CONEXION);
 		}
 	}
 
