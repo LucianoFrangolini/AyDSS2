@@ -46,7 +46,7 @@ public class Puesto extends ConexionSocket {
 			e.printStackTrace();
 		}
 	}*/
-
+	/*
 	public void enviarMensaje1(String accion) {	//ORIGINAL
 		try {
 			this.socket = new Socket(this.host,this.puerto);
@@ -65,7 +65,7 @@ public class Puesto extends ConexionSocket {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-	}
+	}*/
 	
 	public void enviarMensaje(String accion) {
 		try {

@@ -26,7 +26,8 @@ public class ControladorPuesto implements ActionListener {
 			else
 				this.vista.setDisplay(this.puesto.getClienteActual());
 		} else if (e.getActionCommand().equalsIgnoreCase(IVistaPuesto.ELIMINAR)) {
-			
+			//REVISAR FUNCIONALIDAD DEL BOTON
+			//this.puesto.enviarMensaje(ListaDeAcciones.ELIMINAR);
 		}
 	} 
 
