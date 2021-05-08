@@ -25,7 +25,11 @@ public class ControladorDisplay implements ActionListener, PropertyChangeListene
 		ListaDeTurnos listaDeLlamados = (ListaDeTurnos) arg0.getNewValue();
 		this.vista.actualizarLista(listaDeLlamados.getItTurnos());
 	}
-
+	
+	/**
+	 * Método encargado de realizar acciones correspondientes una vez que la vista dispara un evento <br>
+	 * @param e de tipo ActionEvent: es el evento disparado por la vista.<br>
+	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
 	}
