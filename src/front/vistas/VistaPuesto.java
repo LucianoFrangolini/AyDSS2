@@ -88,4 +88,14 @@ public class VistaPuesto extends JFrame implements IVistaPuesto {
 	public void dispose() {
 		super.dispose();
 	}
+
+	@Override
+	public void habilitarBotonEliminar() {
+		this.btnEliminar.setEnabled(true);
+	}
+
+	@Override
+	public void deshabilitarBotonEliminar() {
+		this.btnEliminar.setEnabled(false);
+	}
 }

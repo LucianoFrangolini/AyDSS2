@@ -7,5 +7,7 @@ public interface IVistaPuesto extends IVista {
 	
 	void setDisplay(String clienteActual);
 	int getNumeroPuesto();
+	void habilitarBotonEliminar();
+	void deshabilitarBotonEliminar();
 	void dispose();
 }

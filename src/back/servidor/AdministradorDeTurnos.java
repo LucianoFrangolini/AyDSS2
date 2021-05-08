@@ -57,114 +57,50 @@ public class AdministradorDeTurnos extends ConexionConServerSocket implements Pr
 			Turno turno = new Turno(puesto, dni);
 			this.listaDeTurnos.agregarTurno(turno);
 			//this.setTurno(turno);	//Es necesario para el patron PropertyChangeSupport/Listener
-			pcs.firePropertyChange("turnoNuevo", null, turno);
+			pcs.firePropertyChange("listaActualizada", null, turno);
 			ret = true;
 		}
 		return ret;
 	}
 	
 	private void eliminarTurno(Integer puesto) {
-		//Boolean ret = false;
 		this.listaDeTurnos.eliminarTurno(puesto);
-		pcs.firePropertyChange("eliminarTurno", null, null);
-		//return ret;
+		pcs.firePropertyChange("listaActualizada", null, null);
 	}
 	
 	public String obtenerProximoCliente() {
 		return this.colaDeEspera.poll();
 	}
-	
-	public void setTurno(Turno turno) {
-		Turno oldValue = null;
-		pcs.firePropertyChange("turnoNuevo", null, turno);
-	}
+
 	
 	@Override
 	public void propertyChange(PropertyChangeEvent arg0) {
+		if(arg0.getPropertyName().equals("listaActualizada"))
+			abrirPuertoDisplay(ListaDeDirecciones.PUERTO_DISPLAY);
+		/*
 		if(arg0.getPropertyName().equals("turnoNuevo")) {
 			abrirPuertoDisplay(ListaDeDirecciones.PUERTO_DISPLAY);
 		} else if(arg0.getPropertyName().equals("eliminarTurno")) {
 			abrirPuertoDisplay(ListaDeDirecciones.PUERTO_DISPLAY);
-		}
+		}*/
 	}
-/*
-	@Override
-	public void setMsj(String nuevoMensaje) {
-		String oldMsj = this.msj;
-		this.msj = nuevoMensaje;
-		this.pcs.firePropertyChange("Mensaje", oldMsj, this.msj);
-	}*/
-	/*
-	@Override
-	public void addPropertyChangeListener(PropertyChangeListener listener) {
-		pcs.addPropertyChangeListener(listener);
-	}*/
+
 
 	@Override
 	public void abrirServidor() {
-
 		abrirPuertoTotem(ListaDeDirecciones.PUERTO_TOTEM);
 		abrirPuertoPuestos(ListaDeDirecciones.PUERTO_PUESTOS);
-		//abrirPuertoDisplay(ListaDeDirecciones.PUERTO_DISPLAY);
-		/*
-		 * new Thread() { public void run() { try { Socket skt; myServerSocket = new
-		 * ServerSocket(puerto); setMsj("Esperando conexion..."); skt =
-		 * myServerSocket.accept(); setMsj("Conexión establecida con el puerto " +
-		 * skt.getPort() + "\n"); } catch (IOException e) { e.printStackTrace(); } }
-		 * }.start();
-		 */
 	}
 
-	/*
-	private void abrirPuertoDisplay(int puertoDisplay) {
-		new Thread() {
-			public void run() {
-				ServerSocket puestosServerSocket;
-				Socket socket;
-				AdministradorDeTurnos admin = AdministradorDeTurnos.getInstance();
-				BufferedReader myInput;
-				PrintWriter myOutput;
-				int numeroPuesto;
-				String dni;
-				
-				
-				ObjectOutputStream myObjectOutput;
-				int tamañoLista = -1;
-				try {
-					puestosServerSocket = new ServerSocket(puertoDisplay);
-					socket = puestosServerSocket.accept();
-					while(admin.listaDeTurnos.size()!=tamañoLista) {
-						tamañoLista = admin.listaDeTurnos.size();
-						myObjectOutput = new ObjectOutputStream(socket.getOutputStream());
-						//myInput = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-						//myOutput = new PrintWriter(socket.getOutputStream(), true);
-						while(admin.listaDeTurnos.size()==tamañoLista) {
-							
-						}
-						myObjectOutput.writeObject(listaDeTurnos);
-						//myInput.close();
-						myObjectOutput.close();
-						//socket.close();
-					}
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-		}.start();
-	}*/
+
 	
 	public void abrirPuertoDisplay(int puertoDisplay) {
 		try {
 			Socket socket = new Socket(this.hostPantalla, puertoDisplay);
-			// this.myInput = new BufferedReader(new
-			// InputStreamReader(socket.getInputStream()));
-			//ObjectInputStream myObjectInputStream = new ObjectInputStream(socket.getInputStream());
-			// this.myOutput = new PrintWriter(socket.getOutputStream(), true);
 			ObjectOutputStream myObjectOutput = new ObjectOutputStream(socket.getOutputStream());
 			myObjectOutput.writeObject(listaDeTurnos);
 			myObjectOutput.close();
-			// myOutput.close();
-			// myInput.close();
+
 			socket.close();
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
@@ -227,10 +163,8 @@ public class AdministradorDeTurnos extends ConexionConServerSocket implements Pr
 				String nuevoDni = null;
 				try {
 					totemServerSocket = new ServerSocket(puertoTotem);
-					while (true) { // nuevoDni==null //true
-						// setMsj("Esperando conexion...");
+					while (true) {
 						socket = totemServerSocket.accept();
-						// setMsj("Conexión establecida con el puerto " + skt.getPort() + "\n");
 						myInput = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 						myOutput = new PrintWriter(socket.getOutputStream(), true);
 						nuevoDni = myInput.readLine();
