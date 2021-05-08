@@ -87,16 +87,14 @@ public class VistaDisplay extends JFrame implements IVistaDisplay {
 		while (it.hasNext()) {
 			entry = it.next();
 			StringBuilder sb = new StringBuilder();
-			for(int i=0 ; i<10 ; i++) {
-				sb.append(" ");
-			}
-			
-			//ACOMODAR DISPOSICION
-			sb.append(entry.getKey().toString());
-			for(int i=0 ; i<10 ; i++) {
+			for(int i=0 ; i<27 ; i++) {
 				sb.append(" ");
 			}
 			sb.append(entry.getValue());
+			for(int i=0 ; i<58 ; i++) {
+				sb.append(" ");
+			} 
+			sb.append(entry.getKey().toString());
 			this.listModelTurnos.addElement(sb.toString());
 		}		
 		this.repaint();

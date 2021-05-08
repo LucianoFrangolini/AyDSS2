@@ -21,14 +21,13 @@ public class ControladorPuesto implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		if (e.getActionCommand().equalsIgnoreCase(IVistaPuesto.LLAMAR)) {
 			this.puesto.enviarMensaje(ListaDeAcciones.LLAMAR);
-			if (this.puesto.getClienteActual().length()==8) {
-				this.vista.setDisplay("Atendiendo cliente: "+ this.puesto.getClienteActual());
+			if (this.puesto.getClienteActual() != null && this.puesto.getClienteActual().length() == 8) {
+				this.vista.setDisplay("Atendiendo cliente: " + this.puesto.getClienteActual());
 				this.vista.habilitarBotonEliminar();
-			}
-			else
+			} else if (this.puesto.getClienteActual() != null)
 				this.vista.setDisplay(this.puesto.getClienteActual());
+			
 		} else if (e.getActionCommand().equalsIgnoreCase(IVistaPuesto.ELIMINAR)) {
-			//REVISAR FUNCIONALIDAD DEL BOTON
 			this.puesto.enviarMensaje(ListaDeAcciones.ELIMINAR);
 			this.vista.setDisplay("-");
 			this.vista.deshabilitarBotonEliminar();

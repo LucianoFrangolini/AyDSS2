@@ -1,41 +1,34 @@
 package back.pantalla;
 
+import java.awt.Toolkit;
 import java.beans.PropertyChangeSupport;
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.net.UnknownHostException;
+
+import javax.swing.JOptionPane;
 
 import back.conexiones.ConexionSocket;
 import back.constantes.ListaDeDirecciones;
-import back.servidor.AdministradorDeTurnos;
 import back.servidor.ListaDeTurnos;
 
 public class Display extends ConexionSocket {
 
-	// private String listaDeLlamados;
 	private ListaDeTurnos listaDeLlamados = null;
 	public PropertyChangeSupport pcs;
 
 	public Display() {
 		this.puerto = ListaDeDirecciones.PUERTO_DISPLAY;
-		this.host = ListaDeDirecciones.HOST;
 		this.pcs = new PropertyChangeSupport(this);
 		this.establecerConexion();
 	}
 
-	
-    public void setListaLlamados(ListaDeTurnos listaDeLlamados) {
-    	ListaDeTurnos oldValue = this.listaDeLlamados;
-        this.listaDeLlamados = listaDeLlamados;
-        pcs.firePropertyChange("lista de llamados",oldValue, listaDeLlamados);
-    }
-
+	public void setListaLlamados(ListaDeTurnos listaDeLlamados) {
+		ListaDeTurnos oldValue = this.listaDeLlamados;
+		this.listaDeLlamados = listaDeLlamados;
+		pcs.firePropertyChange("lista de llamados", oldValue, listaDeLlamados);
+	}
 
 	public void establecerConexion() {
 		new Thread() {
@@ -50,8 +43,9 @@ public class Display extends ConexionSocket {
 						setListaLlamados((ListaDeTurnos) myObjectInputStream.readObject());
 					}
 				} catch (IOException e) {
-					e.printStackTrace();
-					
+					Toolkit.getDefaultToolkit().beep();
+					JOptionPane.showMessageDialog(null, ConexionSocket.MENSAJE_SIN_CONEXION);
+
 				} catch (ClassNotFoundException e) {
 					e.printStackTrace();
 				}

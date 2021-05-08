@@ -38,7 +38,7 @@ public class VistaServidor extends JFrame implements IVista{
 
 	@Override
 	public void abrir() {
-		setBounds(800, 800, 279, 131);
+		setBounds(800, 500, 279, 131);
 		setVisible(true);
 	}
 

@@ -15,16 +15,12 @@ import java.net.UnknownHostException;
 import back.constantes.ListaDeAcciones;
 import back.constantes.ListaDeDirecciones;
 
-//REVISAR IMPLEMENTS
-
-public class AdministradorDeTurnos implements PropertyChangeListener  {
+public class AdministradorDeTurnos implements PropertyChangeListener {
 	private ListaDeTurnos listaDeTurnos = new ListaDeTurnos();
 	private ColaDeEspera colaDeEspera = new ColaDeEspera();
 	private static AdministradorDeTurnos instance;
 	private PropertyChangeSupport pcs;
-	
-	//REVISAR
-	private String hostPantalla = "localhost";
+	private String hostPantalla;
 
 	public static AdministradorDeTurnos getInstance() {
 		if (instance == null) {
@@ -36,6 +32,7 @@ public class AdministradorDeTurnos implements PropertyChangeListener  {
 	private AdministradorDeTurnos() {
 		this.pcs = new PropertyChangeSupport(this);
 		this.pcs.addPropertyChangeListener(this);
+		this.hostPantalla = ListaDeDirecciones.HOST;
 	}
 
 	private Boolean validarDni(String dni) {
@@ -56,33 +53,25 @@ public class AdministradorDeTurnos implements PropertyChangeListener  {
 		if (dni != null) {
 			Turno turno = new Turno(puesto, dni);
 			this.listaDeTurnos.agregarTurno(turno);
-			//this.setTurno(turno);	//Es necesario para el patron PropertyChangeSupport/Listener
 			pcs.firePropertyChange("listaActualizada", null, turno);
 			ret = true;
 		}
 		return ret;
 	}
-	
+
 	private void eliminarTurno(Integer puesto) {
 		this.listaDeTurnos.eliminarTurno(puesto);
 		pcs.firePropertyChange("listaActualizada", null, null);
 	}
-	
+
 	public String obtenerProximoCliente() {
 		return this.colaDeEspera.poll();
 	}
 
-	
 	@Override
 	public void propertyChange(PropertyChangeEvent arg0) {
-		if(arg0.getPropertyName().equals("listaActualizada"))
+		if (arg0.getPropertyName().equals("listaActualizada"))
 			abrirPuertoDisplay(ListaDeDirecciones.PUERTO_DISPLAY);
-		/*
-		if(arg0.getPropertyName().equals("turnoNuevo")) {
-			abrirPuertoDisplay(ListaDeDirecciones.PUERTO_DISPLAY);
-		} else if(arg0.getPropertyName().equals("eliminarTurno")) {
-			abrirPuertoDisplay(ListaDeDirecciones.PUERTO_DISPLAY);
-		}*/
 	}
 
 	public void abrirServidor() {
@@ -90,15 +79,12 @@ public class AdministradorDeTurnos implements PropertyChangeListener  {
 		abrirPuertoPuestos(ListaDeDirecciones.PUERTO_PUESTOS);
 	}
 
-
-	
 	public void abrirPuertoDisplay(int puertoDisplay) {
 		try {
 			Socket socket = new Socket(this.hostPantalla, puertoDisplay);
 			ObjectOutputStream myObjectOutput = new ObjectOutputStream(socket.getOutputStream());
 			myObjectOutput.writeObject(listaDeTurnos);
 			myObjectOutput.close();
-
 			socket.close();
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
@@ -106,7 +92,6 @@ public class AdministradorDeTurnos implements PropertyChangeListener  {
 			e.printStackTrace();
 		}
 	}
-
 
 	private void abrirPuertoPuestos(int puertoPuestos) {
 		new Thread() {
@@ -125,7 +110,7 @@ public class AdministradorDeTurnos implements PropertyChangeListener  {
 						myInput = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 						accion = myInput.readLine();
 						numeroPuesto = Integer.parseInt(myInput.readLine());
-						if(accion.equals(ListaDeAcciones.LLAMAR)) {
+						if (accion.equals(ListaDeAcciones.LLAMAR)) {
 							dni = admin.obtenerProximoCliente();
 							myOutput = new PrintWriter(socket.getOutputStream(), true);
 							if (admin.agregarTurno(numeroPuesto, dni)) {
@@ -133,8 +118,7 @@ public class AdministradorDeTurnos implements PropertyChangeListener  {
 							} else
 								myOutput.println("No hay clientes en espera");
 							myOutput.close();
-						}
-						else if(accion.equals(ListaDeAcciones.ELIMINAR)) {
+						} else if (accion.equals(ListaDeAcciones.ELIMINAR)) {
 							admin.eliminarTurno(numeroPuesto);
 						}
 						myInput.close();
@@ -156,7 +140,6 @@ public class AdministradorDeTurnos implements PropertyChangeListener  {
 				Socket socket;
 				AdministradorDeTurnos admin = AdministradorDeTurnos.getInstance();
 				BufferedReader myInput;
-				// PrintStream myOutput;
 				PrintWriter myOutput;
 				String nuevoDni = null;
 				try {

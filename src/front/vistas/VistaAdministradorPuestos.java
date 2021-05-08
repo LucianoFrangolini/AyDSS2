@@ -82,7 +82,7 @@ public class VistaAdministradorPuestos extends JFrame implements IVistaAdministr
 
 	@Override
 	public void abrir() {
-		setBounds(100, 100, 450, 300);
+		setBounds(700, 100, 450, 300);
 		setVisible(true);
 	}
 	

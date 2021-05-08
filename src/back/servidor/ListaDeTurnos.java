@@ -5,12 +5,10 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map.Entry;
 
-import back.puestos.Puesto;
 
-@SuppressWarnings("serial")
-
-//REVISAR SERIALIZABLE
+//Agregar que debe ser SERIALIZABLE en la documentacion para el envío de objetos/socket
 public class ListaDeTurnos implements Serializable {
+	private static final long serialVersionUID = -6925984720747589926L;
 	private HashMap<Integer,String> lista = new HashMap<Integer,String>();
 	
 	public void agregarTurno(Turno turno) {

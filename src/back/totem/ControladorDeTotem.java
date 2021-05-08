@@ -14,25 +14,26 @@ import back.constantes.ListaDeDirecciones;
 
 public class ControladorDeTotem extends ConexionSocket {
 
-	private String estado = "";
+	private String estado;
 
 	public ControladorDeTotem() {
-		this.host = ListaDeDirecciones.HOST; //"localhost" //InetAddress.getLocalHost().getCanonicalHostName();
+		this.host = ListaDeDirecciones.HOST;
 		this.puerto = ListaDeDirecciones.PUERTO_TOTEM;
+		this.estado = "";
 	}
 
 	public String getEstado() {
 		return estado;
 	}
+
 	private Boolean estadoAceptable() {
 		Boolean ret = false;
-		if(estado.equals("Registro exitoso") || estado.equals("El DNI ya se encuentra registrado."))
-				ret = true;
+		if (estado.equals("Registro exitoso") || estado.equals("El DNI ya se encuentra registrado."))
+			ret = true;
 		return ret;
 	}
 
 	public void enviarMensaje(String DNI) {
-		//myOutput.print(DNI);
 		this.estado = "";
 		try {
 			this.socket = new Socket(this.host, this.puerto);
@@ -47,7 +48,7 @@ public class ControladorDeTotem extends ConexionSocket {
 			socket.close();
 		} catch (IOException e) {
 			Toolkit.getDefaultToolkit().beep();
-			JOptionPane.showMessageDialog(null, "No se pudo establecer una conexion con el servidor");
+			JOptionPane.showMessageDialog(null, ConexionSocket.MENSAJE_SIN_CONEXION);
 		}
 	}
 

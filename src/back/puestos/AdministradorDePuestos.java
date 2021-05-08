@@ -1,16 +1,8 @@
 package back.puestos;
 
-import java.util.Iterator;
-import java.util.Map.Entry;
-
-import back.constantes.ListaDeDirecciones;
-
-
 public class AdministradorDePuestos {
 	private ListaDePuestos listaDePuestos = new ListaDePuestos();
 	private static int proximoNumeroPuestoDisponible = 1;
-	//private static int proximoSocketDisponible;
-	//private static int puerto;
 	private static AdministradorDePuestos instance;
 	
 	public static AdministradorDePuestos getInstance() {
@@ -20,15 +12,11 @@ public class AdministradorDePuestos {
 		return instance;
 	}
 
-	private AdministradorDePuestos() {
-		//puerto = ListaDeDirecciones.PUERTO_PUESTOS;
-		//proximoSocketDisponible = socketBase + 1;
-	}
+	private AdministradorDePuestos() {}
 	
 	public Puesto abrirPuestoTrabajo() {
 		Puesto puesto = listaDePuestos.agregarPuesto(proximoNumeroPuestoDisponible);
 		proximoNumeroPuestoDisponible += 1;
-		//proximoSocketDisponible += 1;
 		return puesto;
 	}
 	public void eliminarPuestoTrabajo(int numeroPuesto) {
@@ -36,11 +24,6 @@ public class AdministradorDePuestos {
 	}
 	public Puesto getPuesto(int numeroPuesto) {
 		return this.listaDePuestos.getPuesto(numeroPuesto);
-	}
-	
-	//TAL VEZ NO SE USA
-	public Iterator<Entry<Integer,Puesto>> getItPuestos(){
-		return listaDePuestos.getItPuestos();
 	}
 }
  

@@ -168,7 +168,7 @@ public class VistaTotem extends JFrame implements IVistaTotem{
 
 	@Override
 	public void abrir() {
-		setBounds(100, 100, 463, 450);
+		setBounds(100, 400, 463, 450);
 		setVisible(true);
 	}
 

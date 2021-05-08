@@ -58,7 +58,6 @@ public class ControladorTotem implements ActionListener {
 			this.vista.deshabilitarEnvio();
 			this.totem.enviarMensaje(this.vista.getLabelDisplay());
 			this.vista.setLabelDisplay(this.totem.getEstado());
-			//this.vista.limpiarTotemDisplay(3500);
 		}
 	}
 

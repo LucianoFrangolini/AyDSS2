@@ -1,11 +1,14 @@
 package back.puestos;
 
+import java.awt.Toolkit;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
+
+import javax.swing.JOptionPane;
 
 import back.conexiones.ConexionSocket;
 import back.constantes.ListaDeAcciones;
@@ -25,47 +28,6 @@ public class Puesto extends ConexionSocket {
 	public int getNumeroPuesto() {
 		return numeroPuesto;
 	}
-
-	
-	//NO LO USAMOS 
-	/*public void enviarMensaje(String host, int puerto, String texto) {
-		try {
-			this.socket = new Socket(this.host,this.puerto);
-			this.myInput = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-			this.myOutput = new PrintWriter(socket.getOutputStream(), true);
-			myOutput.println(numeroPuesto);
-			
-			this.clienteActual = myInput.readLine();
-			
-			myOutput.close();
-			myInput.close();
-			socket.close();
-		} catch (UnknownHostException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}*/
-	/*
-	public void enviarMensaje1(String accion) {	//ORIGINAL
-		try {
-			this.socket = new Socket(this.host,this.puerto);
-			this.myInput = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-			this.myOutput = new PrintWriter(socket.getOutputStream(), true);
-			
-			myOutput.println("agregar");
-			
-			myOutput.println(this.numeroPuesto);
-			this.clienteActual = myInput.readLine();
-			myOutput.close();
-			myInput.close();
-			socket.close();
-		} catch (UnknownHostException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}*/
 	
 	public void enviarMensaje(String accion) {
 		try {
@@ -87,10 +49,10 @@ public class Puesto extends ConexionSocket {
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
-			e.printStackTrace();
+			Toolkit.getDefaultToolkit().beep();
+			JOptionPane.showMessageDialog(null, ConexionSocket.MENSAJE_SIN_CONEXION);
 		}
 	}
-
 	
 	public String getClienteActual() {
 		return clienteActual;

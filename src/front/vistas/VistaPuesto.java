@@ -31,7 +31,7 @@ public class VistaPuesto extends JFrame implements IVistaPuesto {
 		setContentPane(mainPanel);
 		mainPanel.setLayout(new GridLayout(2, 0, 0, 0));
 		
-		lblDisplay = new JLabel("[DNI cliente actual]");
+		lblDisplay = new JLabel("-");
 		lblDisplay.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		lblDisplay.setHorizontalAlignment(SwingConstants.CENTER);
 		mainPanel.add(lblDisplay);
@@ -40,7 +40,7 @@ public class VistaPuesto extends JFrame implements IVistaPuesto {
 		mainPanel.add(panelBotones);
 		panelBotones.setLayout(new GridLayout(0, 2, 0, 0));
 		
-		btnEliminar = new JButton("Eliminar cliente actual");
+		btnEliminar = new JButton("Eliminar cliente atendido");
 		btnEliminar.setEnabled(false);
 		btnEliminar.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		panelBotones.add(btnEliminar);
@@ -71,7 +71,7 @@ public class VistaPuesto extends JFrame implements IVistaPuesto {
 
 	@Override
 	public void abrir() {
-		setBounds(100, 100, 450, 300);
+		setBounds(1200, 100, 450, 300);
 		setVisible(true);
 	}
 	
