@@ -6,6 +6,10 @@ import front.vistas.VistaAdministradorPuestos;
 
 public class AdministradorPuestos {
 
+	/**
+	 * Método encargado de ejecutar el Administrador de Puestos.<br>
+	 * @param args de tipo String[]: No utilizado.
+	 */
 	public static void main(String[] args) {
 		IVistaAdministradorPuestos vista = new VistaAdministradorPuestos();
 		ControladorAdministradorPuestos controlador = new ControladorAdministradorPuestos(vista);
