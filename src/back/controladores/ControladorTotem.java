@@ -6,11 +6,21 @@ import java.awt.event.ActionListener;
 import back.totem.ControladorDeTotem;
 import front.interfaces.IVistaTotem;
 
+/**
+ * @author Grupo12
+ * <br>
+ * Controlador para el Totem, implementa ActionListener.
+ * <br>
+ */
 public class ControladorTotem implements ActionListener {
 
 	private IVistaTotem vista;
 	private ControladorDeTotem totem;
 
+	/**
+	 * Constructor para el controlador de un puesto.<br>
+	 * @param vista de tipo IVistaTotem: es la vista que se le presenta a los usuarios que solicitan un turno en el sistema.<br>
+	 */
 	public ControladorTotem(IVistaTotem vista) {
 		this.vista = vista;
 		this.totem = new ControladorDeTotem();
@@ -64,7 +74,11 @@ public class ControladorTotem implements ActionListener {
 			this.vista.setLabelDisplay(this.totem.getEstado());
 		}
 	}
-
+	
+	/**
+	 * Método encargado de actualizar el display del totem.<br>
+	 * <b> Post: </b> Se actualiza el display según que boton se haya tocado, tambien habilita o deshabilita el boton de envio según corresponda.<br>
+	 */
 	private void actualizarDisplay(String digito) {
 		String aux = this.vista.getLabelDisplay();
 		if (digito != IVistaTotem.BACKSPACE) {

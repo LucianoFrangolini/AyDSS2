@@ -13,23 +13,49 @@ import back.conexiones.ConexionSocket;
 import back.constantes.ListaDeDirecciones;
 import back.servidor.ListaDeTurnos;
 
+/**
+ * @author Grupo12
+ * <br>
+ * Clase para el Display que extiende de ConexionSocket.
+ * <br>
+ */
 public class Display extends ConexionSocket {
 
 	private ListaDeTurnos listaDeLlamados = null;
-	public PropertyChangeSupport pcs;
-
+	private PropertyChangeSupport pcs;
+	
+	/**
+	 * Constructor para el display<br>
+	 */
 	public Display() {
 		this.puerto = ListaDeDirecciones.PUERTO_DISPLAY;
 		this.pcs = new PropertyChangeSupport(this);
 		this.establecerConexion();
 	}
-
+	
+	/**
+	 * Método getter del PropertyChangeSupport de la clase.<br>
+	 * @return Devuelve el PropertyChangeSupport de la clase.<br>
+	 */
+	public PropertyChangeSupport getPcs() {
+		return pcs;
+	}
+	
+	/**
+	 * Método encargado de actualizar la lista de llamados y disparar el evento de su cambio.<br>
+	 * @param listaDeLlamados de tipo ListaDeTurnos: es el objeto que va a recibir cambios.<br>
+	 *  * <b> Post: </b> El atributo listaDeLlamados es seteado y se dispara un evento con el cambio del mismo.<br>
+	 */
 	public void setListaLlamados(ListaDeTurnos listaDeLlamados) {
 		ListaDeTurnos oldValue = this.listaDeLlamados;
 		this.listaDeLlamados = listaDeLlamados;
 		pcs.firePropertyChange("lista de llamados", oldValue, listaDeLlamados);
 	}
-
+	
+	/**
+	 * Método encargado de abrir una conexion socket para que se le puedan enviar objetos y actualizar su propio atributo listaDeLlamados.<br>
+	 *  * <b> Post: </b> Se abre un serverSocket a la espera de recibir objetos de tipo ListaDeTurnos.<br>
+	 */
 	public void establecerConexion() {
 		new Thread() {
 			public void run() {

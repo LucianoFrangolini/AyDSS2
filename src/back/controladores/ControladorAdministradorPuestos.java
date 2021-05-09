@@ -15,7 +15,7 @@ import front.vistas.VistaPuesto;
 /**
  * @author Grupo12
  * <br>
- * Controlador para el Administrador de puestos.
+ * Controlador para el Administrador de puestos, implementa ActionListener.
  * <br>
  */
 public class ControladorAdministradorPuestos implements ActionListener {
@@ -25,7 +25,7 @@ public class ControladorAdministradorPuestos implements ActionListener {
 	private ArrayList<IVistaPuesto> listaVistasPuestos;
 	
 	/**
-	 * Constructor para el turno<br>
+	 * Constructor para el controlador del administrador de puestos<br>
 	 * @param vista de tipo IVistaAdministradorPuestos: es la vista que se le muestra al usuario que administra los puestos.<br>
 	 */
 	public ControladorAdministradorPuestos(IVistaAdministradorPuestos vista) {

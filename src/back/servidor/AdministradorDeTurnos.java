@@ -15,30 +15,51 @@ import java.net.UnknownHostException;
 import back.constantes.ListaDeAcciones;
 import back.constantes.ListaDeDirecciones;
 
+/**
+ * @author Grupo12
+ * <br>
+ * Clase del Administrador de Puestos que implementa el patrón Singleton.
+ * <br>
+ */
 public class AdministradorDeTurnos implements PropertyChangeListener {
 	private ListaDeTurnos listaDeTurnos = new ListaDeTurnos();
 	private ColaDeEspera colaDeEspera = new ColaDeEspera();
 	private static AdministradorDeTurnos instance;
 	private PropertyChangeSupport pcs;
 	private String hostPantalla;
-
+	
+	/**
+	 * Método encargado de obtener la instancia de la clase AdministradorDeTurnos.<br>
+	 * @return una instancia de AdministradorDeTurnos.
+	 */
 	public static AdministradorDeTurnos getInstance() {
 		if (instance == null) {
 			instance = new AdministradorDeTurnos();
 		}
 		return instance;
 	}
-
+	
+	/**
+	 * Constructor para el administrador de turnos.<br>
+	 */
 	private AdministradorDeTurnos() {
 		this.pcs = new PropertyChangeSupport(this);
 		this.pcs.addPropertyChangeListener(this);
 		this.hostPantalla = ListaDeDirecciones.HOST;
 	}
-
+	
+	/**
+	 * Método encargado de validar si el dni ya se encuentra registrado en la cola.<br>
+	 * @return true si el dni no se encuentra en la cola de espera, false en caso contrario.
+	 */
 	private Boolean validarDni(String dni) {
 		return !this.colaDeEspera.contains(dni);
 	}
-
+	
+	/**
+	 * Método encargado de agregar un dni en la cola de espera.<br>
+	 * @return true si pudo agregar el dni en la cola, falso en caso contrario.
+	 */
 	public Boolean agregarDni(String dni) {
 		Boolean ret = false;
 		if (validarDni(dni)) {
@@ -47,7 +68,12 @@ public class AdministradorDeTurnos implements PropertyChangeListener {
 		}
 		return ret;
 	}
-
+	
+	/**
+	 * Método encargado de agregar un turno en la lista de turnos.<br>
+	 * <b> Post: </b> Si el dni es valido se crea un turno, se lo agrego a la lista de turnos y se dispara una accion de lista actualizada.<br>
+	 * @return true si pudo agregar el dni en la cola, falso en caso contrario.
+	 */
 	private Boolean agregarTurno(Integer puesto, String dni) {
 		Boolean ret = false;
 		if (dni != null) {
@@ -58,22 +84,38 @@ public class AdministradorDeTurnos implements PropertyChangeListener {
 		}
 		return ret;
 	}
-
+	
+	/**
+	 * Método encargado de eliminar un turno y disparar una accion de que la lista de turnos se actualizo.<br>
+	 * <b> Post: </b> Si elimina el turno con el numero de puesto correspondiente si es que existe y se dispara una accion de lista actualizada.<br>
+	 */
 	private void eliminarTurno(Integer puesto) {
 		this.listaDeTurnos.eliminarTurno(puesto);
 		pcs.firePropertyChange("listaActualizada", null, null);
 	}
-
+	
+	/**
+	 * Método encargado de obtener el proximo dni de la cola de espera.<br>
+	 * @return devuelve un String con el dni del proximo cliente en la cola y lo retira de la misma, o null si estaba vacía.
+	 */
 	public String obtenerProximoCliente() {
 		return this.colaDeEspera.poll();
 	}
-
+	
+	/**
+	 * Método encargado de disparar una accion cuando la propiedad observada sufrió cambios.<br>
+	 * @param arg0vista de tipo PropertyChangeEvent: es el objeto que contiene atributos sobre el cambio en el objeto observado.<br>
+	 */
 	@Override
 	public void propertyChange(PropertyChangeEvent arg0) {
 		if (arg0.getPropertyName().equals("listaActualizada"))
 			abrirPuertoDisplay(ListaDeDirecciones.PUERTO_DISPLAY);
 	}
-
+	
+	/**
+	 * Método encargado de eliminar un turno y disparar una accion de que la lista de turnos se actualizo.<br>
+	 * <b> Post: </b> Si elimina el turno con el numero de puesto correspondiente si es que existe y se dispara una accion de lista actualizada.<br>
+	 */
 	public void abrirServidor() {
 		abrirPuertoTotem(ListaDeDirecciones.PUERTO_TOTEM);
 		abrirPuertoPuestos(ListaDeDirecciones.PUERTO_PUESTOS);

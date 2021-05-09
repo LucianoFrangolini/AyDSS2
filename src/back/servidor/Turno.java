@@ -11,7 +11,7 @@ public class Turno {
 	private String dni;
 	
 	/**
-	 * Constructor para el turno
+	 * Constructor para el turno<br>
 	 * @param puesto de tipo Integer: Representa el numero de puesto asignado al turno.<br>
 	 * @param dni de tipo String: Representa el dni asignado al turno.<br>
 	 */
@@ -21,16 +21,16 @@ public class Turno {
 	}
 	
 	/**
-	 * Método getter del Puesto
-	 * @return Devuelve el numero de puesto asignado al turno
+	 * Método getter del numero de puesto.<br>
+	 * @return Devuelve el numero de puesto asignado al turno.<br>
 	 */
 	public Integer getPuesto() {
 		return puesto;
 	}
 	
 	/**
-	 * Método getter del dni
-	 * @return Devuelve el dni como String
+	 * Método getter del dni.<br>
+	 * @return Devuelve el dni como String.<br>
 	 */
 	public String getDni() {
 		return dni;

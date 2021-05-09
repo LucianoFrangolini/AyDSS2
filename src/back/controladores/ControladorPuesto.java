@@ -7,11 +7,22 @@ import back.constantes.ListaDeAcciones;
 import back.puestos.Puesto;
 import front.interfaces.IVistaPuesto;
 
+/**
+ * @author Grupo12
+ * <br>
+ * Controlador para un puesto, implementa ActionListener.
+ * <br>
+ */
 public class ControladorPuesto implements ActionListener {
 
 	private IVistaPuesto vista;
 	private Puesto puesto;
-
+	
+	/**
+	 * Constructor para el controlador de un puesto.<br>
+	 * @param puesto de tipo Puesto: es el puesto que se le otorga al controlador.<br>
+	 * @param vista de tipo IVistaPuesto: es la vista del puesto que se le muestra al operador.<br>
+	 */
 	public ControladorPuesto(Puesto puesto, IVistaPuesto vista) {
 		this.vista = vista;
 		this.puesto = puesto;
