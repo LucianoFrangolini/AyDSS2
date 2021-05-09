@@ -16,7 +16,7 @@ import back.servidor.ListaDeTurnos;
 public class Display extends ConexionSocket {
 
 	private ListaDeTurnos listaDeLlamados = null;
-	public PropertyChangeSupport pcs;
+	private PropertyChangeSupport pcs;
 
 	public Display() {
 		this.puerto = ListaDeDirecciones.PUERTO_DISPLAY;
@@ -30,6 +30,10 @@ public class Display extends ConexionSocket {
 		pcs.firePropertyChange("lista de llamados", oldValue, listaDeLlamados);
 	}
 
+	public PropertyChangeSupport getPcs() {
+		return this.pcs;
+	}
+	
 	public void establecerConexion() {
 		new Thread() {
 			public void run() {

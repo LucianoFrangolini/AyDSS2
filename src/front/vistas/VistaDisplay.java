@@ -21,8 +21,8 @@ public class VistaDisplay extends JFrame implements IVistaDisplay {
 
 	private static final long serialVersionUID = -638127726284784506L;
 	private JPanel contentPane;
-	JList<String> lista;
-	DefaultListModel<String> listModelTurnos;
+	private JList<String> lista;
+	private DefaultListModel<String> listModelTurnos;
 
 	public VistaDisplay() {
 		setTitle("Display");
