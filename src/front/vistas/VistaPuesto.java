@@ -24,36 +24,36 @@ public class VistaPuesto extends JFrame implements IVistaPuesto {
 	private JButton btnLlamar;
 
 	public VistaPuesto(int numeroPuesto) {
-		setTitle("Puesto "+numeroPuesto);
+		setTitle("Puesto " + numeroPuesto);
 		setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 		mainPanel = new JPanel();
 		mainPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(mainPanel);
 		mainPanel.setLayout(new GridLayout(2, 0, 0, 0));
-		
+
 		lblDisplay = new JLabel("-");
 		lblDisplay.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		lblDisplay.setHorizontalAlignment(SwingConstants.CENTER);
 		mainPanel.add(lblDisplay);
-		
+
 		JPanel panelBotones = new JPanel();
 		mainPanel.add(panelBotones);
 		panelBotones.setLayout(new GridLayout(0, 2, 0, 0));
-		
+
 		btnEliminar = new JButton("Eliminar cliente atendido");
 		btnEliminar.setEnabled(false);
 		btnEliminar.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		panelBotones.add(btnEliminar);
-		
+
 		btnLlamar = new JButton("Llamar siguiente cliente");
 		btnLlamar.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		panelBotones.add(btnLlamar);
-		
+
 		this.numeroPuesto = numeroPuesto;
-		
+
 		setActionCommands();
 	}
-	
+
 	public int getNumeroPuesto() {
 		return this.numeroPuesto;
 	}
@@ -62,7 +62,7 @@ public class VistaPuesto extends JFrame implements IVistaPuesto {
 		this.btnEliminar.setActionCommand(IVistaPuesto.ELIMINAR);
 		this.btnLlamar.setActionCommand(IVistaPuesto.LLAMAR);
 	}
-	
+
 	@Override
 	public void setActionListener(ActionListener c) {
 		this.btnLlamar.addActionListener(c);
@@ -74,7 +74,7 @@ public class VistaPuesto extends JFrame implements IVistaPuesto {
 		setBounds(1200, 100, 450, 300);
 		setVisible(true);
 	}
-	
+
 	@Override
 	public String toString() {
 		return "Puesto : " + this.numeroPuesto;
@@ -84,6 +84,7 @@ public class VistaPuesto extends JFrame implements IVistaPuesto {
 	public void setDisplay(String clienteActual) {
 		this.lblDisplay.setText(clienteActual);
 	}
+
 	@Override
 	public void dispose() {
 		super.dispose();

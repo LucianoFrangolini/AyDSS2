@@ -17,7 +17,7 @@ public class ControladorDisplay implements ActionListener, PropertyChangeListene
 	public ControladorDisplay(IVistaDisplay vista) {
 		this.vista = vista;
 		this.display = new Display();
-		this.display.pcs.addPropertyChangeListener(this);
+		this.display.getPcs().addPropertyChangeListener(this);
 	}
 
 	@Override
