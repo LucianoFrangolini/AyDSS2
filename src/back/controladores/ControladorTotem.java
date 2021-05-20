@@ -7,10 +7,8 @@ import back.totem.ControladorDeTotem;
 import front.interfaces.IVistaTotem;
 
 /**
- * @author Grupo12
- * <br>
- * Controlador para el Totem, implementa ActionListener.
- * <br>
+ * @author Grupo12 <br>
+ *         Controlador para el Totem, implementa ActionListener. <br>
  */
 public class ControladorTotem implements ActionListener {
 
@@ -19,22 +17,26 @@ public class ControladorTotem implements ActionListener {
 
 	/**
 	 * Constructor para el controlador de un puesto.<br>
-	 * @param vista de tipo IVistaTotem: es la vista que se le presenta a los usuarios que solicitan un turno en el sistema.<br>
+	 * 
+	 * @param vista de tipo IVistaTotem: es la vista que se le presenta a los
+	 *              usuarios que solicitan un turno en el sistema.<br>
 	 */
 	public ControladorTotem(IVistaTotem vista) {
 		this.vista = vista;
 		this.totem = new ControladorDeTotem();
 	}
-	
+
 	/**
-	 * Método encargado de realizar acciones correspondientes una vez que la vista dispara un evento <br>
+	 * Método encargado de realizar acciones correspondientes una vez que la vista
+	 * dispara un evento <br>
+	 * 
 	 * @param e de tipo ActionEvent: es el evento disparado por la vista.<br>
 	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if(this.vista.getLabelDisplay().length()>8)
+		if (this.vista.getLabelDisplay().length() > 8)
 			this.vista.setLabelDisplay("");
-		
+
 		if (e.getActionCommand().equalsIgnoreCase(IVistaTotem.CERO))
 			actualizarDisplay(IVistaTotem.CERO);
 
@@ -67,17 +69,20 @@ public class ControladorTotem implements ActionListener {
 
 		else if (e.getActionCommand().equalsIgnoreCase(IVistaTotem.BACKSPACE)) {
 			actualizarDisplay(IVistaTotem.BACKSPACE);
-			
+
 		} else if (e.getActionCommand().equalsIgnoreCase(IVistaTotem.ENVIAR)) {
 			this.vista.deshabilitarEnvio();
 			this.totem.enviarMensaje(this.vista.getLabelDisplay());
 			this.vista.setLabelDisplay(this.totem.getEstado());
 		}
 	}
-	
+
 	/**
 	 * Método encargado de actualizar el display del totem.<br>
-	 * <b> Post: </b> Se actualiza el display según que boton se haya tocado, tambien habilita o deshabilita el boton de envio según corresponda.<br>
+	 * <b> Post: </b> Se actualiza el display según que boton se haya tocado,
+	 * tambien habilita o deshabilita el boton de envio según corresponda.<br>
+	 * 
+	 * @param digito de tipo String: Representa el dígito a añadir en el display del tótem.
 	 */
 	private void actualizarDisplay(String digito) {
 		String aux = this.vista.getLabelDisplay();
@@ -88,8 +93,7 @@ public class ControladorTotem implements ActionListener {
 				if (aux.length() == 8)
 					vista.habilitarEnvio();
 			}
-		}
-		else if (aux.length() != 0) {
+		} else if (aux.length() != 0) {
 			this.vista.setLabelDisplay(aux.substring(0, aux.length() - 1));
 			if (aux.length() == 8)
 				vista.deshabilitarEnvio();

@@ -1,9 +1,9 @@
 package back.constantes;
 
 /**
- * @author Grupo12
- * <br>
- * Clase de constantes con las direcciones de los host y los puertos utilizados
+ * @author Grupo12 <br>
+ *         Clase de constantes con las direcciones de los host y los puertos
+ *         utilizados
  */
 public class ListaDeDirecciones {
 

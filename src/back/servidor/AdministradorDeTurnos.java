@@ -16,10 +16,9 @@ import back.constantes.ListaDeAcciones;
 import back.constantes.ListaDeDirecciones;
 
 /**
- * @author Grupo12
- * <br>
- * Clase del Administrador de Puestos que implementa el patrón Singleton.
- * <br>
+ * @author Grupo12 <br>
+ *         Clase del Administrador de Puestos que implementa el patrón
+ *         Singleton. <br>
  */
 public class AdministradorDeTurnos implements PropertyChangeListener {
 	private ListaDeTurnos listaDeTurnos = new ListaDeTurnos();
@@ -27,9 +26,11 @@ public class AdministradorDeTurnos implements PropertyChangeListener {
 	private static AdministradorDeTurnos instance;
 	private PropertyChangeSupport pcs;
 	private String hostPantalla;
-	
+
 	/**
-	 * Método encargado de obtener la instancia de la clase AdministradorDeTurnos.<br>
+	 * Método encargado de obtener la instancia de la clase
+	 * AdministradorDeTurnos.<br>
+	 * 
 	 * @return una instancia de AdministradorDeTurnos.
 	 */
 	public static AdministradorDeTurnos getInstance() {
@@ -38,7 +39,7 @@ public class AdministradorDeTurnos implements PropertyChangeListener {
 		}
 		return instance;
 	}
-	
+
 	/**
 	 * Constructor para el administrador de turnos.<br>
 	 */
@@ -47,17 +48,26 @@ public class AdministradorDeTurnos implements PropertyChangeListener {
 		this.pcs.addPropertyChangeListener(this);
 		this.hostPantalla = ListaDeDirecciones.HOST;
 	}
-	
+
 	/**
-	 * Método encargado de validar si el dni ya se encuentra registrado en la cola.<br>
-	 * @return true si el dni no se encuentra en la cola de espera, false en caso contrario.
+	 * Método encargado de validar si el dni ya se encuentra registrado en la
+	 * cola.<br>
+	 * 
+	 * @param dni de tipo String: Representa el dni a validar.<br>
+	 * 
+	 * @return true si el dni no se encuentra en la cola de espera, false en caso
+	 *         contrario.
 	 */
 	private Boolean validarDni(String dni) {
 		return !this.colaDeEspera.contains(dni);
 	}
-	
+
 	/**
 	 * Método encargado de agregar un dni en la cola de espera.<br>
+	 * 
+	 * @param dni de tipo String: Representa el dni a agregar en la cola de
+	 *            espera<br>
+	 * 
 	 * @return true si pudo agregar el dni en la cola, falso en caso contrario.
 	 */
 	public Boolean agregarDni(String dni) {
@@ -68,10 +78,18 @@ public class AdministradorDeTurnos implements PropertyChangeListener {
 		}
 		return ret;
 	}
-	
+
 	/**
 	 * Método encargado de agregar un turno en la lista de turnos.<br>
-	 * <b> Post: </b> Si el dni es valido se crea un turno, se lo agrego a la lista de turnos y se dispara una accion de lista actualizada.<br>
+	 * 
+	 * <b> Post: </b> Si el dni es valido se crea un turno, se lo agrego a la lista
+	 * de turnos y se dispara una accion de lista actualizada.<br>
+	 * 
+	 * @param puesto de tipo Integer: Representa el puesto con el que se crea un
+	 *               turno.<br>
+	 * @param dni    de tipo String: Representa el dni con el que se crea un
+	 *               turno<br>
+	 * 
 	 * @return true si pudo agregar el dni en la cola, falso en caso contrario.
 	 */
 	private Boolean agregarTurno(Integer puesto, String dni) {
@@ -84,43 +102,66 @@ public class AdministradorDeTurnos implements PropertyChangeListener {
 		}
 		return ret;
 	}
-	
+
 	/**
-	 * Método encargado de eliminar un turno y disparar una accion de que la lista de turnos se actualizo.<br>
-	 * <b> Post: </b> Si elimina el turno con el numero de puesto correspondiente si es que existe y se dispara una accion de lista actualizada.<br>
+	 * Método encargado de eliminar un turno y disparar una accion de que la lista
+	 * de turnos se actualizo.<br>
+	 * 
+	 * <b> Post: </b> Si elimina el turno con el numero de puesto correspondiente si
+	 * es que existe y se dispara una accion de lista actualizada.<br>
+	 * 
+	 * @param puesto de tipo Integer: Representa el numero de puesto del turno a
+	 *               eliminar<br>
 	 */
 	private void eliminarTurno(Integer puesto) {
 		this.listaDeTurnos.eliminarTurno(puesto);
 		pcs.firePropertyChange("listaActualizada", null, null);
 	}
-	
+
 	/**
 	 * Método encargado de obtener el proximo dni de la cola de espera.<br>
-	 * @return devuelve un String con el dni del proximo cliente en la cola y lo retira de la misma, o null si estaba vacía.
+	 * 
+	 * @return devuelve un String con el dni del proximo cliente en la cola y lo
+	 *         retira de la misma, o null si estaba vacía.
 	 */
 	public String obtenerProximoCliente() {
 		return this.colaDeEspera.poll();
 	}
-	
+
 	/**
-	 * Método encargado de disparar una accion cuando la propiedad observada sufrió cambios.<br>
-	 * @param arg0vista de tipo PropertyChangeEvent: es el objeto que contiene atributos sobre el cambio en el objeto observado.<br>
+	 * Método encargado de disparar una accion cuando la propiedad observada sufrió
+	 * cambios.<br>
+	 * 
+	 * @param arg0 de tipo PropertyChangeEvent: es el objeto que contiene atributos
+	 *             sobre el cambio en el objeto observado.<br>
 	 */
 	@Override
 	public void propertyChange(PropertyChangeEvent arg0) {
 		if (arg0.getPropertyName().equals("listaActualizada"))
 			abrirPuertoDisplay(ListaDeDirecciones.PUERTO_DISPLAY);
 	}
-	
+
 	/**
-	 * Método encargado de eliminar un turno y disparar una accion de que la lista de turnos se actualizo.<br>
-	 * <b> Post: </b> Si elimina el turno con el numero de puesto correspondiente si es que existe y se dispara una accion de lista actualizada.<br>
+	 * Método encargado de enviar la orden de para abrir los puertos de conexión del
+	 * totem y de los puestos de trabajo.<br>
+	 * 
+	 * <b> Post: </b> Se abren los puertos para la conexión del totem y los puestos
+	 * de trabajo.<br>
 	 */
 	public void abrirServidor() {
 		abrirPuertoTotem(ListaDeDirecciones.PUERTO_TOTEM);
 		abrirPuertoPuestos(ListaDeDirecciones.PUERTO_PUESTOS);
 	}
 
+	/**
+	 * Método encargado de establecer una conexión socket con el Display o
+	 * pantalla.<br>
+	 * 
+	 * <b> Post: </b> Se envía un objeto de tipo ListaDeTurnos al Display.<br>
+	 * 
+	 * @param puertoDisplay de tipo int: Representa el puerto con el cual establecer
+	 *                      una conexión. <br>
+	 */
 	public void abrirPuertoDisplay(int puertoDisplay) {
 		try {
 			Socket socket = new Socket(this.hostPantalla, puertoDisplay);
@@ -135,6 +176,16 @@ public class AdministradorDeTurnos implements PropertyChangeListener {
 		}
 	}
 
+	/**
+	 * Método encargado de abrir una conexion socket para que los puestos de trabajo
+	 * comuniquen sus solicitudes <br>
+	 * 
+	 * * <b> Post: </b> Se abre un serverSocket a la espera de recibir solicitudes
+	 * de los puestos de trabajo.<br>
+	 * 
+	 * @param puertoPuestos de tipo int: Representa el puerto a abrir para realizar
+	 *                      la conexión.<br>
+	 */
 	private void abrirPuertoPuestos(int puertoPuestos) {
 		new Thread() {
 			public void run() {
@@ -175,6 +226,16 @@ public class AdministradorDeTurnos implements PropertyChangeListener {
 
 	}
 
+	/**
+	 * Método encargado de abrir una conexion socket para que el totem comunique sus
+	 * solicitudes <br>
+	 * 
+	 * * <b> Post: </b> Se abre un serverSocket a la espera de recibir solicitudes
+	 * del totem.<br>
+	 * 
+	 * @param puertoTotem de tipo int: Representa el puerto a abrir para realizar la
+	 *                    conexión.<br>
+	 */
 	private void abrirPuertoTotem(int puertoTotem) {
 		new Thread() {
 			public void run() {
