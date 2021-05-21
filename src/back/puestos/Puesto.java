@@ -69,9 +69,14 @@ public class Puesto extends ConexionSocket {
 			this.socket = new Socket(this.host, this.puerto);
 			this.myInput = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 			this.myOutput = new PrintWriter(socket.getOutputStream(), true);
-
 			myOutput.println(accion);
-			if (accion.equals(ListaDeAcciones.LLAMAR)) {
+			//REVISAR
+			if (accion.equals(ListaDeAcciones.ABRIR)) {
+				String aux = myInput.readLine();
+				this.numeroPuesto = Integer.parseInt(aux);
+				myInput.close();
+			}
+			else if (accion.equals(ListaDeAcciones.LLAMAR)) {
 				myOutput.println(this.numeroPuesto);
 				this.clienteActual = myInput.readLine();
 				myInput.close();

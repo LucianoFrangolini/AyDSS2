@@ -26,6 +26,7 @@ public class AdministradorDeTurnos implements PropertyChangeListener {
 	private static AdministradorDeTurnos instance;
 	private PropertyChangeSupport pcs;
 	private String hostPantalla;
+	private static int proximoNumeroPuestoDisponible = 1;
 
 	/**
 	 * Método encargado de obtener la instancia de la clase
@@ -201,20 +202,25 @@ public class AdministradorDeTurnos implements PropertyChangeListener {
 					while (true) {
 						socket = puestosServerSocket.accept();
 						myInput = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+						myOutput = new PrintWriter(socket.getOutputStream(), true);
 						accion = myInput.readLine();
-						numeroPuesto = Integer.parseInt(myInput.readLine());
-						if (accion.equals(ListaDeAcciones.LLAMAR)) {
-							dni = admin.obtenerProximoCliente();
-							myOutput = new PrintWriter(socket.getOutputStream(), true);
-							if (admin.agregarTurno(numeroPuesto, dni)) {
-								myOutput.println(dni);
-							} else
-								myOutput.println("No hay clientes en espera");
-							myOutput.close();
-						} else if (accion.equals(ListaDeAcciones.ELIMINAR)) {
-							admin.eliminarTurno(numeroPuesto);
+						//REVISAR
+						if (accion.equals(ListaDeAcciones.ABRIR)) {
+							myOutput.println(proximoNumeroPuestoDisponible);
+						} else {
+							numeroPuesto = Integer.parseInt(myInput.readLine());
+							if (accion.equals(ListaDeAcciones.LLAMAR)) {
+								dni = admin.obtenerProximoCliente();
+								if (admin.agregarTurno(numeroPuesto, dni)) {
+									myOutput.println(dni);
+								} else
+									myOutput.println("No hay clientes en espera");
+							} else if (accion.equals(ListaDeAcciones.ELIMINAR)) {
+								admin.eliminarTurno(numeroPuesto);
+							}
 						}
 						myInput.close();
+						myOutput.close();
 						socket.close();
 					}
 

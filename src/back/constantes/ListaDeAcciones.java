@@ -6,6 +6,7 @@ package back.constantes;
  *         mensajes <br>
  */
 public class ListaDeAcciones {
+	public static final String ABRIR = "ABRIR";
 	public static final String LLAMAR = "LLAMAR";
 	public static final String ELIMINAR = "ELIMINAR";
 }
