@@ -4,15 +4,22 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import back.constantes.ListaDeDirecciones;
 import front.interfaces.IVistaPuesto;
 
 import java.awt.GridLayout;
 import java.awt.event.ActionListener;
 
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
 import java.awt.Font;
 import javax.swing.JButton;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 
 /**
  * @author Grupo12.<br>
@@ -27,6 +34,7 @@ public class VistaPuesto extends JFrame implements IVistaPuesto {
 	private JLabel lblDisplay;
 	private JButton btnEliminar;
 	private JButton btnLlamar;
+	private PropertyChangeSupport pcs;
 
 	/**
 	 * Método constructor de VistaPuesto.<br>
@@ -34,7 +42,7 @@ public class VistaPuesto extends JFrame implements IVistaPuesto {
 	 * @param numeroPuesto de tipo Int: Representa el número del puesto.<br>
 	 */
 	public VistaPuesto() {
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		mainPanel = new JPanel();
 		mainPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(mainPanel);
@@ -59,6 +67,24 @@ public class VistaPuesto extends JFrame implements IVistaPuesto {
 		panelBotones.add(btnLlamar);
 
 		setActionCommands();
+		
+		this.pcs = new PropertyChangeSupport(this);
+		
+
+		addWindowListener(new WindowAdapter() {
+			public void windowClosing(WindowEvent e) {
+			
+				VistaPuesto vista = (VistaPuesto) e.getSource();
+
+				int res = JOptionPane.showConfirmDialog(vista, "¿Esta seguro que quiere cerrar el puesto de trabajo?",
+						"Cerrar Puesto", JOptionPane.YES_NO_OPTION);
+
+				if (res == JOptionPane.YES_OPTION) {
+					vista.getPropertyChangeSupport().firePropertyChange("Cerrar Puesto", null, null);
+					vista.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+				}
+			}
+		});
 	}
 
 	/**
@@ -79,6 +105,8 @@ public class VistaPuesto extends JFrame implements IVistaPuesto {
 		this.btnLlamar.setActionCommand(IVistaPuesto.LLAMAR);
 	}
 
+	
+	
 	/**
 	 * Método encargado de setear un actionListener. <br>
 	 * 
@@ -90,13 +118,22 @@ public class VistaPuesto extends JFrame implements IVistaPuesto {
 		this.btnEliminar.addActionListener(c);
 	}
 
+	public void setPropertyChangeListener(PropertyChangeListener c) {
+		this.pcs.addPropertyChangeListener(c);
+	}
+	
+	@Override
+	public PropertyChangeSupport getPropertyChangeSupport() {
+		return this.pcs;
+	}
+	
 	/**
 	 * Método encargado de abrir la vista.<br>
 	 * <b> Post: </b> La vista es visible.<br>
 	 */
 	@Override
 	public void abrir() {
-		if (this.numeroPuesto!=0) {
+		if (this.numeroPuesto != 0) {
 			setBounds(1200, 100, 450, 300);
 			setVisible(true);
 		} else
@@ -151,9 +188,9 @@ public class VistaPuesto extends JFrame implements IVistaPuesto {
 	@Override
 	public void setNumeroPuesto(int numero) {
 		this.numeroPuesto = numero;
-		this.setTitle("Puesto de trabajo numero "+String.valueOf(this.numeroPuesto));
+		this.setTitle("Puesto de trabajo numero " + String.valueOf(this.numeroPuesto));
 	}
-	
+
 	public VistaPuesto getInstance() {
 		return this;
 	}

@@ -26,7 +26,7 @@ public class AdministradorDeTurnos implements PropertyChangeListener {
 	private static AdministradorDeTurnos instance;
 	private PropertyChangeSupport pcs;
 	private String hostPantalla;
-	private static int[] puestosDisponibles = {0,0,0};
+	private static int[] puestosDisponibles = {0,0,0,0,0,0,0,0};
 
 	/**
 	 * Método encargado de obtener la instancia de la clase
@@ -171,9 +171,7 @@ public class AdministradorDeTurnos implements PropertyChangeListener {
 			myObjectOutput.close();
 			socket.close();
 		} catch (UnknownHostException e) {
-			e.printStackTrace();
 		} catch (IOException e) {
-			e.printStackTrace();
 		}
 	}
 
@@ -221,7 +219,8 @@ public class AdministradorDeTurnos implements PropertyChangeListener {
 							} else if (accion.equals(ListaDeAcciones.ELIMINAR_TURNO)) {
 								admin.eliminarTurno(numeroPuesto);
 							} else if (accion.equals(ListaDeAcciones.CERRAR_PUESTO)) {
-								
+								admin.eliminarTurno(numeroPuesto);
+								puestosDisponibles[numeroPuesto-1] = 0;
 							}
 						}
 						myInput.close();

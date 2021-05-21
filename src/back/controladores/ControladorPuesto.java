@@ -2,6 +2,8 @@ package back.controladores;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
 import back.constantes.ListaDeAcciones;
 import back.puestos.AdministradorDePuestos;
@@ -13,7 +15,7 @@ import front.interfaces.IVistaPuesto;
  * @author Grupo12 <br>
  *         Controlador para un puesto, implementa ActionListener. <br>
  */
-public class ControladorPuesto implements ActionListener {
+public class ControladorPuesto implements ActionListener, PropertyChangeListener {
 
 	private IVistaPuesto vista;
 	private Puesto puesto;
@@ -31,6 +33,7 @@ public class ControladorPuesto implements ActionListener {
 		this.puesto = new Puesto();
 		this.puesto.enviarMensaje(ListaDeAcciones.ABRIR_PUESTO);
 		this.vista.setNumeroPuesto(this.puesto.getNumeroPuesto());
+		this.vista.getPropertyChangeSupport().addPropertyChangeListener(this);
 	}
 
 	/**
@@ -53,6 +56,14 @@ public class ControladorPuesto implements ActionListener {
 			this.puesto.enviarMensaje(ListaDeAcciones.ELIMINAR_TURNO);
 			this.vista.setDisplay("-");
 			this.vista.deshabilitarBotonEliminar();
+		}
+	}
+
+	@Override
+	public void propertyChange(PropertyChangeEvent arg0) {
+		if (arg0.getPropertyName().equals("Cerrar Puesto")) {
+			this.puesto.enviarMensaje(ListaDeAcciones.CERRAR_PUESTO);
+			this.vista.dispose();
 		}
 	}
 }

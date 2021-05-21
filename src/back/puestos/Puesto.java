@@ -84,7 +84,7 @@ public class Puesto extends ConexionSocket {
 				myOutput.println(this.numeroPuesto);
 				this.clienteActual = myInput.readLine();
 				myInput.close();
-			} else if (accion.equals(ListaDeAcciones.ELIMINAR_TURNO)) {
+			} else if (accion.equals(ListaDeAcciones.ELIMINAR_TURNO) || accion.equalsIgnoreCase(ListaDeAcciones.CERRAR_PUESTO)) {
 				myOutput.println(this.numeroPuesto);
 			}
 			myOutput.close();

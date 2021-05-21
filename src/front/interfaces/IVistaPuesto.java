@@ -1,5 +1,8 @@
 package front.interfaces;
 
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
+
 /**
  * @author Grupo12<br>
  *         * Clase que representa una interfaz que será implementada por
@@ -46,4 +49,6 @@ public interface IVistaPuesto extends IVista {
 	void dispose();
 	
 	void setNumeroPuesto(int numero);
+	
+	PropertyChangeSupport getPropertyChangeSupport();
 }
