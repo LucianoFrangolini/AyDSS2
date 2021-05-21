@@ -13,6 +13,7 @@ import javax.swing.JOptionPane;
 import back.conexiones.ConexionSocket;
 import back.constantes.ListaDeAcciones;
 import back.constantes.ListaDeDirecciones;
+import back.puestos.excepciones.PuestosAgotadosException;
 
 /**
  * @author Grupo12 <br>
@@ -29,8 +30,7 @@ public class Puesto extends ConexionSocket {
 	 * @param numeroPuesto de tipo Integer: representa el numero de puesto que se va
 	 *                     a crear.<br>
 	 */
-	public Puesto(int numeroPuesto) {
-		this.numeroPuesto = numeroPuesto;
+	public Puesto() {
 		this.puerto = ListaDeDirecciones.PUERTO_PUESTOS;
 		this.host = ListaDeDirecciones.HOST;
 	}
@@ -70,17 +70,21 @@ public class Puesto extends ConexionSocket {
 			this.myInput = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 			this.myOutput = new PrintWriter(socket.getOutputStream(), true);
 			myOutput.println(accion);
-			//REVISAR
-			if (accion.equals(ListaDeAcciones.ABRIR)) {
+			if (accion.equals(ListaDeAcciones.ABRIR_PUESTO)) {
 				String aux = myInput.readLine();
+				
+				//CAMBIAR POR VARIABLES
+				
+				if (aux.equalsIgnoreCase("error"))
+					throw new PuestosAgotadosException("Se llegó al límite de puestos posibles");
 				this.numeroPuesto = Integer.parseInt(aux);
-				myInput.close();
+				myInput.close();				
 			}
-			else if (accion.equals(ListaDeAcciones.LLAMAR)) {
+			else if (accion.equals(ListaDeAcciones.LLAMAR_CLIENTE)) {
 				myOutput.println(this.numeroPuesto);
 				this.clienteActual = myInput.readLine();
 				myInput.close();
-			} else if (accion.equals(ListaDeAcciones.ELIMINAR)) {
+			} else if (accion.equals(ListaDeAcciones.ELIMINAR_TURNO)) {
 				myOutput.println(this.numeroPuesto);
 			}
 			myOutput.close();
@@ -90,6 +94,9 @@ public class Puesto extends ConexionSocket {
 		} catch (IOException e) {
 			Toolkit.getDefaultToolkit().beep();
 			JOptionPane.showMessageDialog(null, ConexionSocket.MENSAJE_SIN_CONEXION);
+		} catch (PuestosAgotadosException e) {
+			Toolkit.getDefaultToolkit().beep();
+			JOptionPane.showMessageDialog(null, e.getMessage());
 		}
 	}
 

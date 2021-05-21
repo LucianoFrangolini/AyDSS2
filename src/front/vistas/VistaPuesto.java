@@ -33,9 +33,8 @@ public class VistaPuesto extends JFrame implements IVistaPuesto {
 	 * 
 	 * @param numeroPuesto de tipo Int: Representa el número del puesto.<br>
 	 */
-	public VistaPuesto(int numeroPuesto) {
-		setTitle("Puesto " + numeroPuesto);
-		setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+	public VistaPuesto() {
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		mainPanel = new JPanel();
 		mainPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(mainPanel);
@@ -58,8 +57,6 @@ public class VistaPuesto extends JFrame implements IVistaPuesto {
 		btnLlamar = new JButton("Llamar siguiente cliente");
 		btnLlamar.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		panelBotones.add(btnLlamar);
-
-		this.numeroPuesto = numeroPuesto;
 
 		setActionCommands();
 	}
@@ -99,8 +96,11 @@ public class VistaPuesto extends JFrame implements IVistaPuesto {
 	 */
 	@Override
 	public void abrir() {
-		setBounds(1200, 100, 450, 300);
-		setVisible(true);
+		if (this.numeroPuesto!=0) {
+			setBounds(1200, 100, 450, 300);
+			setVisible(true);
+		} else
+			this.dispose();
 	}
 
 	@Override
@@ -146,5 +146,15 @@ public class VistaPuesto extends JFrame implements IVistaPuesto {
 	@Override
 	public void deshabilitarBotonEliminar() {
 		this.btnEliminar.setEnabled(false);
+	}
+
+	@Override
+	public void setNumeroPuesto(int numero) {
+		this.numeroPuesto = numero;
+		this.setTitle("Puesto de trabajo numero "+String.valueOf(this.numeroPuesto));
+	}
+	
+	public VistaPuesto getInstance() {
+		return this;
 	}
 }

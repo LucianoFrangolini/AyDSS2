@@ -44,4 +44,6 @@ public interface IVistaPuesto extends IVista {
 	 * Método encargado de eliminar la vista del puesto<br>
 	 */
 	void dispose();
+	
+	void setNumeroPuesto(int numero);
 }

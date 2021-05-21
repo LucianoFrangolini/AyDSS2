@@ -26,7 +26,7 @@ public class AdministradorDeTurnos implements PropertyChangeListener {
 	private static AdministradorDeTurnos instance;
 	private PropertyChangeSupport pcs;
 	private String hostPantalla;
-	private static int proximoNumeroPuestoDisponible = 1;
+	private static int[] puestosDisponibles = {0,0,0};
 
 	/**
 	 * Método encargado de obtener la instancia de la clase
@@ -204,19 +204,24 @@ public class AdministradorDeTurnos implements PropertyChangeListener {
 						myInput = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 						myOutput = new PrintWriter(socket.getOutputStream(), true);
 						accion = myInput.readLine();
-						//REVISAR
-						if (accion.equals(ListaDeAcciones.ABRIR)) {
-							myOutput.println(proximoNumeroPuestoDisponible);
+						if (accion.equals(ListaDeAcciones.ABRIR_PUESTO)) {	
+							int nuevoNumPuesto = buscaYOcupaPuesto();
+							if (nuevoNumPuesto!=0)
+								myOutput.println(nuevoNumPuesto);
+							else
+								myOutput.println("error");
 						} else {
 							numeroPuesto = Integer.parseInt(myInput.readLine());
-							if (accion.equals(ListaDeAcciones.LLAMAR)) {
+							if (accion.equals(ListaDeAcciones.LLAMAR_CLIENTE)) {
 								dni = admin.obtenerProximoCliente();
 								if (admin.agregarTurno(numeroPuesto, dni)) {
 									myOutput.println(dni);
 								} else
 									myOutput.println("No hay clientes en espera");
-							} else if (accion.equals(ListaDeAcciones.ELIMINAR)) {
+							} else if (accion.equals(ListaDeAcciones.ELIMINAR_TURNO)) {
 								admin.eliminarTurno(numeroPuesto);
+							} else if (accion.equals(ListaDeAcciones.CERRAR_PUESTO)) {
+								
 							}
 						}
 						myInput.close();
@@ -230,6 +235,17 @@ public class AdministradorDeTurnos implements PropertyChangeListener {
 			}
 		}.start();
 
+	}
+	
+	private static int buscaYOcupaPuesto() {
+		int i=0;
+		while (i<puestosDisponibles.length && puestosDisponibles[i]!=0)
+			i++;
+		if (i<puestosDisponibles.length)
+			puestosDisponibles[i]=1;
+		else
+			i=-1;
+		return i+1;
 	}
 
 	/**
