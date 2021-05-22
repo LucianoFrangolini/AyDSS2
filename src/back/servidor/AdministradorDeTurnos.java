@@ -26,13 +26,14 @@ import back.servidor.interfaces.ValidacionDNI;
  *         Singleton. <br>
  */
 public class AdministradorDeTurnos implements PropertyChangeListener, ValidacionDNI, AdministracionDeCola,
-		AdministracionDeLista, ActualizacionDisplay,ActualizacionPuesto {
+		AdministracionDeLista, ActualizacionDisplay, ActualizacionPuesto {
 	
 	private ListaDeTurnos listaDeTurnos = new ListaDeTurnos();
 	private ColaDeEspera colaDeEspera = new ColaDeEspera();
 	private static AdministradorDeTurnos instance;
 	private PropertyChangeSupport pcs;
 	private String hostPantalla;
+	private Thread totemServer, puestoServer;
 	private static int[] puestosDisponibles = { 0, 0, 0, 0, 0, 0, 0, 0 };
 
 	/**
@@ -55,7 +56,10 @@ public class AdministradorDeTurnos implements PropertyChangeListener, Validacion
 		this.pcs = new PropertyChangeSupport(this);
 		this.pcs.addPropertyChangeListener(this);
 		this.hostPantalla = ListaDeDirecciones.HOST;
-	}
+		
+		//PROVISORIO, LUEGO MOVER A BOTON
+		this.abrirServer();
+	} 
 
 	/**
 	 * Método encargado de validar si el dni ya se encuentra registrado en la
@@ -200,6 +204,7 @@ public class AdministradorDeTurnos implements PropertyChangeListener, Validacion
 	 */
 	@Override
 	public void abrirPuertoPuestos(int puertoPuestos) {
+		/*
 		new Thread() {
 			public void run() {
 				ServerSocket puestosServerSocket;
@@ -246,8 +251,8 @@ public class AdministradorDeTurnos implements PropertyChangeListener, Validacion
 					e.printStackTrace();
 				}
 			}
-		}.start();
-
+		}.start();*/
+		this.puestoServer.start();
 	}
 
 	private static int buscaYOcupaPuesto() {
@@ -272,6 +277,7 @@ public class AdministradorDeTurnos implements PropertyChangeListener, Validacion
 	 *                    conexión.<br>
 	 */
 	private void abrirPuertoTotem(int puertoTotem) {
+		/*
 		new Thread() {
 			public void run() {
 				ServerSocket totemServerSocket;
@@ -300,6 +306,95 @@ public class AdministradorDeTurnos implements PropertyChangeListener, Validacion
 					e.printStackTrace();
 				}
 			}
-		}.start();
+		}.start();*/
+		//PROVISORIO
+		this.totemServer.start();
+	}
+	
+	private Thread crearPuertoTotem(int puertoTotem) {
+		return new Thread() {
+			public void run() {
+				ServerSocket totemServerSocket;
+				Socket socket;
+				AdministradorDeTurnos admin = AdministradorDeTurnos.getInstance();
+				BufferedReader myInput;
+				PrintWriter myOutput;
+				String nuevoDni = null;
+				try {
+					totemServerSocket = new ServerSocket(puertoTotem);
+					while (true) {
+						socket = totemServerSocket.accept();
+						myInput = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+						myOutput = new PrintWriter(socket.getOutputStream(), true);
+						nuevoDni = myInput.readLine();
+						if (admin.agregarDni(nuevoDni))
+							myOutput.println("Registro exitoso");
+						else
+							myOutput.println("El DNI ya se encuentra registrado.");
+						myInput.close();
+						myOutput.close();
+						socket.close();
+					}
+
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		};
+	}
+	
+	private Thread crearPuertoPuestos(int puertoPuestos) {
+		return new Thread() {
+			public void run() {
+				ServerSocket puestosServerSocket;
+				Socket socket;
+				AdministradorDeTurnos admin = AdministradorDeTurnos.getInstance();
+				BufferedReader myInput;
+				PrintWriter myOutput;
+				int numeroPuesto;
+				String dni, accion;
+				try {
+					puestosServerSocket = new ServerSocket(puertoPuestos);
+					while (true) {
+						socket = puestosServerSocket.accept();
+						myInput = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+						myOutput = new PrintWriter(socket.getOutputStream(), true);
+						accion = myInput.readLine();
+						if (accion.equals(ListaDeAcciones.ABRIR_PUESTO)) {
+							int nuevoNumPuesto = buscaYOcupaPuesto();
+							if (nuevoNumPuesto != 0)
+								myOutput.println(nuevoNumPuesto);
+							else
+								myOutput.println("error");
+						} else {
+							numeroPuesto = Integer.parseInt(myInput.readLine());
+							if (accion.equals(ListaDeAcciones.LLAMAR_CLIENTE)) {
+								dni = admin.obtenerProximoCliente();
+								if (admin.agregarTurno(numeroPuesto, dni)) {
+									myOutput.println(dni);
+								} else
+									myOutput.println("No hay clientes en espera");
+							} else if (accion.equals(ListaDeAcciones.ELIMINAR_TURNO)) {
+								admin.eliminarTurno(numeroPuesto);
+							} else if (accion.equals(ListaDeAcciones.CERRAR_PUESTO)) {
+								admin.eliminarTurno(numeroPuesto);
+								puestosDisponibles[numeroPuesto - 1] = 0;
+							}
+						}
+						myInput.close();
+						myOutput.close();
+						socket.close();
+					}
+
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		};
+	}
+	
+	private void abrirServer() {
+		this.totemServer = crearPuertoTotem(ListaDeDirecciones.PUERTO_TOTEM);
+		this.puestoServer = crearPuertoPuestos(ListaDeDirecciones.PUERTO_PUESTOS);
 	}
 }
