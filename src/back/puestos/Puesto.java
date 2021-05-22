@@ -14,12 +14,13 @@ import back.conexiones.ConexionSocket;
 import back.constantes.ListaDeAcciones;
 import back.constantes.ListaDeDirecciones;
 import back.puestos.excepciones.PuestosAgotadosException;
+import back.puestos.interfaces.SolicitudDeActualizacion;
 
 /**
  * @author Grupo12 <br>
  *         Clase para un Puesto de trabajo, extiende de ConexionSocket. <br>
  */
-public class Puesto extends ConexionSocket {
+public class Puesto extends ConexionSocket implements SolicitudDeActualizacion{
 
 	private int numeroPuesto;
 	private String clienteActual;
@@ -64,6 +65,7 @@ public class Puesto extends ConexionSocket {
 	 * @param accion de tipo String: representa la accion que se quiere
 	 *               realizar.<br>
 	 */
+	@Override
 	public void enviarMensaje(String accion) {
 		try {
 			this.socket = new Socket(this.host, this.puerto);

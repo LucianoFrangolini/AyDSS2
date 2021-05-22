@@ -11,13 +11,14 @@ import javax.swing.JOptionPane;
 
 import back.conexiones.ConexionSocket;
 import back.constantes.ListaDeDirecciones;
+import back.totem.interfaces.EnvioDNI;
 
 /**
  * @author Grupo12 <br>
  *         Clase ControladorDeTotem con la lógica del Tótem. Se extiende de
  *         ConexiónSocket. <br>
  */
-public class ControladorDeTotem extends ConexionSocket {
+public class ControladorDeTotem extends ConexionSocket implements EnvioDNI {
 
 	private String estado;
 
@@ -61,6 +62,7 @@ public class ControladorDeTotem extends ConexionSocket {
 	 * 
 	 * @param DNI de tipo String: Representa el DNI a enviar por socket.<br>
 	 */
+	@Override
 	public void enviarMensaje(String DNI) {
 		this.estado = "";
 		try {

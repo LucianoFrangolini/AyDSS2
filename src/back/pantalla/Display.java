@@ -11,13 +11,14 @@ import javax.swing.JOptionPane;
 
 import back.conexiones.ConexionSocket;
 import back.constantes.ListaDeDirecciones;
+import back.pantalla.interfaces.Visualizacion;
 import back.servidor.ListaDeTurnos;
 
 /**
  * @author Grupo12 <br>
  *         Clase para el Display que extiende de ConexionSocket. <br>
  */
-public class Display extends ConexionSocket {
+public class Display extends ConexionSocket implements Visualizacion {
 
 	private ListaDeTurnos listaDeLlamados = null;
 	private PropertyChangeSupport pcs;
@@ -28,7 +29,7 @@ public class Display extends ConexionSocket {
 	public Display() {
 		this.puerto = ListaDeDirecciones.PUERTO_DISPLAY;
 		this.pcs = new PropertyChangeSupport(this);
-		this.establecerConexion();
+		this.abrirPuertoDeConexion();
 	}
 
 	/**
@@ -42,6 +43,7 @@ public class Display extends ConexionSocket {
 	 *                        cambios.<br>
 	 * 
 	 */
+	@Override
 	public void setListaLlamados(ListaDeTurnos listaDeLlamados) {
 		ListaDeTurnos oldValue = this.listaDeLlamados;
 		this.listaDeLlamados = listaDeLlamados;
@@ -64,7 +66,7 @@ public class Display extends ConexionSocket {
 	 * * <b> Post: </b> Se abre un serverSocket a la espera de recibir objetos de
 	 * tipo ListaDeTurnos.<br>
 	 */
-	public void establecerConexion() {
+	public void abrirPuertoDeConexion() {
 		new Thread() {
 			public void run() {
 				ServerSocket displayServerSocket;

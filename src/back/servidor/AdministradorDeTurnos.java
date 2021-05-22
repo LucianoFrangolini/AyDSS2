@@ -14,19 +14,26 @@ import java.net.UnknownHostException;
 
 import back.constantes.ListaDeAcciones;
 import back.constantes.ListaDeDirecciones;
+import back.servidor.interfaces.ActualizacionDisplay;
+import back.servidor.interfaces.ActualizacionPuesto;
+import back.servidor.interfaces.AdministracionDeCola;
+import back.servidor.interfaces.AdministracionDeLista;
+import back.servidor.interfaces.ValidacionDNI;
 
 /**
  * @author Grupo12 <br>
  *         Clase del Administrador de Puestos que implementa el patrón
  *         Singleton. <br>
  */
-public class AdministradorDeTurnos implements PropertyChangeListener {
+public class AdministradorDeTurnos implements PropertyChangeListener, ValidacionDNI, AdministracionDeCola,
+		AdministracionDeLista, ActualizacionDisplay,ActualizacionPuesto {
+	
 	private ListaDeTurnos listaDeTurnos = new ListaDeTurnos();
 	private ColaDeEspera colaDeEspera = new ColaDeEspera();
 	private static AdministradorDeTurnos instance;
 	private PropertyChangeSupport pcs;
 	private String hostPantalla;
-	private static int[] puestosDisponibles = {0,0,0,0,0,0,0,0};
+	private static int[] puestosDisponibles = { 0, 0, 0, 0, 0, 0, 0, 0 };
 
 	/**
 	 * Método encargado de obtener la instancia de la clase
@@ -59,7 +66,8 @@ public class AdministradorDeTurnos implements PropertyChangeListener {
 	 * @return true si el dni no se encuentra en la cola de espera, false en caso
 	 *         contrario.
 	 */
-	private Boolean validarDni(String dni) {
+	@Override
+	public Boolean validarDni(String dni) {
 		return !this.colaDeEspera.contains(dni);
 	}
 
@@ -71,6 +79,7 @@ public class AdministradorDeTurnos implements PropertyChangeListener {
 	 * 
 	 * @return true si pudo agregar el dni en la cola, falso en caso contrario.
 	 */
+	@Override
 	public Boolean agregarDni(String dni) {
 		Boolean ret = false;
 		if (validarDni(dni)) {
@@ -93,7 +102,8 @@ public class AdministradorDeTurnos implements PropertyChangeListener {
 	 * 
 	 * @return true si pudo agregar el dni en la cola, falso en caso contrario.
 	 */
-	private Boolean agregarTurno(Integer puesto, String dni) {
+	@Override
+	public Boolean agregarTurno(Integer puesto, String dni) {
 		Boolean ret = false;
 		if (dni != null) {
 			Turno turno = new Turno(puesto, dni);
@@ -114,7 +124,8 @@ public class AdministradorDeTurnos implements PropertyChangeListener {
 	 * @param puesto de tipo Integer: Representa el numero de puesto del turno a
 	 *               eliminar<br>
 	 */
-	private void eliminarTurno(Integer puesto) {
+	@Override
+	public void eliminarTurno(Integer puesto) {
 		this.listaDeTurnos.eliminarTurno(puesto);
 		pcs.firePropertyChange("listaActualizada", null, null);
 	}
@@ -125,6 +136,7 @@ public class AdministradorDeTurnos implements PropertyChangeListener {
 	 * @return devuelve un String con el dni del proximo cliente en la cola y lo
 	 *         retira de la misma, o null si estaba vacía.
 	 */
+	@Override
 	public String obtenerProximoCliente() {
 		return this.colaDeEspera.poll();
 	}
@@ -139,7 +151,7 @@ public class AdministradorDeTurnos implements PropertyChangeListener {
 	@Override
 	public void propertyChange(PropertyChangeEvent arg0) {
 		if (arg0.getPropertyName().equals("listaActualizada"))
-			abrirPuertoDisplay(ListaDeDirecciones.PUERTO_DISPLAY);
+			actualizacionDisplay(ListaDeDirecciones.PUERTO_DISPLAY);
 	}
 
 	/**
@@ -163,7 +175,8 @@ public class AdministradorDeTurnos implements PropertyChangeListener {
 	 * @param puertoDisplay de tipo int: Representa el puerto con el cual establecer
 	 *                      una conexión. <br>
 	 */
-	public void abrirPuertoDisplay(int puertoDisplay) {
+	@Override
+	public void actualizacionDisplay(int puertoDisplay) {
 		try {
 			Socket socket = new Socket(this.hostPantalla, puertoDisplay);
 			ObjectOutputStream myObjectOutput = new ObjectOutputStream(socket.getOutputStream());
@@ -185,7 +198,8 @@ public class AdministradorDeTurnos implements PropertyChangeListener {
 	 * @param puertoPuestos de tipo int: Representa el puerto a abrir para realizar
 	 *                      la conexión.<br>
 	 */
-	private void abrirPuertoPuestos(int puertoPuestos) {
+	@Override
+	public void abrirPuertoPuestos(int puertoPuestos) {
 		new Thread() {
 			public void run() {
 				ServerSocket puestosServerSocket;
@@ -202,9 +216,9 @@ public class AdministradorDeTurnos implements PropertyChangeListener {
 						myInput = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 						myOutput = new PrintWriter(socket.getOutputStream(), true);
 						accion = myInput.readLine();
-						if (accion.equals(ListaDeAcciones.ABRIR_PUESTO)) {	
+						if (accion.equals(ListaDeAcciones.ABRIR_PUESTO)) {
 							int nuevoNumPuesto = buscaYOcupaPuesto();
-							if (nuevoNumPuesto!=0)
+							if (nuevoNumPuesto != 0)
 								myOutput.println(nuevoNumPuesto);
 							else
 								myOutput.println("error");
@@ -220,7 +234,7 @@ public class AdministradorDeTurnos implements PropertyChangeListener {
 								admin.eliminarTurno(numeroPuesto);
 							} else if (accion.equals(ListaDeAcciones.CERRAR_PUESTO)) {
 								admin.eliminarTurno(numeroPuesto);
-								puestosDisponibles[numeroPuesto-1] = 0;
+								puestosDisponibles[numeroPuesto - 1] = 0;
 							}
 						}
 						myInput.close();
@@ -235,16 +249,16 @@ public class AdministradorDeTurnos implements PropertyChangeListener {
 		}.start();
 
 	}
-	
+
 	private static int buscaYOcupaPuesto() {
-		int i=0;
-		while (i<puestosDisponibles.length && puestosDisponibles[i]!=0)
+		int i = 0;
+		while (i < puestosDisponibles.length && puestosDisponibles[i] != 0)
 			i++;
-		if (i<puestosDisponibles.length)
-			puestosDisponibles[i]=1;
+		if (i < puestosDisponibles.length)
+			puestosDisponibles[i] = 1;
 		else
-			i=-1;
-		return i+1;
+			i = -1;
+		return i + 1;
 	}
 
 	/**

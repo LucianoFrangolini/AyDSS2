@@ -6,9 +6,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
 import back.constantes.ListaDeAcciones;
-import back.puestos.AdministradorDePuestos;
 import back.puestos.Puesto;
-import back.servidor.AdministradorDeTurnos;
 import front.interfaces.IVistaPuesto;
 
 /**

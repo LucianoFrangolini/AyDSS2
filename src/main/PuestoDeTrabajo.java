@@ -1,10 +1,7 @@
 package main;
 
-import back.controladores.ControladorAdministradorPuestos;
 import back.controladores.ControladorPuesto;
-import front.interfaces.IVistaAdministradorPuestos;
 import front.interfaces.IVistaPuesto;
-import front.vistas.VistaAdministradorPuestos;
 import front.vistas.VistaPuesto;
 
 public class PuestoDeTrabajo {
