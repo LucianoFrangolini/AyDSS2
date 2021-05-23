@@ -74,7 +74,10 @@ public class ControladorTotem implements ActionListener, ActualizacionTotem {
 		} else if (e.getActionCommand().equalsIgnoreCase(Inscripcion.ENVIAR)) {
 			this.vista.deshabilitarEnvio();
 			this.totem.enviarMensaje(this.vista.getLabelDisplay());
-			this.vista.setLabelDisplay(this.totem.getEstado());
+			if (this.totem.getEstado()!=null)
+				this.vista.setLabelDisplay(this.totem.getEstado());
+			else
+				this.vista.setLabelDisplay("");
 		}
 	}
 

@@ -47,8 +47,8 @@ public class ControladorDeTotem extends ConexionSocket implements EnvioDNI {
 	 * @return true si el estado es aceptable, false si el estado no es
 	 *         aceptable.<br>
 	 */
-	private Boolean estadoAceptable() {
-		Boolean ret = false;
+	private Boolean estadoAceptable() throws NullPointerException {
+		Boolean ret = false;		
 		if (estado.equals("Registro exitoso") || estado.equals("El DNI ya se encuentra registrado."))
 			ret = true;
 		return ret;
@@ -77,6 +77,9 @@ public class ControladorDeTotem extends ConexionSocket implements EnvioDNI {
 			myOutput.close();
 			socket.close();
 		} catch (IOException e) {
+			Toolkit.getDefaultToolkit().beep();
+			JOptionPane.showMessageDialog(null, ConexionSocket.MENSAJE_SIN_CONEXION);
+		} catch(NullPointerException e) {
 			Toolkit.getDefaultToolkit().beep();
 			JOptionPane.showMessageDialog(null, ConexionSocket.MENSAJE_SIN_CONEXION);
 		}

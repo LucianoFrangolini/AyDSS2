@@ -12,4 +12,6 @@ public class ListaDeDirecciones {
 	public static final int PUERTO_TOTEM = 9000;
 	public static final int PUERTO_PUESTOS = 8000;
 	public static final int PUERTO_DISPLAY = 7000;
+	public static final int PUERTO_S1 = 5000;
+	public static final int PUERTO_S2 = 5005;
 }
