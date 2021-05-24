@@ -3,7 +3,7 @@ package main;
 import back.constantes.ListaDeDirecciones;
 import back.controladores.ControladorAdministrador;
 import back.servidor.Administrador;
-import front.interfaces.IVistaServidor;
+import front.interfaces.IVista;
 import front.vistas.VistaServidor;
 
 public class PrimerServidor {
@@ -17,10 +17,9 @@ public class PrimerServidor {
 
 		Administrador administrador = new Administrador(ListaDeDirecciones.PUERTO_TOTEM,
 				ListaDeDirecciones.PUERTO_PUESTOS, ListaDeDirecciones.PUERTO_S2);
-		IVistaServidor vista = new VistaServidor();
+		IVista vista = new VistaServidor("Servidor 1");
 		ControladorAdministrador controlador = new ControladorAdministrador(vista,administrador);
 		vista.setActionListener(controlador);
 		vista.abrir();
-		administrador.abrirServidor();
 	}
 }

@@ -6,11 +6,13 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.net.UnknownHostException;
 
 import javax.swing.JOptionPane;
 
 import back.conexiones.ConexionSocket;
 import back.constantes.ListaDeDirecciones;
+import back.constantes.ListaDeMensajes;
 import back.totem.interfaces.EnvioDNI;
 
 /**
@@ -48,8 +50,8 @@ public class ControladorDeTotem extends ConexionSocket implements EnvioDNI {
 	 *         aceptable.<br>
 	 */
 	private Boolean estadoAceptable() throws NullPointerException {
-		Boolean ret = false;		
-		if (estado.equals("Registro exitoso") || estado.equals("El DNI ya se encuentra registrado."))
+		Boolean ret = false;
+		if (estado.equals(ListaDeMensajes.REGISTRO_EXITOSO) || estado.equals(ListaDeMensajes.DNI_EXISTENTE))
 			ret = true;
 		return ret;
 	}
@@ -65,21 +67,57 @@ public class ControladorDeTotem extends ConexionSocket implements EnvioDNI {
 	@Override
 	public void enviarMensaje(String DNI) {
 		this.estado = "";
+		establecerConexion();
+		intercambio(DNI);
+		cerrarConexion();
+	}
+
+	private void resincronizacion() {
+		if (this.puerto == ListaDeDirecciones.PUERTO_TOTEM)
+			this.puerto = ListaDeDirecciones.PUERTO_TOTEM_S2;
+		else
+			this.puerto = ListaDeDirecciones.PUERTO_TOTEM;
+	}
+
+	private void establecerConexion() {
 		try {
 			this.socket = new Socket(this.host, this.puerto);
 			this.myInput = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 			this.myOutput = new PrintWriter(socket.getOutputStream(), true);
-			myOutput.println(DNI);
-			while (!estadoAceptable()) {
-				this.estado = myInput.readLine();
+		} catch (IOException e) {
+			try {
+				resincronizacion();
+				this.socket = new Socket(this.host, this.puerto);				
+				this.myInput = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+				this.myOutput = new PrintWriter(socket.getOutputStream(), true);
+			} catch (IOException e2) {
+				Toolkit.getDefaultToolkit().beep();
+				JOptionPane.showMessageDialog(null, ConexionSocket.MENSAJE_SIN_CONEXION);
 			}
+		}
+	}
+
+	private void intercambio(String DNI) {
+		myOutput.println(DNI);
+		while (!estadoAceptable()) {
+			try {
+				this.estado = myInput.readLine();
+			} catch (IOException e) {
+				Toolkit.getDefaultToolkit().beep();
+				JOptionPane.showMessageDialog(null, ConexionSocket.MENSAJE_SIN_CONEXION);
+			} catch (NullPointerException e) {
+				Toolkit.getDefaultToolkit().beep();
+				JOptionPane.showMessageDialog(null, ConexionSocket.MENSAJE_SIN_CONEXION);
+			}
+		}
+	}
+	
+	private void cerrarConexion() {
+		try {
 			myInput.close();
 			myOutput.close();
 			socket.close();
 		} catch (IOException e) {
-			Toolkit.getDefaultToolkit().beep();
-			JOptionPane.showMessageDialog(null, ConexionSocket.MENSAJE_SIN_CONEXION);
-		} catch(NullPointerException e) {
 			Toolkit.getDefaultToolkit().beep();
 			JOptionPane.showMessageDialog(null, ConexionSocket.MENSAJE_SIN_CONEXION);
 		}

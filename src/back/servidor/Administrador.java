@@ -34,28 +34,45 @@ public class Administrador implements PropertyChangeListener, ValidacionDNI, Adm
 	
 	private ServerTotem servidorTotem;
 	private ServerPuestos servidorPuestos;
+	private ServerBackup servidorBackup;
 	
 	private int[] puestosDeTrabajo = { 0, 0, 0, 0, 0, 0, 0, 0 };
 
 	/**
 	 * Constructor para el administrador de turnos.<br>
 	 */
-	public Administrador(int puertoTotem, int puertoPuestos,int puertoServer2) {
+	public Administrador(int puertoTotem, int puertoPuestos,int puertoBackup) {
 		this.pcs = new PropertyChangeSupport(this);
 		this.pcs.addPropertyChangeListener(this);
-		
+
 		this.hostPantalla = ListaDeDirecciones.HOST;
 		this.puertoTotem = puertoTotem;
 		this.puertoPuestos = puertoPuestos;
-		this.puertoBackup = puertoServer2;
+		this.puertoBackup = puertoBackup;
+		
+		abrirServidor();
+		
+		//intentarSincronizar();
 	} 	
+	
+	
+
+	protected void setListaDeTurnos(ListaDeTurnos listaDeTurnos) {
+		this.listaDeTurnos = listaDeTurnos;
+	}
+
+	protected void setColaDeEspera(ColaDeEspera colaDeEspera) {
+		this.colaDeEspera = colaDeEspera;
+	}
+	
+	public void setPuestosDeTrabajo(int[] puestosDeTrabajo) {
+		this.puestosDeTrabajo = puestosDeTrabajo;
+	}
 
 	protected int[] getPuestosDeTrabajo() {
 		return puestosDeTrabajo;
 	}
 	
-
-
 
 	/**
 	 * Método encargado de validar si el dni ya se encuentra registrado en la
@@ -84,6 +101,7 @@ public class Administrador implements PropertyChangeListener, ValidacionDNI, Adm
 		Boolean ret = false;
 		if (validarDni(dni)) {
 			this.colaDeEspera.add(dni);
+			backup();
 			ret = true;
 		}
 		return ret;
@@ -108,7 +126,7 @@ public class Administrador implements PropertyChangeListener, ValidacionDNI, Adm
 		if (dni != null) {
 			Turno turno = new Turno(puesto, dni);
 			this.listaDeTurnos.agregarTurno(turno);
-			pcs.firePropertyChange("listaActualizada", null, turno);
+			pcs.firePropertyChange("listaActualizada", null, turno);			
 			ret = true;
 		}
 		return ret;
@@ -150,8 +168,10 @@ public class Administrador implements PropertyChangeListener, ValidacionDNI, Adm
 	 */
 	@Override
 	public void propertyChange(PropertyChangeEvent arg0) {
-		if (arg0.getPropertyName().equals("listaActualizada"))
+		if (arg0.getPropertyName().equals("listaActualizada")) {
 			actualizacionDisplay(ListaDeDirecciones.PUERTO_DISPLAY);
+			backup();
+		}
 	}
 
 	/**
@@ -161,20 +181,31 @@ public class Administrador implements PropertyChangeListener, ValidacionDNI, Adm
 	 * <b> Post: </b> Se abren los puertos para la conexión del totem y los puestos
 	 * de trabajo.<br>
 	 */
-	public void abrirServidor() {
+	private void abrirServidor() {
 		this.servidorTotem = new ServerTotem(this,this.puertoTotem);
 		this.servidorTotem.start();
 		
 		this.servidorPuestos = new ServerPuestos(this,this.puertoPuestos);
 		this.servidorPuestos.start();
-	}
-	
-	public void cerrarServidor() {
-		//IntentarRealizarBackup
-		this.servidorTotem.cambiarEstado();
-		this.servidorPuestos.cambiarEstado();
+		
+		this.servidorBackup = new ServerBackup(this,this.puertoBackup);
+		this.servidorBackup.start();
 	}
 
+	public void backup() {
+		try {
+			Socket socket = new Socket("localhost", this.puertoBackup);
+			ObjectOutputStream myObjectOutput = new ObjectOutputStream(socket.getOutputStream());
+			myObjectOutput.writeObject(this.listaDeTurnos);
+			myObjectOutput.writeObject(this.colaDeEspera);
+			myObjectOutput.writeObject(this.puestosDeTrabajo);
+			myObjectOutput.close();
+			socket.close();
+		} catch (UnknownHostException e) {
+		} catch (IOException e) {
+		}
+	}
+	
 	/**
 	 * Método encargado de establecer una conexión socket con el Display o
 	 * pantalla.<br>
@@ -195,6 +226,10 @@ public class Administrador implements PropertyChangeListener, ValidacionDNI, Adm
 		} catch (UnknownHostException e) {
 		} catch (IOException e) {
 		}
+	}
+	
+	public void intentarSincronizar() {
+		//Mensaje al otro servidor (a través de un nuevo puerto? mirar bien) para que le mande los datos actualizados
 	}
 
 

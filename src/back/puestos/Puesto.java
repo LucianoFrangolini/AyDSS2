@@ -6,13 +6,13 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.net.UnknownHostException;
 
 import javax.swing.JOptionPane;
 
 import back.conexiones.ConexionSocket;
 import back.constantes.ListaDeAcciones;
 import back.constantes.ListaDeDirecciones;
+import back.constantes.ListaDeMensajes;
 import back.puestos.excepciones.PuestosAgotadosException;
 import back.puestos.interfaces.SolicitudDeActualizacion;
 
@@ -20,7 +20,7 @@ import back.puestos.interfaces.SolicitudDeActualizacion;
  * @author Grupo12 <br>
  *         Clase para un Puesto de trabajo, extiende de ConexionSocket. <br>
  */
-public class Puesto extends ConexionSocket implements SolicitudDeActualizacion{
+public class Puesto extends ConexionSocket implements SolicitudDeActualizacion {
 
 	private int numeroPuesto;
 	private String clienteActual;
@@ -67,38 +67,70 @@ public class Puesto extends ConexionSocket implements SolicitudDeActualizacion{
 	 */
 	@Override
 	public void enviarMensaje(String accion) {
+		establecerConexion();
+		intercambio(accion);
+		cerrarConexion();
+	}
+
+	private void resincronizacion() {
+		if (this.puerto == ListaDeDirecciones.PUERTO_PUESTOS)
+			this.puerto = ListaDeDirecciones.PUERTO_PUESTOS_S2;
+		else
+			this.puerto = ListaDeDirecciones.PUERTO_PUESTOS;
+	}
+
+	private void establecerConexion() {
 		try {
 			this.socket = new Socket(this.host, this.puerto);
 			this.myInput = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 			this.myOutput = new PrintWriter(socket.getOutputStream(), true);
+		} catch (IOException e) {
+			try {
+				resincronizacion();
+				this.socket = new Socket(this.host, this.puerto);
+				this.myInput = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+				this.myOutput = new PrintWriter(socket.getOutputStream(), true);
+			} catch (IOException e2) {
+				Toolkit.getDefaultToolkit().beep();
+				JOptionPane.showMessageDialog(null, ConexionSocket.MENSAJE_SIN_CONEXION);
+			}
+		}
+	}
+
+	private void intercambio(String accion) {
+		try {
 			myOutput.println(accion);
 			if (accion.equals(ListaDeAcciones.ABRIR_PUESTO)) {
 				String aux = myInput.readLine();
-				
-				//CAMBIAR POR VARIABLES
-				
-				if (aux.equalsIgnoreCase("error"))
-					throw new PuestosAgotadosException("Se llegó al límite de puestos posibles");
+				if (aux.equalsIgnoreCase(ListaDeMensajes.ERROR))
+					throw new PuestosAgotadosException(ListaDeMensajes.LIMITE_PUESTOS);
 				this.numeroPuesto = Integer.parseInt(aux);
-				myInput.close();				
-			}
-			else if (accion.equals(ListaDeAcciones.LLAMAR_CLIENTE)) {
+
+			} else if (accion.equals(ListaDeAcciones.LLAMAR_CLIENTE)) {
 				myOutput.println(this.numeroPuesto);
 				this.clienteActual = myInput.readLine();
-				myInput.close();
-			} else if (accion.equals(ListaDeAcciones.ELIMINAR_TURNO) || accion.equalsIgnoreCase(ListaDeAcciones.CERRAR_PUESTO)) {
+				
+			} else if (accion.equals(ListaDeAcciones.ELIMINAR_TURNO)
+					|| accion.equalsIgnoreCase(ListaDeAcciones.CERRAR_PUESTO)) {
 				myOutput.println(this.numeroPuesto);
 			}
-			myOutput.close();
-			socket.close();
-		} catch (UnknownHostException e) {
-			e.printStackTrace();
 		} catch (IOException e) {
 			Toolkit.getDefaultToolkit().beep();
 			JOptionPane.showMessageDialog(null, ConexionSocket.MENSAJE_SIN_CONEXION);
 		} catch (PuestosAgotadosException e) {
 			Toolkit.getDefaultToolkit().beep();
 			JOptionPane.showMessageDialog(null, e.getMessage());
+		}
+	}
+
+	private void cerrarConexion() {
+		try {
+			myInput.close();
+			myOutput.close();
+			socket.close();
+		} catch (IOException e) {
+			Toolkit.getDefaultToolkit().beep();
+			JOptionPane.showMessageDialog(null, ConexionSocket.MENSAJE_SIN_CONEXION);
 		}
 	}
 

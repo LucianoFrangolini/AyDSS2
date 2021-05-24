@@ -8,26 +8,25 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 import back.constantes.ListaDeAcciones;
+import back.constantes.ListaDeMensajes;
 
 public class ServerPuestos implements Runnable {
 
 	private Administrador admin;
 	private int puerto;
-	private Boolean detener;
 	private Thread server;
-	private ServerSocket puestosServerSocket;
-	private Socket socket;
 
 	public ServerPuestos(Administrador admin, int puerto) {
 		this.admin = admin;
 		this.puerto = puerto;
-		this.detener = false;
 		this.server = new Thread(this, String.valueOf(puerto));
 	}
 
 	@Override
 	public void run() {
 
+		ServerSocket puestosServerSocket;
+		Socket socket;
 		BufferedReader myInput;
 		PrintWriter myOutput;
 		int numeroPuesto;
@@ -36,52 +35,43 @@ public class ServerPuestos implements Runnable {
 		try {
 			puestosServerSocket = new ServerSocket(this.puerto);
 
-			while (!detener) {
+			while (true) {
 
 				socket = puestosServerSocket.accept();
 				myInput = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 				myOutput = new PrintWriter(socket.getOutputStream(), true);
 
 				accion = myInput.readLine();
-				if (!this.detener) {
-					if (accion.equals(ListaDeAcciones.ABRIR_PUESTO)) {
-						int nuevoNumPuesto = buscaYOcupaPuesto();
-						if (nuevoNumPuesto != 0)
-							myOutput.println(nuevoNumPuesto);
-						else
-							myOutput.println("error");
-					} else {
 
-						numeroPuesto = Integer.parseInt(myInput.readLine());
-
-						if (accion.equals(ListaDeAcciones.LLAMAR_CLIENTE)) {
-							dni = admin.obtenerProximoCliente();
-							if (admin.agregarTurno(numeroPuesto, dni)) {
-								myOutput.println(dni);
-							} else
-								myOutput.println("No hay clientes en espera");
-
-						} else if (accion.equals(ListaDeAcciones.ELIMINAR_TURNO)) {
-							admin.eliminarTurno(numeroPuesto);
-
-						} else if (accion.equals(ListaDeAcciones.CERRAR_PUESTO)) {
-							admin.eliminarTurno(numeroPuesto);
-							admin.getPuestosDeTrabajo()[numeroPuesto - 1] = 0;
-						}
-					}
-					myInput.close();
-					myOutput.close();
-					socket.close();
+				if (accion.equals(ListaDeAcciones.ABRIR_PUESTO)) {
+					int nuevoNumPuesto = buscaYOcupaPuesto();
+					if (nuevoNumPuesto != 0)
+						myOutput.println(nuevoNumPuesto);
+					else
+						myOutput.println(ListaDeMensajes.ERROR);
 				} else {
-					myInput.close();
-					myOutput.close();
-					puestosServerSocket.close();
+
+					numeroPuesto = Integer.parseInt(myInput.readLine());
+
+					if (accion.equals(ListaDeAcciones.LLAMAR_CLIENTE)) {
+						dni = admin.obtenerProximoCliente();
+						if (admin.agregarTurno(numeroPuesto, dni)) {
+							myOutput.println(dni);
+						} else
+							myOutput.println(ListaDeMensajes.SIN_CLIENTES);
+
+					} else if (accion.equals(ListaDeAcciones.ELIMINAR_TURNO)) {
+						admin.eliminarTurno(numeroPuesto);
+
+					} else if (accion.equals(ListaDeAcciones.CERRAR_PUESTO)) {
+						admin.eliminarTurno(numeroPuesto);
+						admin.getPuestosDeTrabajo()[numeroPuesto - 1] = 0;
+					}
 				}
-
+				myInput.close();
+				myOutput.close();
+				socket.close();
 			}
-
-			puestosServerSocket.close();
-
 		} catch (IOException e) {
 		}
 	}
@@ -98,22 +88,6 @@ public class ServerPuestos implements Runnable {
 			i = -1;
 
 		return i + 1;
-	}
-
-	public void cambiarEstado() {
-		if (this.detener)
-			this.detener = false;
-		else {
-			try {
-				if (this.socket == null)
-					this.puestosServerSocket.close();
-				else
-					this.socket.close();
-				this.detener = true;
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
 	}
 
 	public void start() {
