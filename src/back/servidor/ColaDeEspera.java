@@ -1,5 +1,6 @@
 package back.servidor;
 
+import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -7,7 +8,9 @@ import java.util.Queue;
  * @author Grupo12 <br>
  *         Clase para la cola de espera que encapsula el uso de un Queue. <br>
  */
-public class ColaDeEspera {
+public class ColaDeEspera implements Serializable{
+
+	private static final long serialVersionUID = -8359156628507108488L;
 	private Queue<String> cola = new LinkedList<String>();
 
 	/**
@@ -42,5 +45,14 @@ public class ColaDeEspera {
 	 */
 	public Boolean contains(String dni) {
 		return this.cola.contains(dni);
+	}
+	
+	@Override
+	public String toString() {
+		String aux="";
+		for (String x : cola) {
+			aux+=x+" ; ";
+		}
+		return aux; 
 	}
 }

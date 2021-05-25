@@ -45,8 +45,10 @@ public class ServerPuestos implements Runnable {
 
 				if (accion.equals(ListaDeAcciones.ABRIR_PUESTO)) {
 					int nuevoNumPuesto = buscaYOcupaPuesto();
-					if (nuevoNumPuesto != 0)
+					if (nuevoNumPuesto != 0) {
 						myOutput.println(nuevoNumPuesto);
+						this.admin.backup(); //revisar
+					}
 					else
 						myOutput.println(ListaDeMensajes.ERROR);
 				} else {
@@ -66,6 +68,7 @@ public class ServerPuestos implements Runnable {
 					} else if (accion.equals(ListaDeAcciones.CERRAR_PUESTO)) {
 						admin.eliminarTurno(numeroPuesto);
 						admin.getPuestosDeTrabajo()[numeroPuesto - 1] = 0;
+						this.admin.backup(); //revisar
 					}
 				}
 				myInput.close();
@@ -78,7 +81,7 @@ public class ServerPuestos implements Runnable {
 
 	private int buscaYOcupaPuesto() {
 		int i = 0;
-		int[] puestos = admin.getPuestosDeTrabajo();
+		Integer[] puestos = admin.getPuestosDeTrabajo();
 
 		while (i < puestos.length && puestos[i] != 0)
 			i++;

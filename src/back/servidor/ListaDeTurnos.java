@@ -11,7 +11,6 @@ import java.util.Map.Entry;
  *         el display y atender por los Puestos de trabajo. Implementa
  *         Serializable para permitir ser enviado por socket<br>
  */
-//Agregar que debe ser SERIALIZABLE en la documentacion para el envío de objetos/socket
 public class ListaDeTurnos implements Serializable {
 	private static final long serialVersionUID = -6925984720747589926L;
 	private HashMap<Integer, String> lista = new HashMap<Integer, String>();

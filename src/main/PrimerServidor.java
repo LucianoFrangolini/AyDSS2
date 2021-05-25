@@ -16,7 +16,7 @@ public class PrimerServidor {
 	public static void main(String[] args) {
 
 		Administrador administrador = new Administrador(ListaDeDirecciones.PUERTO_TOTEM,
-				ListaDeDirecciones.PUERTO_PUESTOS, ListaDeDirecciones.PUERTO_S2);
+				ListaDeDirecciones.PUERTO_PUESTOS, ListaDeDirecciones.PUERTO_S2,ListaDeDirecciones.PUERTO_S1);
 		IVista vista = new VistaServidor("Servidor 1");
 		ControladorAdministrador controlador = new ControladorAdministrador(vista,administrador);
 		vista.setActionListener(controlador);

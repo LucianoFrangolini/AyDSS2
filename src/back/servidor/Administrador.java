@@ -3,8 +3,11 @@ package back.servidor;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
@@ -22,26 +25,27 @@ import back.servidor.interfaces.ValidacionDNI;
  */
 public class Administrador implements PropertyChangeListener, ValidacionDNI, AdministracionDeCola,
 		AdministracionDeLista, ActualizacionDisplay, ActualizacionPuesto {
-	
+
 	private ListaDeTurnos listaDeTurnos = new ListaDeTurnos();
 	private ColaDeEspera colaDeEspera = new ColaDeEspera();
 	private PropertyChangeSupport pcs;
-	
+
 	private String hostPantalla;
 	private int puertoTotem;
 	private int puertoPuestos;
 	private int puertoBackup;
-	
+	private int puertoPropio;
+
 	private ServerTotem servidorTotem;
 	private ServerPuestos servidorPuestos;
 	private ServerBackup servidorBackup;
-	
-	private int[] puestosDeTrabajo = { 0, 0, 0, 0, 0, 0, 0, 0 };
+
+	private Integer[] puestosDeTrabajo = { 0, 0, 0, 0, 0, 0, 0, 0 };
 
 	/**
 	 * Constructor para el administrador de turnos.<br>
 	 */
-	public Administrador(int puertoTotem, int puertoPuestos,int puertoBackup) {
+	public Administrador(int puertoTotem, int puertoPuestos, int puertoBackup, int puertoPropio) {
 		this.pcs = new PropertyChangeSupport(this);
 		this.pcs.addPropertyChangeListener(this);
 
@@ -49,13 +53,10 @@ public class Administrador implements PropertyChangeListener, ValidacionDNI, Adm
 		this.puertoTotem = puertoTotem;
 		this.puertoPuestos = puertoPuestos;
 		this.puertoBackup = puertoBackup;
-		
+		this.puertoPropio = puertoPropio;
 		abrirServidor();
-		
-		//intentarSincronizar();
-	} 	
-	
-	
+		intentarSincronizar();
+	}
 
 	protected void setListaDeTurnos(ListaDeTurnos listaDeTurnos) {
 		this.listaDeTurnos = listaDeTurnos;
@@ -64,15 +65,22 @@ public class Administrador implements PropertyChangeListener, ValidacionDNI, Adm
 	protected void setColaDeEspera(ColaDeEspera colaDeEspera) {
 		this.colaDeEspera = colaDeEspera;
 	}
-	
-	public void setPuestosDeTrabajo(int[] puestosDeTrabajo) {
+
+	protected void setPuestosDeTrabajo(Integer[] puestosDeTrabajo) {
 		this.puestosDeTrabajo = puestosDeTrabajo;
 	}
 
-	protected int[] getPuestosDeTrabajo() {
+	protected ListaDeTurnos getListaDeTurnos() {
+		return listaDeTurnos;
+	}
+
+	protected ColaDeEspera getColaDeEspera() {
+		return colaDeEspera;
+	}
+
+	protected Integer[] getPuestosDeTrabajo() {
 		return puestosDeTrabajo;
 	}
-	
 
 	/**
 	 * Método encargado de validar si el dni ya se encuentra registrado en la
@@ -126,7 +134,7 @@ public class Administrador implements PropertyChangeListener, ValidacionDNI, Adm
 		if (dni != null) {
 			Turno turno = new Turno(puesto, dni);
 			this.listaDeTurnos.agregarTurno(turno);
-			pcs.firePropertyChange("listaActualizada", null, turno);			
+			pcs.firePropertyChange("listaActualizada", null, turno);
 			ret = true;
 		}
 		return ret;
@@ -182,20 +190,23 @@ public class Administrador implements PropertyChangeListener, ValidacionDNI, Adm
 	 * de trabajo.<br>
 	 */
 	private void abrirServidor() {
-		this.servidorTotem = new ServerTotem(this,this.puertoTotem);
+		this.servidorTotem = new ServerTotem(this, this.puertoTotem);
 		this.servidorTotem.start();
-		
-		this.servidorPuestos = new ServerPuestos(this,this.puertoPuestos);
+
+		this.servidorPuestos = new ServerPuestos(this, this.puertoPuestos);
 		this.servidorPuestos.start();
-		
-		this.servidorBackup = new ServerBackup(this,this.puertoBackup);
+
+		this.servidorBackup = new ServerBackup(this, this.puertoPropio);
 		this.servidorBackup.start();
 	}
 
 	public void backup() {
 		try {
+			// cambiar cadenas por constantes
 			Socket socket = new Socket("localhost", this.puertoBackup);
+			PrintWriter msjOutput = new PrintWriter(socket.getOutputStream(), true);
 			ObjectOutputStream myObjectOutput = new ObjectOutputStream(socket.getOutputStream());
+			msjOutput.println("Backup");
 			myObjectOutput.writeObject(this.listaDeTurnos);
 			myObjectOutput.writeObject(this.colaDeEspera);
 			myObjectOutput.writeObject(this.puestosDeTrabajo);
@@ -205,7 +216,7 @@ public class Administrador implements PropertyChangeListener, ValidacionDNI, Adm
 		} catch (IOException e) {
 		}
 	}
-	
+
 	/**
 	 * Método encargado de establecer una conexión socket con el Display o
 	 * pantalla.<br>
@@ -227,11 +238,36 @@ public class Administrador implements PropertyChangeListener, ValidacionDNI, Adm
 		} catch (IOException e) {
 		}
 	}
-	
+
 	public void intentarSincronizar() {
-		//Mensaje al otro servidor (a través de un nuevo puerto? mirar bien) para que le mande los datos actualizados
+		try {
+			// cambiar las cadenas por constantes
+			Socket socket = new Socket("localhost", this.puertoBackup);
+			
+			PrintWriter msjOutput = new PrintWriter(socket.getOutputStream(), true);			
+			msjOutput.println("Sincronizar");
+			msjOutput.close();
+			System.out.println("cerre el output");
+			ObjectInputStream obInput = new ObjectInputStream(socket.getInputStream());
+			this.setListaDeTurnos((ListaDeTurnos) obInput.readObject());
+			this.setColaDeEspera((ColaDeEspera) obInput.readObject());
+			this.setPuestosDeTrabajo((Integer[]) obInput.readObject());
+			System.out.println("Turnos: "+this.getListaDeTurnos());
+			System.out.println("Cola: "+this.getListaDeTurnos());
+			System.out.println("Puestos: "+this.getListaDeTurnos());
+			obInput.close();
+			socket.close();
+		} catch (ClassNotFoundException e) {
+		} catch (UnknownHostException e) {
+		} catch (IOException e) {
+		}
+		// Mensaje al otro servidor (a través de un nuevo puerto? mirar bien) para que
+		// le mande los datos actualizados
+
 	}
 
-
+	public String toString() {
+		return String.valueOf(this.puertoBackup);
+	}
 
 }
