@@ -263,7 +263,6 @@ public class Administrador implements PropertyChangeListener, ValidacionDNI, Adm
 		} catch (IOException e) {
 			this.realizarBackup = false;
 		}
-
 	}
 
 	public String toString() {

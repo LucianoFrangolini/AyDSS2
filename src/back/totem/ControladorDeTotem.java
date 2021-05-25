@@ -22,6 +22,8 @@ import back.totem.interfaces.EnvioDNI;
  */
 public class ControladorDeTotem extends ConexionSocket implements EnvioDNI {
 
+	
+	
 	private String estado;
 
 	/**
