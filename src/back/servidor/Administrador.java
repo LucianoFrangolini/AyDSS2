@@ -204,9 +204,7 @@ public class Administrador implements PropertyChangeListener, ValidacionDNI, Adm
 		try {
 			// cambiar cadenas por constantes
 			Socket socket = new Socket("localhost", this.puertoBackup);
-			PrintWriter msjOutput = new PrintWriter(socket.getOutputStream(), true);
 			ObjectOutputStream myObjectOutput = new ObjectOutputStream(socket.getOutputStream());
-			msjOutput.println("Backup");
 			myObjectOutput.writeObject(this.listaDeTurnos);
 			myObjectOutput.writeObject(this.colaDeEspera);
 			myObjectOutput.writeObject(this.puestosDeTrabajo);
@@ -243,18 +241,13 @@ public class Administrador implements PropertyChangeListener, ValidacionDNI, Adm
 		try {
 			// cambiar las cadenas por constantes
 			Socket socket = new Socket("localhost", this.puertoBackup);
-			
-			PrintWriter msjOutput = new PrintWriter(socket.getOutputStream(), true);			
-			msjOutput.println("Sincronizar");
-			msjOutput.close();
-			System.out.println("cerre el output");
+			System.out.println(socket);
 			ObjectInputStream obInput = new ObjectInputStream(socket.getInputStream());
+			System.out.println(obInput);
 			this.setListaDeTurnos((ListaDeTurnos) obInput.readObject());
 			this.setColaDeEspera((ColaDeEspera) obInput.readObject());
 			this.setPuestosDeTrabajo((Integer[]) obInput.readObject());
-			System.out.println("Turnos: "+this.getListaDeTurnos());
-			System.out.println("Cola: "+this.getListaDeTurnos());
-			System.out.println("Puestos: "+this.getListaDeTurnos());
+			
 			obInput.close();
 			socket.close();
 		} catch (ClassNotFoundException e) {

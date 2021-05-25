@@ -26,44 +26,34 @@ public class ServerBackup implements Runnable{
 		
 		ServerSocket backupServerSocket;
 		Socket socket;
-		BufferedReader input;
 		ObjectInputStream obInput;
 		ObjectOutputStream obOutput;
 		String msj;		
+		Boolean sincronizar = true;
 		
 		try {
 			backupServerSocket = new ServerSocket(this.puerto);
 			while (true) {
 				socket = backupServerSocket.accept();
-				input = new BufferedReader(new InputStreamReader(socket.getInputStream()));	
-				System.out.println("Esperando msj");
 				
-				msj = input.readLine();
-				input.close();
-				System.out.println("Voy a entrar al if");
-				System.out.println(msj);
-				if (msj.equalsIgnoreCase("Sincronizar")) {
-					System.out.println("Entre al if");
-					
+				if (sincronizar) {
 					obOutput = new ObjectOutputStream(socket.getOutputStream());
-					System.out.println("Cree el output");
 					obOutput.writeObject(this.admin.getListaDeTurnos());
 					obOutput.writeObject(this.admin.getColaDeEspera());
 					obOutput.writeObject(this.admin.getPuestosDeTrabajo());
-					System.out.println("Envie las cosas");
 					obOutput.close();
-					
-				} else if (msj.equalsIgnoreCase("Backup")) {
+					sincronizar=false;
+				} else{
 					obInput = new ObjectInputStream(socket.getInputStream());
 					this.admin.setListaDeTurnos((ListaDeTurnos) obInput.readObject());
 					this.admin.setColaDeEspera((ColaDeEspera) obInput.readObject());
 					this.admin.setPuestosDeTrabajo((Integer[])obInput.readObject());
 					obInput.close();
-				}	
-				System.out.println("Sali del if");
+				}								
 				socket.close();
 			}
 		} catch (IOException e) {
+			e.printStackTrace();
 		} catch (ClassNotFoundException e) {
 		}
 	}
