@@ -28,15 +28,14 @@ public class ServerBackup implements Runnable{
 		Socket socket;
 		ObjectInputStream obInput;
 		ObjectOutputStream obOutput;
-		String msj;		
 		Boolean sincronizar = true;
 		
 		try {
 			backupServerSocket = new ServerSocket(this.puerto);
 			while (true) {
 				socket = backupServerSocket.accept();
-				
 				if (sincronizar) {
+					this.admin.setRealizarBackup(true);
 					obOutput = new ObjectOutputStream(socket.getOutputStream());
 					obOutput.writeObject(this.admin.getListaDeTurnos());
 					obOutput.writeObject(this.admin.getColaDeEspera());
@@ -53,7 +52,6 @@ public class ServerBackup implements Runnable{
 				socket.close();
 			}
 		} catch (IOException e) {
-			e.printStackTrace();
 		} catch (ClassNotFoundException e) {
 		}
 	}

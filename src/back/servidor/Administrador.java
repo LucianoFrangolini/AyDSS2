@@ -36,6 +36,8 @@ public class Administrador implements PropertyChangeListener, ValidacionDNI, Adm
 	private int puertoBackup;
 	private int puertoPropio;
 
+	private Boolean realizarBackup;
+
 	private ServerTotem servidorTotem;
 	private ServerPuestos servidorPuestos;
 	private ServerBackup servidorBackup;
@@ -54,10 +56,16 @@ public class Administrador implements PropertyChangeListener, ValidacionDNI, Adm
 		this.puertoPuestos = puertoPuestos;
 		this.puertoBackup = puertoBackup;
 		this.puertoPropio = puertoPropio;
+		this.realizarBackup = true;
+
 		abrirServidor();
 		intentarSincronizar();
 	}
 
+	protected void setRealizarBackup(Boolean backup) {
+		this.realizarBackup = backup;
+	}
+	
 	protected void setListaDeTurnos(ListaDeTurnos listaDeTurnos) {
 		this.listaDeTurnos = listaDeTurnos;
 	}
@@ -201,17 +209,20 @@ public class Administrador implements PropertyChangeListener, ValidacionDNI, Adm
 	}
 
 	public void backup() {
-		try {
-			// cambiar cadenas por constantes
-			Socket socket = new Socket("localhost", this.puertoBackup);
-			ObjectOutputStream myObjectOutput = new ObjectOutputStream(socket.getOutputStream());
-			myObjectOutput.writeObject(this.listaDeTurnos);
-			myObjectOutput.writeObject(this.colaDeEspera);
-			myObjectOutput.writeObject(this.puestosDeTrabajo);
-			myObjectOutput.close();
-			socket.close();
-		} catch (UnknownHostException e) {
-		} catch (IOException e) {
+		if (realizarBackup) {
+			try {
+				// cambiar cadenas por constantes
+				Socket socket = new Socket("localhost", this.puertoBackup);
+				ObjectOutputStream myObjectOutput = new ObjectOutputStream(socket.getOutputStream());
+				myObjectOutput.writeObject(this.listaDeTurnos);
+				myObjectOutput.writeObject(this.colaDeEspera);
+				myObjectOutput.writeObject(this.puestosDeTrabajo);
+				myObjectOutput.close();
+				socket.close();
+			} catch (UnknownHostException e) {
+			} catch (IOException e) {
+				this.realizarBackup=false;
+			}
 		}
 	}
 
@@ -241,21 +252,17 @@ public class Administrador implements PropertyChangeListener, ValidacionDNI, Adm
 		try {
 			// cambiar las cadenas por constantes
 			Socket socket = new Socket("localhost", this.puertoBackup);
-			System.out.println(socket);
 			ObjectInputStream obInput = new ObjectInputStream(socket.getInputStream());
-			System.out.println(obInput);
 			this.setListaDeTurnos((ListaDeTurnos) obInput.readObject());
 			this.setColaDeEspera((ColaDeEspera) obInput.readObject());
 			this.setPuestosDeTrabajo((Integer[]) obInput.readObject());
-			
 			obInput.close();
 			socket.close();
 		} catch (ClassNotFoundException e) {
 		} catch (UnknownHostException e) {
 		} catch (IOException e) {
+			this.realizarBackup = false;
 		}
-		// Mensaje al otro servidor (a través de un nuevo puerto? mirar bien) para que
-		// le mande los datos actualizados
 
 	}
 
