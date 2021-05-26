@@ -190,8 +190,4 @@ public class VistaPuesto extends JFrame implements IVistaPuesto {
 		this.numeroPuesto = numero;
 		this.setTitle("Puesto de trabajo numero " + String.valueOf(this.numeroPuesto));
 	}
-
-	public VistaPuesto getInstance() {
-		return this;
-	}
 }
