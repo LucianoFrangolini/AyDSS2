@@ -21,7 +21,7 @@ public class ControladorMonitor implements PropertyChangeListener{
 	
 	@Override
 	public void propertyChange(PropertyChangeEvent arg0) {
-		System.out.println(arg0.getPropertyName());
+		//System.out.println(arg0.getPropertyName());
 		if (arg0.getPropertyName().equalsIgnoreCase("TotemEnLinea")) {
 			this.vista.setLabelTotem("EN LINEA");
 		}

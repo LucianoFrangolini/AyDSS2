@@ -77,51 +77,62 @@ public class Monitor implements Runnable {
 					case "Totem": {
 						totem.setLatido("TotemEnLinea");
 						pcs.firePropertyChange("TotemEnLinea", null, null);
+						break;
 					}
 					case "Servidor1": {
 						servidor1.setLatido("Servidor1EnLinea");
 						pcs.firePropertyChange("Servidor1EnLinea", null, null);
+						break;
 					}
 					case "Servidor2": {
 						servidor2.setLatido("Servidor2EnLinea");
 						pcs.firePropertyChange("Servidor2EnLinea", null, null);
+						break;
 					}
 					case "Display": {
-						System.out.println("llego mensaje del display");
 						display.setLatido("DisplayEnLinea");
 						pcs.firePropertyChange("DisplayEnLinea", null, null);
+						break;
 					}
 					case "Puesto1": {
 						puesto1.setLatido("Puesto1EnLinea");
 						pcs.firePropertyChange("Puesto1EnLinea", null, null);
+						break;
 					}
 					case "Puesto2": {
 						puesto2.setLatido("Puesto2EnLinea");
 						pcs.firePropertyChange("Puesto2EnLinea", null, null);
+						break;
 					}
 					case "Puesto3": {
 						puesto3.setLatido("Puesto3EnLinea");
 						pcs.firePropertyChange("Puesto3EnLinea", null, null);
+						break;
 					}
 					case "Puesto4": {
 						puesto4.setLatido("Puesto4EnLinea");
 						pcs.firePropertyChange("Puesto4EnLinea", null, null);
+						break;
 					}
 					case "Puesto5": {
 						puesto5.setLatido("Puesto5EnLinea");
 						pcs.firePropertyChange("Puesto5EnLinea", null, null);
+						break;
 					}
 					case "Puesto6": {
 						puesto6.setLatido("Puesto6EnLinea");
 						pcs.firePropertyChange("Puesto6EnLinea", null, null);
+						break;
 					}
 					case "Puesto7": {
 						puesto7.setLatido("Puesto7EnLinea");
 						pcs.firePropertyChange("Puesto7EnLinea", null, null);
+						break;
 					}
 					case "Puesto8": {
 						puesto8.setLatido("Puesto8EnLinea");
 						pcs.firePropertyChange("Puesto8EnLinea", null, null);
+						break;
 					}
 				}
 				socket.close();
