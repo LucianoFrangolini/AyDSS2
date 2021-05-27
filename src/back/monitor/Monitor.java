@@ -8,19 +8,55 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 public class Monitor implements Runnable {
-
+	private static Monitor instance;
 	private Thread servidor;
 	private int puerto;
 	private PropertyChangeSupport pcs;
 
+	private HiloTimeOut totem;
+	private HiloTimeOut servidor1;
+	private HiloTimeOut servidor2;
+	private HiloTimeOut display;
+	private HiloTimeOut puesto1;
+	private HiloTimeOut puesto2;
+	private HiloTimeOut puesto3;
+	private HiloTimeOut puesto4;
+	private HiloTimeOut puesto5;
+	private HiloTimeOut puesto6;
+	private HiloTimeOut puesto7;
+	private HiloTimeOut puesto8;
+
 	// Pasar el puerto y el host
-	public Monitor() {
+	private Monitor() {
+		this.puerto = 3000;
 		servidor = new Thread(this, "Monitor");
+		this.pcs = new PropertyChangeSupport(this);
 		servidor.start();
+	}
+
+	public static Monitor getInstance() {
+		if (instance == null)
+			instance = new Monitor();
+		return instance;
 	}
 
 	public PropertyChangeSupport getPcs() {
 		return this.pcs;
+	}
+
+	public void abrirTimers() {
+		totem = new HiloTimeOut("Totem");
+		servidor1 = new HiloTimeOut("Servidor1");
+		servidor2 = new HiloTimeOut("Servidor2");
+		display = new HiloTimeOut("Display");
+		puesto1 = new HiloTimeOut("Puesto1");
+		puesto2 = new HiloTimeOut("Puesto2");
+		puesto3 = new HiloTimeOut("Puesto3");
+		puesto4 = new HiloTimeOut("Puesto4");
+		puesto5 = new HiloTimeOut("Puesto5");
+		puesto6 = new HiloTimeOut("Puesto6");
+		puesto7 = new HiloTimeOut("Puesto7");
+		puesto8 = new HiloTimeOut("Puesto8");
 	}
 
 	@Override
@@ -29,6 +65,8 @@ public class Monitor implements Runnable {
 		Socket socket;
 		BufferedReader myInput;
 		String aux;
+		// REVISAR
+		abrirTimers();
 		try {
 			monitorServerSocket = new ServerSocket(this.puerto);
 			while (true) {
@@ -36,42 +74,55 @@ public class Monitor implements Runnable {
 				myInput = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 				aux = myInput.readLine();
 				switch (aux) {
-				case "Totem": {
-					pcs.firePropertyChange("TotemEnLinea", null, null);
-				}
-				case "Servidor1": {
-					pcs.firePropertyChange("Servidor1EnLinea", null, null);
-				}
-				case "Servidor2": {
-					pcs.firePropertyChange("Servidor2EnLinea", null, null);
-				}
-				case "Display": {
-					pcs.firePropertyChange("DisplayEnLinea", null, null);
-				}
-				case "Puesto1": {
-					pcs.firePropertyChange("Puesto1EnLinea", null, null);
-				}
-				case "Puesto2": {
-					pcs.firePropertyChange("Puesto2EnLinea", null, null);
-				}
-				case "Puesto3": {
-					pcs.firePropertyChange("Puesto3EnLinea", null, null);
-				}
-				case "Puesto4": {
-					pcs.firePropertyChange("Puesto4EnLinea", null, null);
-				}
-				case "Puesto5": {
-					pcs.firePropertyChange("Puesto5EnLinea", null, null);
-				}
-				case "Puesto6": {
-					pcs.firePropertyChange("Puesto6EnLinea", null, null);
-				}
-				case "Puesto7": {
-					pcs.firePropertyChange("Puesto7EnLinea", null, null);
-				}
-				case "Puesto8": {
-					pcs.firePropertyChange("Puesto8EnLinea", null, null);
-				}
+					case "Totem": {
+						totem.setLatido("TotemEnLinea");
+						pcs.firePropertyChange("TotemEnLinea", null, null);
+					}
+					case "Servidor1": {
+						servidor1.setLatido("Servidor1EnLinea");
+						pcs.firePropertyChange("Servidor1EnLinea", null, null);
+					}
+					case "Servidor2": {
+						servidor2.setLatido("Servidor2EnLinea");
+						pcs.firePropertyChange("Servidor2EnLinea", null, null);
+					}
+					case "Display": {
+						System.out.println("llego mensaje del display");
+						display.setLatido("DisplayEnLinea");
+						pcs.firePropertyChange("DisplayEnLinea", null, null);
+					}
+					case "Puesto1": {
+						puesto1.setLatido("Puesto1EnLinea");
+						pcs.firePropertyChange("Puesto1EnLinea", null, null);
+					}
+					case "Puesto2": {
+						puesto2.setLatido("Puesto2EnLinea");
+						pcs.firePropertyChange("Puesto2EnLinea", null, null);
+					}
+					case "Puesto3": {
+						puesto3.setLatido("Puesto3EnLinea");
+						pcs.firePropertyChange("Puesto3EnLinea", null, null);
+					}
+					case "Puesto4": {
+						puesto4.setLatido("Puesto4EnLinea");
+						pcs.firePropertyChange("Puesto4EnLinea", null, null);
+					}
+					case "Puesto5": {
+						puesto5.setLatido("Puesto5EnLinea");
+						pcs.firePropertyChange("Puesto5EnLinea", null, null);
+					}
+					case "Puesto6": {
+						puesto6.setLatido("Puesto6EnLinea");
+						pcs.firePropertyChange("Puesto6EnLinea", null, null);
+					}
+					case "Puesto7": {
+						puesto7.setLatido("Puesto7EnLinea");
+						pcs.firePropertyChange("Puesto7EnLinea", null, null);
+					}
+					case "Puesto8": {
+						puesto8.setLatido("Puesto8EnLinea");
+						pcs.firePropertyChange("Puesto8EnLinea", null, null);
+					}
 				}
 				socket.close();
 			}

@@ -4,8 +4,13 @@ import java.awt.Toolkit;
 import java.beans.PropertyChangeSupport;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.UnknownHostException;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import javax.swing.JOptionPane;
 
@@ -18,10 +23,14 @@ import back.servidor.ListaDeTurnos;
  * @author Grupo12 <br>
  *         Clase para el Display que extiende de ConexionSocket. <br>
  */
-public class Display extends ConexionSocket implements Visualizacion {
+public class Display extends ConexionSocket implements Visualizacion, Runnable {
 
 	private ListaDeTurnos listaDeLlamados = null;
 	private PropertyChangeSupport pcs;
+	
+	private ScheduledExecutorService scheduler;
+	private int initialDelay;
+	private int periodicDelay;
 
 	/**
 	 * Constructor para el display<br>
@@ -30,6 +39,11 @@ public class Display extends ConexionSocket implements Visualizacion {
 		this.puerto = ListaDeDirecciones.PUERTO_DISPLAY;
 		this.pcs = new PropertyChangeSupport(this);
 		this.abrirPuertoDeConexion();
+		
+		scheduler = Executors.newSingleThreadScheduledExecutor();
+		this.initialDelay = 10000;
+		this.periodicDelay = 10000;
+		scheduler.scheduleAtFixedRate(this, initialDelay, periodicDelay, TimeUnit.MILLISECONDS);
 	}
 
 	/**
@@ -87,5 +101,19 @@ public class Display extends ConexionSocket implements Visualizacion {
 				}
 			}
 		}.start();
+	}
+
+	@Override
+	public void run() {
+		try {
+			//CORREGIR SOCKET
+            Socket socket = new Socket("localhost",3000);
+            PrintWriter  pr = new PrintWriter(socket.getOutputStream(), true);
+            pr.println("Display");
+            pr.close();
+            socket.close();
+        } catch (UnknownHostException e) {
+        } catch (IOException e) {
+        }
 	}
 }

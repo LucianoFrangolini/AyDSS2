@@ -10,6 +10,9 @@ import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import back.constantes.ListaDeDirecciones;
 import back.servidor.interfaces.ActualizacionDisplay;
@@ -24,12 +27,14 @@ import back.servidor.interfaces.ValidacionDNI;
  *         Singleton. <br>
  */
 public class Administrador implements PropertyChangeListener, ValidacionDNI, AdministracionDeCola,
-		AdministracionDeLista, ActualizacionDisplay, ActualizacionPuesto {
+		AdministracionDeLista, ActualizacionDisplay, ActualizacionPuesto, Runnable {
 
 	private ListaDeTurnos listaDeTurnos = new ListaDeTurnos();
 	private ColaDeEspera colaDeEspera = new ColaDeEspera();
 	private PropertyChangeSupport pcs;
 
+	private String identificador;
+	
 	private String hostPantalla;
 	private int puertoTotem;
 	private int puertoPuestos;
@@ -43,11 +48,17 @@ public class Administrador implements PropertyChangeListener, ValidacionDNI, Adm
 	private ServerBackup servidorBackup;
 
 	private Integer[] puestosDeTrabajo = { 0, 0, 0, 0, 0, 0, 0, 0 };
+	
+	private ScheduledExecutorService scheduler;
+	private int initialDelay;
+	private int periodicDelay;
 
 	/**
 	 * Constructor para el administrador de turnos.<br>
 	 */
-	public Administrador(int puertoTotem, int puertoPuestos, int puertoBackup, int puertoPropio) {
+	public Administrador(String identificador,int puertoTotem, int puertoPuestos, int puertoBackup, int puertoPropio) {
+		this.identificador = identificador;
+		
 		this.pcs = new PropertyChangeSupport(this);
 		this.pcs.addPropertyChangeListener(this);
 
@@ -60,6 +71,11 @@ public class Administrador implements PropertyChangeListener, ValidacionDNI, Adm
 
 		abrirServidor();
 		intentarSincronizar();
+		
+		scheduler = Executors.newSingleThreadScheduledExecutor();
+		this.initialDelay = 10000;
+		this.periodicDelay = 10000;
+		scheduler.scheduleAtFixedRate(this, initialDelay, periodicDelay, TimeUnit.MILLISECONDS);
 	}
 
 	protected void setRealizarBackup(Boolean backup) {
@@ -267,6 +283,20 @@ public class Administrador implements PropertyChangeListener, ValidacionDNI, Adm
 
 	public String toString() {
 		return String.valueOf(this.puertoBackup);
+	}
+
+	@Override
+	public void run() {
+		try {
+			//CORREGIR SOCKET
+            Socket socket = new Socket("localhost",3000);
+            PrintWriter  pr = new PrintWriter(socket.getOutputStream(), true);
+            pr.println(identificador);
+            pr.close();
+            socket.close();
+        } catch (UnknownHostException e) {
+        } catch (IOException e) {
+        }
 	}
 
 }

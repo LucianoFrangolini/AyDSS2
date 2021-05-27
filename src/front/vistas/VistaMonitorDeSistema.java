@@ -12,8 +12,9 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 
 import front.interfaces.IVista;
+import front.interfaces.IVistaMonitor;
 
-public class VistaMonitorDeSistema extends JFrame implements IVista{
+public class VistaMonitorDeSistema extends JFrame implements IVistaMonitor{
 
 	private static final long serialVersionUID = 9086917266561295058L;
 	private JPanel contentPane;
@@ -203,6 +204,66 @@ public class VistaMonitorDeSistema extends JFrame implements IVista{
 	public void abrir() {
 		setBounds(1220, 400, 600, 600);
 		setVisible(true);
+	}
+
+	@Override
+	public void setLabelTotem(String label) {
+		this.lblEstadoTotem.setText(label);
+	}
+
+	@Override
+	public void setLabelServidor1(String label) {
+		this.lblEstadoServidor1.setText(label);
+	}
+
+	@Override
+	public void setLabelServidor2(String label) {
+		this.lblEstadoServidor2.setText(label);
+	}
+
+	@Override
+	public void setLabelDisplay(String label) {
+		this.lblEstadoDisplay.setText(label);
+	}
+
+	@Override
+	public void setLabelPuesto1(String label) {
+		this.lblEstadoPuesto1.setText(label);
+	}
+
+	@Override
+	public void setLabelPuesto2(String label) {
+		this.lblEstadoPuesto2.setText(label);
+	}
+
+	@Override
+	public void setLabelPuesto3(String label) {
+		this.lblEstadoPuesto3.setText(label);
+	}
+
+	@Override
+	public void setLabelPuesto4(String label) {
+		this.lblEstadoPuesto4.setText(label);
+	}
+
+	@Override
+	public void setLabelPuesto5(String label) {
+		this.lblEstadoPuesto5.setText(label);
+	}
+
+	@Override
+	public void setLabelPuesto6(String label) {
+		this.lblEstadoPuesto6.setText(label);
+	}
+
+	@Override
+	public void setLabelPuesto7(String label) {
+		this.lblEstadoPuesto7.setText(label);
+	}
+
+	@Override
+	public void setLabelPuesto8(String label) {
+		this.lblEstadoPuesto8.setText(label);
 	}
 
 }

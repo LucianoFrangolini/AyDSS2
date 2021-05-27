@@ -7,6 +7,9 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import javax.swing.JOptionPane;
 
@@ -20,11 +23,13 @@ import back.totem.interfaces.EnvioDNI;
  *         Clase ControladorDeTotem con la lógica del Tótem. Se extiende de
  *         ConexiónSocket. <br>
  */
-public class ControladorDeTotem extends ConexionSocket implements EnvioDNI {
-
-	
+public class ControladorDeTotem extends ConexionSocket implements EnvioDNI, Runnable {
 	
 	private String estado;
+	
+	private ScheduledExecutorService scheduler;
+	private int initialDelay;
+	private int periodicDelay;
 
 	/**
 	 * Constructor del ControladorDeTotem.<br>
@@ -33,6 +38,11 @@ public class ControladorDeTotem extends ConexionSocket implements EnvioDNI {
 		this.host = ListaDeDirecciones.HOST;
 		this.puerto = ListaDeDirecciones.PUERTO_TOTEM;
 		this.estado = "";
+		
+		scheduler = Executors.newSingleThreadScheduledExecutor();
+		this.initialDelay = 10000;
+		this.periodicDelay = 10000;
+		scheduler.scheduleAtFixedRate(this, initialDelay, periodicDelay, TimeUnit.MILLISECONDS);
 	}
 
 	/**
@@ -123,6 +133,20 @@ public class ControladorDeTotem extends ConexionSocket implements EnvioDNI {
 			Toolkit.getDefaultToolkit().beep();
 			JOptionPane.showMessageDialog(null, ConexionSocket.MENSAJE_SIN_CONEXION);
 		}
+	}
+
+	@Override
+	public void run() {
+		try {
+			//CORREGIR SOCKET
+            Socket socket = new Socket("localhost",3000);
+            PrintWriter  pr = new PrintWriter(socket.getOutputStream(), true);
+            pr.println("Totem");
+            pr.close();
+            socket.close();
+        } catch (UnknownHostException e) {
+        } catch (IOException e) {
+        }
 	}
 
 }

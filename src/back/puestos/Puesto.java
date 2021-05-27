@@ -6,6 +6,10 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.net.UnknownHostException;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import javax.swing.JOptionPane;
 
@@ -20,10 +24,14 @@ import back.puestos.interfaces.SolicitudDeActualizacion;
  * @author Grupo12 <br>
  *         Clase para un Puesto de trabajo, extiende de ConexionSocket. <br>
  */
-public class Puesto extends ConexionSocket implements SolicitudDeActualizacion {
+public class Puesto extends ConexionSocket implements SolicitudDeActualizacion, Runnable {
 
 	private int numeroPuesto;
 	private String clienteActual;
+	
+	private ScheduledExecutorService scheduler;
+	private int initialDelay;
+	private int periodicDelay;
 
 	/**
 	 * Constructor para un Puesto de trabajo.<br>
@@ -34,6 +42,11 @@ public class Puesto extends ConexionSocket implements SolicitudDeActualizacion {
 	public Puesto() {
 		this.puerto = ListaDeDirecciones.PUERTO_PUESTOS;
 		this.host = ListaDeDirecciones.HOST;
+		
+		scheduler = Executors.newSingleThreadScheduledExecutor();
+		this.initialDelay = 10000;
+		this.periodicDelay = 10000;
+		scheduler.scheduleAtFixedRate(this, initialDelay, periodicDelay, TimeUnit.MILLISECONDS);
 	}
 
 	/**
@@ -142,6 +155,20 @@ public class Puesto extends ConexionSocket implements SolicitudDeActualizacion {
 	@Override
 	public String toString() {
 		return "Puesto numero:  " + numeroPuesto;
+	}
+
+	@Override
+	public void run() {
+		try {
+			//CORREGIR SOCKET
+            Socket socket = new Socket("localhost",3000);
+            PrintWriter  pr = new PrintWriter(socket.getOutputStream(), true);
+            pr.println("Puesto" + Integer.toString(numeroPuesto));
+            pr.close();
+            socket.close();
+        } catch (UnknownHostException e) {
+        } catch (IOException e) {
+        }
 	}
 
 }
