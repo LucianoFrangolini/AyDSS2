@@ -15,13 +15,13 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 
-import front.interfaces.IVistaTotem;
+import front.interfaces.Inscripcion;
 
 /**
  * @author Grupo12.<br>
  *         Clase que representa la vista del Totem. Implementa IVistaTotem.<br>
  */
-public class VistaTotem extends JFrame implements IVistaTotem {
+public class VistaTotem extends JFrame implements Inscripcion {
 
 	private static final long serialVersionUID = 1072509465610926668L;
 	private JPanel panelPrincipal;
@@ -165,18 +165,18 @@ public class VistaTotem extends JFrame implements IVistaTotem {
 	 */
 	@Override
 	public void setActionCommands() {
-		this.btn0.setActionCommand(IVistaTotem.CERO);
-		this.btn1.setActionCommand(IVistaTotem.UNO);
-		this.btn2.setActionCommand(IVistaTotem.DOS);
-		this.btn3.setActionCommand(IVistaTotem.TRES);
-		this.btn4.setActionCommand(IVistaTotem.CUATRO);
-		this.btn5.setActionCommand(IVistaTotem.CINCO);
-		this.btn6.setActionCommand(IVistaTotem.SEIS);
-		this.btn7.setActionCommand(IVistaTotem.SIETE);
-		this.btn8.setActionCommand(IVistaTotem.OCHO);
-		this.btn9.setActionCommand(IVistaTotem.NUEVE);
-		this.btnAceptar.setActionCommand(IVistaTotem.ENVIAR);
-		this.btnEliminar.setActionCommand(IVistaTotem.BACKSPACE);
+		this.btn0.setActionCommand(Inscripcion.CERO);
+		this.btn1.setActionCommand(Inscripcion.UNO);
+		this.btn2.setActionCommand(Inscripcion.DOS);
+		this.btn3.setActionCommand(Inscripcion.TRES);
+		this.btn4.setActionCommand(Inscripcion.CUATRO);
+		this.btn5.setActionCommand(Inscripcion.CINCO);
+		this.btn6.setActionCommand(Inscripcion.SEIS);
+		this.btn7.setActionCommand(Inscripcion.SIETE);
+		this.btn8.setActionCommand(Inscripcion.OCHO);
+		this.btn9.setActionCommand(Inscripcion.NUEVE);
+		this.btnAceptar.setActionCommand(Inscripcion.ENVIAR);
+		this.btnEliminar.setActionCommand(Inscripcion.BACKSPACE);
 	}
 
 	/**
@@ -185,7 +185,7 @@ public class VistaTotem extends JFrame implements IVistaTotem {
 	 */
 	@Override
 	public void abrir() {
-		setBounds(100, 400, 463, 450);
+		setBounds(100, 500, 463, 450);
 		setVisible(true);
 	}
 

@@ -3,16 +3,17 @@ package back.controladores;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import back.controladores.interfaces.ActualizacionTotem;
 import back.totem.ControladorDeTotem;
-import front.interfaces.IVistaTotem;
+import front.interfaces.Inscripcion;
 
 /**
  * @author Grupo12 <br>
  *         Controlador para el Totem, implementa ActionListener. <br>
  */
-public class ControladorTotem implements ActionListener {
+public class ControladorTotem implements ActionListener, ActualizacionTotem {
 
-	private IVistaTotem vista;
+	private Inscripcion vista;
 	private ControladorDeTotem totem;
 
 	/**
@@ -21,7 +22,7 @@ public class ControladorTotem implements ActionListener {
 	 * @param vista de tipo IVistaTotem: es la vista que se le presenta a los
 	 *              usuarios que solicitan un turno en el sistema.<br>
 	 */
-	public ControladorTotem(IVistaTotem vista) {
+	public ControladorTotem(Inscripcion vista) {
 		this.vista = vista;
 		this.totem = new ControladorDeTotem();
 	}
@@ -37,43 +38,46 @@ public class ControladorTotem implements ActionListener {
 		if (this.vista.getLabelDisplay().length() > 8)
 			this.vista.setLabelDisplay("");
 
-		if (e.getActionCommand().equalsIgnoreCase(IVistaTotem.CERO))
-			actualizarDisplay(IVistaTotem.CERO);
+		if (e.getActionCommand().equalsIgnoreCase(Inscripcion.CERO))
+			actualizarDisplay(Inscripcion.CERO);
 
-		else if (e.getActionCommand().equalsIgnoreCase(IVistaTotem.UNO))
-			actualizarDisplay(IVistaTotem.UNO);
+		else if (e.getActionCommand().equalsIgnoreCase(Inscripcion.UNO))
+			actualizarDisplay(Inscripcion.UNO);
 
-		else if (e.getActionCommand().equalsIgnoreCase(IVistaTotem.DOS))
-			actualizarDisplay(IVistaTotem.DOS);
+		else if (e.getActionCommand().equalsIgnoreCase(Inscripcion.DOS))
+			actualizarDisplay(Inscripcion.DOS);
 
-		else if (e.getActionCommand().equalsIgnoreCase(IVistaTotem.TRES))
-			actualizarDisplay(IVistaTotem.TRES);
+		else if (e.getActionCommand().equalsIgnoreCase(Inscripcion.TRES))
+			actualizarDisplay(Inscripcion.TRES);
 
-		else if (e.getActionCommand().equalsIgnoreCase(IVistaTotem.CUATRO))
-			actualizarDisplay(IVistaTotem.CUATRO);
+		else if (e.getActionCommand().equalsIgnoreCase(Inscripcion.CUATRO))
+			actualizarDisplay(Inscripcion.CUATRO);
 
-		else if (e.getActionCommand().equalsIgnoreCase(IVistaTotem.CINCO))
-			actualizarDisplay(IVistaTotem.CINCO);
+		else if (e.getActionCommand().equalsIgnoreCase(Inscripcion.CINCO))
+			actualizarDisplay(Inscripcion.CINCO);
 
-		else if (e.getActionCommand().equalsIgnoreCase(IVistaTotem.SEIS))
-			actualizarDisplay(IVistaTotem.SEIS);
+		else if (e.getActionCommand().equalsIgnoreCase(Inscripcion.SEIS))
+			actualizarDisplay(Inscripcion.SEIS);
 
-		else if (e.getActionCommand().equalsIgnoreCase(IVistaTotem.SIETE))
-			actualizarDisplay(IVistaTotem.SIETE);
+		else if (e.getActionCommand().equalsIgnoreCase(Inscripcion.SIETE))
+			actualizarDisplay(Inscripcion.SIETE);
 
-		else if (e.getActionCommand().equalsIgnoreCase(IVistaTotem.OCHO))
-			actualizarDisplay(IVistaTotem.OCHO);
+		else if (e.getActionCommand().equalsIgnoreCase(Inscripcion.OCHO))
+			actualizarDisplay(Inscripcion.OCHO);
 
-		else if (e.getActionCommand().equalsIgnoreCase(IVistaTotem.NUEVE))
-			actualizarDisplay(IVistaTotem.NUEVE);
+		else if (e.getActionCommand().equalsIgnoreCase(Inscripcion.NUEVE))
+			actualizarDisplay(Inscripcion.NUEVE);
 
-		else if (e.getActionCommand().equalsIgnoreCase(IVistaTotem.BACKSPACE)) {
-			actualizarDisplay(IVistaTotem.BACKSPACE);
+		else if (e.getActionCommand().equalsIgnoreCase(Inscripcion.BACKSPACE)) {
+			actualizarDisplay(Inscripcion.BACKSPACE);
 
-		} else if (e.getActionCommand().equalsIgnoreCase(IVistaTotem.ENVIAR)) {
+		} else if (e.getActionCommand().equalsIgnoreCase(Inscripcion.ENVIAR)) {
 			this.vista.deshabilitarEnvio();
 			this.totem.enviarMensaje(this.vista.getLabelDisplay());
-			this.vista.setLabelDisplay(this.totem.getEstado());
+			if (this.totem.getEstado()!=null)
+				this.vista.setLabelDisplay(this.totem.getEstado());
+			else
+				this.vista.setLabelDisplay("");
 		}
 	}
 
@@ -84,9 +88,10 @@ public class ControladorTotem implements ActionListener {
 	 * 
 	 * @param digito de tipo String: Representa el dígito a añadir en el display del tótem.
 	 */
-	private void actualizarDisplay(String digito) {
+	@Override
+	public void actualizarDisplay(String digito) {
 		String aux = this.vista.getLabelDisplay();
-		if (digito != IVistaTotem.BACKSPACE) {
+		if (digito != Inscripcion.BACKSPACE) {
 			if (aux.length() < 8) {
 				aux += digito;
 				this.vista.setLabelDisplay(aux);

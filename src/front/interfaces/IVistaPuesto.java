@@ -1,5 +1,7 @@
 package front.interfaces;
 
+import java.beans.PropertyChangeSupport;
+
 /**
  * @author Grupo12<br>
  *         * Clase que representa una interfaz que será implementada por
@@ -44,4 +46,8 @@ public interface IVistaPuesto extends IVista {
 	 * Método encargado de eliminar la vista del puesto<br>
 	 */
 	void dispose();
+	
+	void setNumeroPuesto(int numero);
+	
+	PropertyChangeSupport getPropertyChangeSupport();
 }

@@ -1,10 +1,10 @@
 package main;
 
-import back.servidor.AdministradorDeTurnos;
+import back.servidor.Administrador;
 import front.interfaces.IVista;
 import front.vistas.VistaServidor;
 
-public class Servidor {
+public class PrimerServidor {
 
 	/**
 	 * Método encargado de ejecutar el Servidor.<br>
@@ -12,10 +12,11 @@ public class Servidor {
 	 * @param args de tipo String[]: No utilizado.
 	 */
 	public static void main(String[] args) {
-
-		AdministradorDeTurnos servidor = AdministradorDeTurnos.getInstance();
-		IVista vista = new VistaServidor();
+		
+		Administrador administrador = new Administrador("Servidor1");
+		IVista vista = new VistaServidor("Servidor 1");
+		administrador.abrirServidor();
 		vista.abrir();
-		servidor.abrirServidor();
+
 	}
 }

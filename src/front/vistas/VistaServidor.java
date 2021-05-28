@@ -1,17 +1,16 @@
 package front.vistas;
 
 import java.awt.BorderLayout;
+import java.awt.Font;
+import java.awt.event.ActionListener;
 
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
 import front.interfaces.IVista;
-
-import javax.swing.JLabel;
-import javax.swing.SwingConstants;
-import java.awt.Font;
-import java.awt.event.ActionListener;
 
 /**
  * @author Grupo12.<br>
@@ -21,22 +20,24 @@ public class VistaServidor extends JFrame implements IVista {
 
 	private static final long serialVersionUID = -5161354435027911853L;
 	private JPanel contentPane;
+	private JLabel lblDisplay;
 
 	/**
 	 * Método constructor de VistaServidor.<br>
 	 */
-	public VistaServidor() {
-		setTitle("Servidor");
+	public VistaServidor(String titulo) {
+		setTitle(titulo);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(new BorderLayout(0, 0));
 
-		JLabel lblDisplay = new JLabel("SERVIDOR EN LINEA");
+		lblDisplay = new JLabel("SERVIDOR EN LINEA");
 		lblDisplay.setFont(new Font("Tahoma", Font.BOLD, 18));
 		lblDisplay.setHorizontalAlignment(SwingConstants.CENTER);
 		contentPane.add(lblDisplay);
+
 	}
 
 	/**
@@ -57,5 +58,6 @@ public class VistaServidor extends JFrame implements IVista {
 		setBounds(800, 500, 279, 131);
 		setVisible(true);
 	}
+
 
 }

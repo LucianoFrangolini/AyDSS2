@@ -7,7 +7,7 @@ package front.interfaces;
  *         Posee los métodos necesarios para su mínimo funcionamiento.<br>
  *
  */
-public interface IVistaTotem extends IVista {
+public interface Inscripcion extends IVista {
 
 	static final String CERO = "0";
 	static final String UNO = "1";

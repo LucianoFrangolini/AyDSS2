@@ -12,7 +12,7 @@ public class Display {
 	 * @param args de tipo String[]: No utilizado.
 	 */
 	public static void main(String[] args) {
-
+		
 		IVistaDisplay vista = new VistaDisplay();
 		ControladorDisplay controlador = new ControladorDisplay(vista);
 		vista.setActionListener(controlador);
