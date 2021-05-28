@@ -4,7 +4,7 @@ Grupo de Análisis y Diseño de Sistemas 2
 <h1>Instrucciones de Instalación y Configuración</h1>
   <p> Descargar los ejecutables .jar de la carpeta "Ejecutables" perteneciente al proyecto.<br>
   Ejecutarlos uno a uno.</p>
-  <p> Para lograr una correcta funcionalidad, los puestos de trabajo deben ejecutarse con un servidor abierto. Y para cerrarlos, también debe haber un servidor en ejecución.</p>
+  <p> Para lograr una correcta funcionalidad, se recomienda siempre tener un servidor en ejecución al abrir otros componentes. Y para cerrarlos, también debe haber un servidor en ejecución.</p>
   
 <h1>Requisito para un buen funcionamiento</h1>
   <p>Tener instalado el Java Development Kit versión 9.0 en adelante.<br>
