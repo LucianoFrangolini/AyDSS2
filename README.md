@@ -4,11 +4,11 @@ Grupo de Análisis y Diseño de Sistemas 2
 <h1>Instrucciones de Instalación y Configuración</h1>
   <p> Descargar los ejecutables .jar de la carpeta "Ejecutables" perteneciente al proyecto.<br>
   Ejecutarlos uno a uno.</p>
-  <p> Para lograr una correcta funcionalidad, se recomienda siempre tener un servidor en ejecución al abrir otros componentes. Y para cerrarlos, también debe haber un servidor en ejecución.</p>
   
 <h1>Requisitos para un buen funcionamiento</h1>
   <p>Tener instalado el Java Development Kit versión 9.0 en adelante.<br>
     Utilizar en un único dispositivo o dispositivos conectados por una red LAN</p>
+  <p> Para lograr una correcta funcionalidad, se recomienda siempre tener un servidor en ejecución al abrir otros componentes. Y para cerrarlos, también debe haber un servidor en ejecución.</p>
 
 <h1>Instrucciones de operación</h1>
   <p>Abrir los archivos .jar ejecutables incluidos en la carpeta "Ejecutables"<br></p>
