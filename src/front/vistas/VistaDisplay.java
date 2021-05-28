@@ -88,7 +88,7 @@ public class VistaDisplay extends JFrame implements IVistaDisplay {
 	 */
 	@Override
 	public void abrir() {
-		setBounds(100, 50, 450, 450);
+		setBounds(100, 50, 450, 370);
 		setVisible(true);
 	}
 

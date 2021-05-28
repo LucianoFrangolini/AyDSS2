@@ -11,7 +11,6 @@ import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 
-import front.interfaces.IVista;
 import front.interfaces.IVistaMonitor;
 
 public class VistaMonitorDeSistema extends JFrame implements IVistaMonitor{

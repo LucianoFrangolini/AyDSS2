@@ -1,16 +1,23 @@
 package back.monitor;
 
+import java.awt.Toolkit;
 import java.beans.PropertyChangeSupport;
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Properties;
+
+import javax.swing.JOptionPane;
 
 public class Monitor implements Runnable {
 	private static Monitor instance;
 	private Thread servidor;
 	private int puerto;
+	private int tiempoTimeOut;
 	private PropertyChangeSupport pcs;
 
 	private HiloTimeOut totem;
@@ -26,9 +33,8 @@ public class Monitor implements Runnable {
 	private HiloTimeOut puesto7;
 	private HiloTimeOut puesto8;
 
-	// Pasar el puerto y el host
 	private Monitor() {
-		this.puerto = 3000;
+		cargarPropiedades();
 		servidor = new Thread(this, "Monitor");
 		this.pcs = new PropertyChangeSupport(this);
 		servidor.start();
@@ -43,20 +49,35 @@ public class Monitor implements Runnable {
 	public PropertyChangeSupport getPcs() {
 		return this.pcs;
 	}
+	
+	private void cargarPropiedades() {
+		try {
+			Properties p = new Properties();
+			p.load(new FileReader("src/propiedades/monitor.properties"));	
+			this.puerto = Integer.parseInt(p.getProperty("PUERTO_ENTRADA"));
+			this.tiempoTimeOut = Integer.parseInt(p.getProperty("TIEMPO_TIMEOUT"));
+		} catch (FileNotFoundException e) {
+			Toolkit.getDefaultToolkit().beep();
+			JOptionPane.showMessageDialog(null, "No se encontró el archivo de configuración");
+		} catch (IOException e) {
+			Toolkit.getDefaultToolkit().beep();
+			JOptionPane.showMessageDialog(null, "Se encontró un problema leyendo el archivo de configuración");
+		}
+	}
 
 	public void abrirTimers() {
-		totem = new HiloTimeOut("Totem");
-		servidor1 = new HiloTimeOut("Servidor1");
-		servidor2 = new HiloTimeOut("Servidor2");
-		display = new HiloTimeOut("Display");
-		puesto1 = new HiloTimeOut("Puesto1");
-		puesto2 = new HiloTimeOut("Puesto2");
-		puesto3 = new HiloTimeOut("Puesto3");
-		puesto4 = new HiloTimeOut("Puesto4");
-		puesto5 = new HiloTimeOut("Puesto5");
-		puesto6 = new HiloTimeOut("Puesto6");
-		puesto7 = new HiloTimeOut("Puesto7");
-		puesto8 = new HiloTimeOut("Puesto8");
+		totem = new HiloTimeOut("Totem",this.tiempoTimeOut);
+		servidor1 = new HiloTimeOut("Servidor1",this.tiempoTimeOut);
+		servidor2 = new HiloTimeOut("Servidor2",this.tiempoTimeOut);
+		display = new HiloTimeOut("Display",this.tiempoTimeOut);
+		puesto1 = new HiloTimeOut("Puesto1",this.tiempoTimeOut);
+		puesto2 = new HiloTimeOut("Puesto2",this.tiempoTimeOut);
+		puesto3 = new HiloTimeOut("Puesto3",this.tiempoTimeOut);
+		puesto4 = new HiloTimeOut("Puesto4",this.tiempoTimeOut);
+		puesto5 = new HiloTimeOut("Puesto5",this.tiempoTimeOut);
+		puesto6 = new HiloTimeOut("Puesto6",this.tiempoTimeOut);
+		puesto7 = new HiloTimeOut("Puesto7",this.tiempoTimeOut);
+		puesto8 = new HiloTimeOut("Puesto8",this.tiempoTimeOut);
 	}
 
 	@Override
@@ -65,7 +86,6 @@ public class Monitor implements Runnable {
 		Socket socket;
 		BufferedReader myInput;
 		String aux;
-		// REVISAR
 		abrirTimers();
 		try {
 			monitorServerSocket = new ServerSocket(this.puerto);

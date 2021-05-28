@@ -2,12 +2,15 @@ package back.pantalla;
 
 import java.awt.Toolkit;
 import java.beans.PropertyChangeSupport;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.Properties;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -15,7 +18,6 @@ import java.util.concurrent.TimeUnit;
 import javax.swing.JOptionPane;
 
 import back.conexiones.ConexionSocket;
-import back.constantes.ListaDeDirecciones;
 import back.pantalla.interfaces.Visualizacion;
 import back.servidor.ListaDeTurnos;
 
@@ -27,23 +29,22 @@ public class Display extends ConexionSocket implements Visualizacion, Runnable {
 
 	private ListaDeTurnos listaDeLlamados = null;
 	private PropertyChangeSupport pcs;
+	private int puertoConexionMonitor;
+	private int tiempoHeartbeat;
+	private String ipMonitor;
 	
 	private ScheduledExecutorService scheduler;
-	private int initialDelay;
-	private int periodicDelay;
 
 	/**
 	 * Constructor para el display<br>
 	 */
 	public Display() {
-		this.puerto = ListaDeDirecciones.PUERTO_DISPLAY;
+		cargarPropiedades();
 		this.pcs = new PropertyChangeSupport(this);
 		this.abrirPuertoDeConexion();
 		
 		scheduler = Executors.newSingleThreadScheduledExecutor();
-		this.initialDelay = 10000;
-		this.periodicDelay = 10000;
-		scheduler.scheduleAtFixedRate(this, initialDelay, periodicDelay, TimeUnit.MILLISECONDS);
+		scheduler.scheduleAtFixedRate(this, this.tiempoHeartbeat, this.tiempoHeartbeat, TimeUnit.SECONDS);
 	}
 
 	/**
@@ -71,6 +72,23 @@ public class Display extends ConexionSocket implements Visualizacion, Runnable {
 	 */
 	public PropertyChangeSupport getPcs() {
 		return this.pcs;
+	}
+	
+	private void cargarPropiedades() {
+		try {
+			Properties p = new Properties();
+			p.load(new FileReader("src/propiedades/display.properties"));			
+			this.puerto = Integer.parseInt(p.getProperty("PUERTO_ENTRADA"));
+			this.puertoConexionMonitor = Integer.parseInt(p.getProperty("PUERTO_CONEXION_MONITOR"));
+			this.ipMonitor = p.getProperty("IP_MONITOR");
+			this.tiempoHeartbeat = Integer.parseInt(p.getProperty("TIEMPO_HEARTBEAT"));
+		} catch (FileNotFoundException e) {
+			Toolkit.getDefaultToolkit().beep();
+			JOptionPane.showMessageDialog(null, "No se encontró el archivo de configuración");
+		} catch (IOException e) {
+			Toolkit.getDefaultToolkit().beep();
+			JOptionPane.showMessageDialog(null, "Se encontró un problema leyendo el archivo de configuración");
+		}
 	}
 
 	/**
@@ -107,7 +125,7 @@ public class Display extends ConexionSocket implements Visualizacion, Runnable {
 	public void run() {
 		try {
 			//CORREGIR SOCKET
-            Socket socket = new Socket("localhost",3000);
+            Socket socket = new Socket(this.ipMonitor,this.puertoConexionMonitor);
             PrintWriter  pr = new PrintWriter(socket.getOutputStream(), true);
             pr.println("Display");
             pr.close();

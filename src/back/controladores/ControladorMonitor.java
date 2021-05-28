@@ -3,9 +3,7 @@ package back.controladores;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
-import back.constantes.ListaDeDirecciones;
 import back.monitor.Monitor;
-import front.interfaces.IVista;
 import front.interfaces.IVistaMonitor;
 
 public class ControladorMonitor implements PropertyChangeListener{
@@ -21,7 +19,6 @@ public class ControladorMonitor implements PropertyChangeListener{
 	
 	@Override
 	public void propertyChange(PropertyChangeEvent arg0) {
-		//System.out.println(arg0.getPropertyName());
 		if (arg0.getPropertyName().equalsIgnoreCase("TotemEnLinea")) {
 			this.vista.setLabelTotem("EN LINEA");
 		}

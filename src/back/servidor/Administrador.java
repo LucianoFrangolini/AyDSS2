@@ -1,20 +1,24 @@
 package back.servidor;
 
+import java.awt.Toolkit;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
-import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.Properties;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-import back.constantes.ListaDeDirecciones;
+import javax.swing.JOptionPane;
+
 import back.servidor.interfaces.ActualizacionDisplay;
 import back.servidor.interfaces.ActualizacionPuesto;
 import back.servidor.interfaces.AdministracionDeCola;
@@ -34,54 +38,81 @@ public class Administrador implements PropertyChangeListener, ValidacionDNI, Adm
 	private PropertyChangeSupport pcs;
 
 	private String identificador;
-	
-	private String hostPantalla;
+
+	private String ipDisplay;
+	private String ipServidor;
+	private String ipMonitor;
 	private int puertoTotem;
 	private int puertoPuestos;
-	private int puertoBackup;
-	private int puertoPropio;
+	private int puertoEntradaBackup;
+	private int puertoEntradaSincronizacion;
+	private int puertoDisplay;
+	private int puertoMonitor;
+	private int puertoServidorBackup;
+	private int puertoServidorSincronizacion;
 
 	private Boolean realizarBackup;
 
 	private ServerTotem servidorTotem;
 	private ServerPuestos servidorPuestos;
 	private ServerBackup servidorBackup;
+	private ServerSincronizacion servidorSincronizacion;
 
 	private Integer[] puestosDeTrabajo = { 0, 0, 0, 0, 0, 0, 0, 0 };
-	
+
 	private ScheduledExecutorService scheduler;
-	private int initialDelay;
-	private int periodicDelay;
+	private int tiempoHeartbeat;
 
 	/**
 	 * Constructor para el administrador de turnos.<br>
 	 */
-	public Administrador(String identificador,int puertoTotem, int puertoPuestos, int puertoBackup, int puertoPropio) {
+	/*public Administrador(String identificador, int puertoTotem, int puertoPuestos, int puertoEntradaBackup,
+			int puertoEntradaSincronizacion, int puertoDisplay, int puertoMonitor, int puertoServidorBackup,
+			int puertoServidorSincronizacion, String ipDisplay, String ipServidor, String ipMonitor,int heartbeat) {
+
 		this.identificador = identificador;
-		
+
 		this.pcs = new PropertyChangeSupport(this);
 		this.pcs.addPropertyChangeListener(this);
 
-		this.hostPantalla = ListaDeDirecciones.HOST;
 		this.puertoTotem = puertoTotem;
 		this.puertoPuestos = puertoPuestos;
-		this.puertoBackup = puertoBackup;
-		this.puertoPropio = puertoPropio;
+		this.puertoEntradaBackup = puertoEntradaBackup;
+		this.puertoEntradaSincronizacion = puertoEntradaSincronizacion;
+		this.puertoDisplay = puertoDisplay;
+		this.puertoMonitor = puertoMonitor;
+		this.puertoServidorBackup = puertoServidorBackup;
+		this.puertoServidorSincronizacion = puertoServidorSincronizacion;
+
+		this.ipDisplay = ipDisplay;
+		this.ipServidor = ipServidor;
+		this.ipMonitor = ipMonitor;
+
+		this.tiempoHeartbeat = heartbeat;
 		this.realizarBackup = true;
 
-		abrirServidor();
-		intentarSincronizar();
+	}*/
+	
+	/**
+	 * Constructor para el administrador de turnos.<br>
+	 */
+	public Administrador(String identificador) {
+
+		this.identificador = identificador;
+
+		this.pcs = new PropertyChangeSupport(this);
+		this.pcs.addPropertyChangeListener(this);
 		
-		scheduler = Executors.newSingleThreadScheduledExecutor();
-		this.initialDelay = 10000;
-		this.periodicDelay = 10000;
-		scheduler.scheduleAtFixedRate(this, initialDelay, periodicDelay, TimeUnit.MILLISECONDS);
+		cargarPropiedades(identificador);
+		
+		this.realizarBackup = true;
+
 	}
 
 	protected void setRealizarBackup(Boolean backup) {
 		this.realizarBackup = backup;
 	}
-	
+
 	protected void setListaDeTurnos(ListaDeTurnos listaDeTurnos) {
 		this.listaDeTurnos = listaDeTurnos;
 	}
@@ -104,6 +135,73 @@ public class Administrador implements PropertyChangeListener, ValidacionDNI, Adm
 
 	protected Integer[] getPuestosDeTrabajo() {
 		return puestosDeTrabajo;
+	}
+	
+	private void cargarPropiedades(String identificador) {
+		try {
+			Properties p = new Properties();
+			if (identificador.equalsIgnoreCase("Servidor1")) {
+				p.load(new FileReader("src/propiedades/primerServidor.properties"));
+				this.ipDisplay = p.getProperty("IP_DISPLAY");
+				this.ipServidor = p.getProperty("IP_SERVIDOR_2");
+				this.ipMonitor = p.getProperty("IP_MONITOR");
+				this.puertoTotem = Integer.parseInt(p.getProperty("PUERTO_ENTRADA_TOTEM"));
+				this.puertoPuestos = Integer.parseInt(p.getProperty("PUERTO_ENTRADA_PUESTOS"));
+				this.puertoEntradaBackup = Integer.parseInt(p.getProperty("PUERTO_ENTRADA_BACKUP"));
+				this.puertoEntradaSincronizacion = Integer.parseInt(p.getProperty("PUERTO_ENTRADA_SINCRONIZACION"));
+				this.puertoDisplay = Integer.parseInt(p.getProperty("PUERTO_CONEXION_DISPLAY"));
+				this.puertoMonitor = Integer.parseInt(p.getProperty("PUERTO_CONEXION_MONITOR"));
+				this.puertoServidorBackup = Integer.parseInt(p.getProperty("PUERTO_SERVIDOR_2_BACKUP"));
+				this.puertoServidorSincronizacion = Integer.parseInt(p.getProperty("PUERTO_SERVIDOR_2_SINCRONIZACION"));
+				this.tiempoHeartbeat = Integer.parseInt(p.getProperty("TIEMPO_HEARTBEAT"));
+				
+			} else if (identificador.equalsIgnoreCase("Servidor2")) {
+				p.load(new FileReader("src/propiedades/segundoServidor.properties"));
+				this.ipDisplay = p.getProperty("IP_DISPLAY");
+				this.ipServidor = p.getProperty("IP_SERVIDOR_1");
+				this.ipMonitor = p.getProperty("IP_MONITOR");
+				this.puertoTotem = Integer.parseInt(p.getProperty("PUERTO_ENTRADA_TOTEM"));
+				this.puertoPuestos = Integer.parseInt(p.getProperty("PUERTO_ENTRADA_PUESTOS"));
+				this.puertoEntradaBackup = Integer.parseInt(p.getProperty("PUERTO_ENTRADA_BACKUP"));
+				this.puertoEntradaSincronizacion = Integer.parseInt(p.getProperty("PUERTO_ENTRADA_SINCRONIZACION"));
+				this.puertoDisplay = Integer.parseInt(p.getProperty("PUERTO_CONEXION_DISPLAY"));
+				this.puertoMonitor = Integer.parseInt(p.getProperty("PUERTO_CONEXION_MONITOR"));
+				this.puertoServidorBackup = Integer.parseInt(p.getProperty("PUERTO_SERVIDOR_1_BACKUP"));
+				this.puertoServidorSincronizacion = Integer.parseInt(p.getProperty("PUERTO_SERVIDOR_1_SINCRONIZACION"));
+				this.tiempoHeartbeat = Integer.parseInt(p.getProperty("TIEMPO_HEARTBEAT"));
+			}
+		} catch (FileNotFoundException e) {
+			Toolkit.getDefaultToolkit().beep();
+			JOptionPane.showMessageDialog(null, "No se encontró el archivo de configuración");
+		} catch (IOException e) {
+			Toolkit.getDefaultToolkit().beep();
+			JOptionPane.showMessageDialog(null, "Se encontró un problema leyendo el archivo de configuración");
+		}
+	}
+
+	/**
+	 * Método encargado de enviar la orden de para abrir los puertos de conexión del
+	 * totem y de los puestos de trabajo.<br>
+	 * 
+	 * <b> Post: </b> Se abren los puertos para la conexión del totem y los puestos
+	 * de trabajo.<br>
+	 */
+	public void abrirServidor() {
+		this.servidorTotem = new ServerTotem(this, this.puertoTotem);
+		this.servidorTotem.start();
+
+		this.servidorPuestos = new ServerPuestos(this, this.puertoPuestos);
+		this.servidorPuestos.start();
+
+		this.servidorBackup = new ServerBackup(this, this.puertoEntradaBackup);
+		this.servidorBackup.start();
+		
+		this.servidorSincronizacion = new ServerSincronizacion(this,this.puertoEntradaSincronizacion);
+		this.servidorSincronizacion.start();
+
+		intentarSincronizar();
+		scheduler = Executors.newSingleThreadScheduledExecutor();
+		scheduler.scheduleAtFixedRate(this, this.tiempoHeartbeat, this.tiempoHeartbeat, TimeUnit.SECONDS);
 	}
 
 	/**
@@ -201,34 +299,15 @@ public class Administrador implements PropertyChangeListener, ValidacionDNI, Adm
 	@Override
 	public void propertyChange(PropertyChangeEvent arg0) {
 		if (arg0.getPropertyName().equals("listaActualizada")) {
-			actualizacionDisplay(ListaDeDirecciones.PUERTO_DISPLAY);
+			actualizacionDisplay(this.puertoDisplay);
 			backup();
 		}
-	}
-
-	/**
-	 * Método encargado de enviar la orden de para abrir los puertos de conexión del
-	 * totem y de los puestos de trabajo.<br>
-	 * 
-	 * <b> Post: </b> Se abren los puertos para la conexión del totem y los puestos
-	 * de trabajo.<br>
-	 */
-	private void abrirServidor() {
-		this.servidorTotem = new ServerTotem(this, this.puertoTotem);
-		this.servidorTotem.start();
-
-		this.servidorPuestos = new ServerPuestos(this, this.puertoPuestos);
-		this.servidorPuestos.start();
-
-		this.servidorBackup = new ServerBackup(this, this.puertoPropio);
-		this.servidorBackup.start();
 	}
 
 	public void backup() {
 		if (realizarBackup) {
 			try {
-				// cambiar cadenas por constantes
-				Socket socket = new Socket("localhost", this.puertoBackup);
+				Socket socket = new Socket(this.ipServidor, this.puertoServidorBackup);
 				ObjectOutputStream myObjectOutput = new ObjectOutputStream(socket.getOutputStream());
 				myObjectOutput.writeObject(this.listaDeTurnos);
 				myObjectOutput.writeObject(this.colaDeEspera);
@@ -237,7 +316,7 @@ public class Administrador implements PropertyChangeListener, ValidacionDNI, Adm
 				socket.close();
 			} catch (UnknownHostException e) {
 			} catch (IOException e) {
-				this.realizarBackup=false;
+				this.realizarBackup = false;
 			}
 		}
 	}
@@ -254,7 +333,7 @@ public class Administrador implements PropertyChangeListener, ValidacionDNI, Adm
 	@Override
 	public void actualizacionDisplay(int puertoDisplay) {
 		try {
-			Socket socket = new Socket(this.hostPantalla, puertoDisplay);
+			Socket socket = new Socket(this.ipDisplay, puertoDisplay);
 			ObjectOutputStream myObjectOutput = new ObjectOutputStream(socket.getOutputStream());
 			myObjectOutput.writeObject(listaDeTurnos);
 			myObjectOutput.close();
@@ -265,10 +344,12 @@ public class Administrador implements PropertyChangeListener, ValidacionDNI, Adm
 	}
 
 	public void intentarSincronizar() {
+		ObjectInputStream obInput;
+		Socket socket;
 		try {
-			// cambiar las cadenas por constantes
-			Socket socket = new Socket("localhost", this.puertoBackup);
-			ObjectInputStream obInput = new ObjectInputStream(socket.getInputStream());
+			// PROBLEMA
+			socket = new Socket(this.ipServidor, this.puertoServidorSincronizacion);
+			obInput = new ObjectInputStream(socket.getInputStream());
 			this.setListaDeTurnos((ListaDeTurnos) obInput.readObject());
 			this.setColaDeEspera((ColaDeEspera) obInput.readObject());
 			this.setPuestosDeTrabajo((Integer[]) obInput.readObject());
@@ -281,22 +362,17 @@ public class Administrador implements PropertyChangeListener, ValidacionDNI, Adm
 		}
 	}
 
-	public String toString() {
-		return String.valueOf(this.puertoBackup);
-	}
-
 	@Override
 	public void run() {
 		try {
-			//CORREGIR SOCKET
-            Socket socket = new Socket("localhost",3000);
-            PrintWriter  pr = new PrintWriter(socket.getOutputStream(), true);
-            pr.println(identificador);
-            pr.close();
-            socket.close();
-        } catch (UnknownHostException e) {
-        } catch (IOException e) {
-        }
+			Socket socket = new Socket(this.ipMonitor, this.puertoMonitor);
+			PrintWriter pr = new PrintWriter(socket.getOutputStream(), true);
+			pr.println(identificador);
+			pr.close();
+			socket.close();
+		} catch (UnknownHostException e) {
+		} catch (IOException e) {
+		}
 	}
 
 }

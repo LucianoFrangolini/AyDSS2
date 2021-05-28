@@ -8,18 +8,14 @@ public class HiloTimeOut implements Runnable{
 	private Monitor monitor;
 	private String nombre, latido;
 	private ScheduledExecutorService scheduler;
-	private int initialDelay;
-	private int periodicDelay;
 	
 
 
-	public HiloTimeOut(String nombre) {
+	public HiloTimeOut(String nombre,int tiempoTimeOut) {
 		this.nombre = nombre;
 		monitor = Monitor.getInstance();
 		scheduler = Executors.newSingleThreadScheduledExecutor();
-		this.initialDelay = 15000;
-		this.periodicDelay = 15000;
-		scheduler.scheduleAtFixedRate(this, initialDelay, periodicDelay, TimeUnit.MILLISECONDS);
+		scheduler.scheduleAtFixedRate(this, tiempoTimeOut, tiempoTimeOut, TimeUnit.SECONDS);
 	}
 
 	public void setLatido(String latido) {
