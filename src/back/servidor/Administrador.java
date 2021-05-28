@@ -19,6 +19,7 @@ import java.util.concurrent.TimeUnit;
 
 import javax.swing.JOptionPane;
 
+import back.conexiones.Latido;
 import back.servidor.interfaces.ActualizacionDisplay;
 import back.servidor.interfaces.ActualizacionPuesto;
 import back.servidor.interfaces.AdministracionDeCola;
@@ -31,7 +32,7 @@ import back.servidor.interfaces.ValidacionDNI;
  *         Singleton. <br>
  */
 public class Administrador implements PropertyChangeListener, ValidacionDNI, AdministracionDeCola,
-		AdministracionDeLista, ActualizacionDisplay, ActualizacionPuesto, Runnable {
+		AdministracionDeLista, ActualizacionDisplay, ActualizacionPuesto, Latido {
 
 	private ListaDeTurnos listaDeTurnos = new ListaDeTurnos();
 	private ColaDeEspera colaDeEspera = new ColaDeEspera();

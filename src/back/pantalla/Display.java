@@ -18,6 +18,7 @@ import java.util.concurrent.TimeUnit;
 import javax.swing.JOptionPane;
 
 import back.conexiones.ConexionSocket;
+import back.conexiones.Latido;
 import back.pantalla.interfaces.Visualizacion;
 import back.servidor.ListaDeTurnos;
 
@@ -25,7 +26,7 @@ import back.servidor.ListaDeTurnos;
  * @author Grupo12 <br>
  *         Clase para el Display que extiende de ConexionSocket. <br>
  */
-public class Display extends ConexionSocket implements Visualizacion, Runnable {
+public class Display extends ConexionSocket implements Visualizacion, Latido {
 
 	private ListaDeTurnos listaDeLlamados = null;
 	private PropertyChangeSupport pcs;
@@ -124,7 +125,6 @@ public class Display extends ConexionSocket implements Visualizacion, Runnable {
 	@Override
 	public void run() {
 		try {
-			//CORREGIR SOCKET
             Socket socket = new Socket(this.ipMonitor,this.puertoConexionMonitor);
             PrintWriter  pr = new PrintWriter(socket.getOutputStream(), true);
             pr.println("Display");

@@ -17,6 +17,7 @@ import java.util.concurrent.TimeUnit;
 import javax.swing.JOptionPane;
 
 import back.conexiones.ConexionSocket;
+import back.conexiones.Latido;
 import back.constantes.ListaDeAcciones;
 import back.constantes.ListaDeMensajes;
 import back.puestos.excepciones.PuestosAgotadosException;
@@ -26,7 +27,7 @@ import back.puestos.interfaces.SolicitudDeActualizacion;
  * @author Grupo12 <br>
  *         Clase para un Puesto de trabajo, extiende de ConexionSocket. <br>
  */
-public class Puesto extends ConexionSocket implements SolicitudDeActualizacion, Runnable {
+public class Puesto extends ConexionSocket implements SolicitudDeActualizacion, Latido {
 
 	private int numeroPuesto;
 	private String clienteActual;
