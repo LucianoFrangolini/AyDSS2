@@ -17,6 +17,7 @@ import java.util.concurrent.TimeUnit;
 import javax.swing.JOptionPane;
 
 import back.conexiones.ConexionSocket;
+import back.conexiones.Latido;
 import back.constantes.ListaDeMensajes;
 import back.totem.interfaces.EnvioDNI;
 
@@ -25,7 +26,7 @@ import back.totem.interfaces.EnvioDNI;
  *         Clase ControladorDeTotem con la lógica del Tótem. Se extiende de
  *         ConexiónSocket. <br>
  */
-public class ControladorDeTotem extends ConexionSocket implements EnvioDNI, Runnable {
+public class ControladorDeTotem extends ConexionSocket implements EnvioDNI, Latido {
 	
 	private String estado;
 	private String ipConexionActual;
