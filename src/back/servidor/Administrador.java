@@ -66,36 +66,6 @@ public class Administrador implements PropertyChangeListener, ValidacionDNI, Adm
 	/**
 	 * Constructor para el administrador de turnos.<br>
 	 */
-	/*public Administrador(String identificador, int puertoTotem, int puertoPuestos, int puertoEntradaBackup,
-			int puertoEntradaSincronizacion, int puertoDisplay, int puertoMonitor, int puertoServidorBackup,
-			int puertoServidorSincronizacion, String ipDisplay, String ipServidor, String ipMonitor,int heartbeat) {
-
-		this.identificador = identificador;
-
-		this.pcs = new PropertyChangeSupport(this);
-		this.pcs.addPropertyChangeListener(this);
-
-		this.puertoTotem = puertoTotem;
-		this.puertoPuestos = puertoPuestos;
-		this.puertoEntradaBackup = puertoEntradaBackup;
-		this.puertoEntradaSincronizacion = puertoEntradaSincronizacion;
-		this.puertoDisplay = puertoDisplay;
-		this.puertoMonitor = puertoMonitor;
-		this.puertoServidorBackup = puertoServidorBackup;
-		this.puertoServidorSincronizacion = puertoServidorSincronizacion;
-
-		this.ipDisplay = ipDisplay;
-		this.ipServidor = ipServidor;
-		this.ipMonitor = ipMonitor;
-
-		this.tiempoHeartbeat = heartbeat;
-		this.realizarBackup = true;
-
-	}*/
-	
-	/**
-	 * Constructor para el administrador de turnos.<br>
-	 */
 	public Administrador(String identificador) {
 
 		this.identificador = identificador;
@@ -347,7 +317,6 @@ public class Administrador implements PropertyChangeListener, ValidacionDNI, Adm
 		ObjectInputStream obInput;
 		Socket socket;
 		try {
-			// PROBLEMA
 			socket = new Socket(this.ipServidor, this.puertoServidorSincronizacion);
 			obInput = new ObjectInputStream(socket.getInputStream());
 			this.setListaDeTurnos((ListaDeTurnos) obInput.readObject());
