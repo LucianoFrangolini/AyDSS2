@@ -16,7 +16,6 @@ import java.util.concurrent.TimeUnit;
 
 import javax.swing.JOptionPane;
 
-import back.conexiones.ConexionSocket;
 import back.conexiones.Latido;
 import back.constantes.ListaDeAcciones;
 import back.constantes.ListaDeMensajes;
@@ -27,7 +26,7 @@ import back.puestos.interfaces.SolicitudDeActualizacion;
  * @author Grupo12 <br>
  *         Clase para un Puesto de trabajo, extiende de ConexionSocket. <br>
  */
-public class Puesto extends ConexionSocket implements SolicitudDeActualizacion, Latido {
+public class Puesto implements SolicitudDeActualizacion, Latido {
 
 	private int numeroPuesto;
 	private String clienteActual;
@@ -41,8 +40,12 @@ public class Puesto extends ConexionSocket implements SolicitudDeActualizacion, 
 	private int puertoServidor2;
 	private int puertoMonitor;
 	private int tiempoHeartbeat;
-	
+
 	private ScheduledExecutorService scheduler;
+	
+	private BufferedReader myInput;
+	private PrintWriter myOutput;
+	private Socket socket;
 
 	/**
 	 * Constructor para un Puesto de trabajo.<br>
@@ -138,7 +141,7 @@ public class Puesto extends ConexionSocket implements SolicitudDeActualizacion, 
 				this.myOutput = new PrintWriter(socket.getOutputStream(), true);
 			} catch (IOException e2) {
 				Toolkit.getDefaultToolkit().beep();
-				JOptionPane.showMessageDialog(null, ConexionSocket.MENSAJE_SIN_CONEXION);
+				JOptionPane.showMessageDialog(null, Latido.MENSAJE_SIN_CONEXION);
 			}
 		}
 	}
@@ -162,7 +165,7 @@ public class Puesto extends ConexionSocket implements SolicitudDeActualizacion, 
 			}
 		} catch (IOException e) {
 			Toolkit.getDefaultToolkit().beep();
-			JOptionPane.showMessageDialog(null, ConexionSocket.MENSAJE_SIN_CONEXION);
+			JOptionPane.showMessageDialog(null, Latido.MENSAJE_SIN_CONEXION);
 		} catch (PuestosAgotadosException e) {
 			Toolkit.getDefaultToolkit().beep();
 			JOptionPane.showMessageDialog(null, e.getMessage());
@@ -176,7 +179,7 @@ public class Puesto extends ConexionSocket implements SolicitudDeActualizacion, 
 			socket.close();
 		} catch (IOException e) {
 			Toolkit.getDefaultToolkit().beep();
-			JOptionPane.showMessageDialog(null, ConexionSocket.MENSAJE_SIN_CONEXION);
+			JOptionPane.showMessageDialog(null, Latido.MENSAJE_SIN_CONEXION);
 		}
 	}
 

@@ -16,7 +16,6 @@ import java.util.concurrent.TimeUnit;
 
 import javax.swing.JOptionPane;
 
-import back.conexiones.ConexionSocket;
 import back.conexiones.Latido;
 import back.constantes.ListaDeMensajes;
 import back.totem.interfaces.EnvioDNI;
@@ -26,7 +25,7 @@ import back.totem.interfaces.EnvioDNI;
  *         Clase ControladorDeTotem con la lógica del Tótem. Se extiende de
  *         ConexiónSocket. <br>
  */
-public class ControladorDeTotem extends ConexionSocket implements EnvioDNI, Latido {
+public class ControladorDeTotem implements EnvioDNI, Latido {
 	
 	private String estado;
 	private String ipConexionActual;
@@ -39,6 +38,9 @@ public class ControladorDeTotem extends ConexionSocket implements EnvioDNI, Lati
 	private int puertoMonitor;
 	private int tiempoHeartbeat;
 	private ScheduledExecutorService scheduler;
+	private BufferedReader myInput;
+	private PrintWriter myOutput;
+	private Socket socket;
 
 	/**
 	 * Constructor del ControladorDeTotem.<br>
@@ -135,7 +137,7 @@ public class ControladorDeTotem extends ConexionSocket implements EnvioDNI, Lati
 				this.myOutput = new PrintWriter(socket.getOutputStream(), true);
 			} catch (IOException e2) {
 				Toolkit.getDefaultToolkit().beep();
-				JOptionPane.showMessageDialog(null, ConexionSocket.MENSAJE_SIN_CONEXION);
+				JOptionPane.showMessageDialog(null, Latido.MENSAJE_SIN_CONEXION);
 			}
 		}
 	}
@@ -147,10 +149,10 @@ public class ControladorDeTotem extends ConexionSocket implements EnvioDNI, Lati
 				this.estado = myInput.readLine();
 			} catch (IOException e) {
 				Toolkit.getDefaultToolkit().beep();
-				JOptionPane.showMessageDialog(null, ConexionSocket.MENSAJE_SIN_CONEXION);
+				JOptionPane.showMessageDialog(null, Latido.MENSAJE_SIN_CONEXION);
 			} catch (NullPointerException e) {
 				Toolkit.getDefaultToolkit().beep();
-				JOptionPane.showMessageDialog(null, ConexionSocket.MENSAJE_SIN_CONEXION);
+				JOptionPane.showMessageDialog(null, Latido.MENSAJE_SIN_CONEXION);
 			}
 		}
 	}
@@ -162,7 +164,7 @@ public class ControladorDeTotem extends ConexionSocket implements EnvioDNI, Lati
 			socket.close();
 		} catch (IOException e) {
 			Toolkit.getDefaultToolkit().beep();
-			JOptionPane.showMessageDialog(null, ConexionSocket.MENSAJE_SIN_CONEXION);
+			JOptionPane.showMessageDialog(null, Latido.MENSAJE_SIN_CONEXION);
 		}
 	}
 
