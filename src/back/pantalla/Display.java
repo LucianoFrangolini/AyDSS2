@@ -17,7 +17,7 @@ import java.util.concurrent.TimeUnit;
 
 import javax.swing.JOptionPane;
 
-import back.conexiones.ConexionSocket;
+import back.conexiones.Latido;
 import back.pantalla.interfaces.Visualizacion;
 import back.servidor.ListaDeTurnos;
 
@@ -25,12 +25,13 @@ import back.servidor.ListaDeTurnos;
  * @author Grupo12 <br>
  *         Clase para el Display que extiende de ConexionSocket. <br>
  */
-public class Display extends ConexionSocket implements Visualizacion, Runnable {
+public class Display implements Visualizacion, Latido {
 
 	private ListaDeTurnos listaDeLlamados = null;
 	private PropertyChangeSupport pcs;
 	private int puertoConexionMonitor;
 	private int tiempoHeartbeat;
+	private int puerto;
 	private String ipMonitor;
 	
 	private ScheduledExecutorService scheduler;
@@ -112,7 +113,7 @@ public class Display extends ConexionSocket implements Visualizacion, Runnable {
 					}
 				} catch (IOException e) {
 					Toolkit.getDefaultToolkit().beep();
-					JOptionPane.showMessageDialog(null, ConexionSocket.MENSAJE_SIN_CONEXION);
+					JOptionPane.showMessageDialog(null, Latido.MENSAJE_SIN_CONEXION);
 
 				} catch (ClassNotFoundException e) {
 					e.printStackTrace();
@@ -124,7 +125,6 @@ public class Display extends ConexionSocket implements Visualizacion, Runnable {
 	@Override
 	public void run() {
 		try {
-			//CORREGIR SOCKET
             Socket socket = new Socket(this.ipMonitor,this.puertoConexionMonitor);
             PrintWriter  pr = new PrintWriter(socket.getOutputStream(), true);
             pr.println("Display");
