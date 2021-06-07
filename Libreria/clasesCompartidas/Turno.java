@@ -1,12 +1,14 @@
 package clasesCompartidas;
 
+import back.servidor.Cliente;
+
 /**
  * @author Grupo12 <br>
  *         Clase para encapsular los atributos de un turno <br>
  */
 public class Turno {
 	private Integer puesto;
-	private String dni;
+	private Cliente cliente;
 
 	/**
 	 * Constructor para el turno<br>
@@ -15,9 +17,9 @@ public class Turno {
 	 *               turno.<br>
 	 * @param dni    de tipo String: Representa el dni asignado al turno.<br>
 	 */
-	public Turno(Integer puesto, String dni) {
+	public Turno(Integer puesto, Cliente cliente) {
 		this.puesto = puesto;
-		this.dni = dni;
+		this.cliente = cliente;
 	}
 
 	/**
@@ -35,6 +37,15 @@ public class Turno {
 	 * @return Devuelve el dni como String.<br>
 	 */
 	public String getDni() {
-		return dni;
+		return cliente.getDni();
+	}
+	
+	/**
+	 * Método getter del nombre.<br>
+	 * 
+	 * @return Devuelve el nombre como String.<br>
+	 */
+	public String getNombre() {
+		return cliente.getNombre();
 	}
 }
