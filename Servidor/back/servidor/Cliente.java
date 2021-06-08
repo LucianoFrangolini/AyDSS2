@@ -14,6 +14,12 @@ public class Cliente implements Serializable {
 		this.nombre = null;
 		this.prioridad = 0;
 	}
+	
+	public Cliente(String nombre,String dni, Integer prioridad) {
+		this.dni = dni;
+		this.nombre = nombre;
+		this.prioridad = prioridad;
+	}
 
 	public void setNombre(String nombre) {
 		this.nombre = nombre;

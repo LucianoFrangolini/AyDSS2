@@ -42,4 +42,16 @@ public class Mapper {
 			e.printStackTrace();
 		}
 	}
+	
+	public Cliente buscar(String dni) {
+		Cliente cliente = null;
+		try {
+			this.persistidorTXT.abrirInput("ClientesRegistrados.txt");
+			cliente = (Cliente) this.persistidorTXT.leerYBuscar(dni);
+			this.persistidorTXT.cerrarInput();	
+		} catch (IOException | ClassNotFoundException e) {
+			e.printStackTrace();
+		}		
+		return cliente;
+	}
 }
