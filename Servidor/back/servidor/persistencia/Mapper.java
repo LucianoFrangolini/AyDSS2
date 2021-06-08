@@ -6,22 +6,29 @@ import back.servidor.Cliente;
 
 public class Mapper {
 	
+	private final String persistirTXT = "TXT";
+	
 	@SuppressWarnings("rawtypes")
 	private IPersistencia persistidorTXT;
+	private String tipoDePersistencia;
+	
+	//Se pueden agregar más persistidores de distintos tipos
+	//Asi como distintos tipos de persistencias
 
-	public Mapper() {
-		this.persistidorTXT = new PersistenciaTXT(); 
+	public Mapper(String tipoDePersistencia) {
+		this.persistidorTXT = new PersistenciaTXT();
+		this.tipoDePersistencia = tipoDePersistencia;
 	}
 	
-	public void persistir(String dni, String tipo) {
+	public void persistir(String dni) {
 		Registro reg = new Registro(dni);
-		if (tipo.equalsIgnoreCase("TXT")) 
+		if (tipoDePersistencia.equalsIgnoreCase(persistirTXT)); 
 				persistirTXT(reg,"Registros.txt");
 	}
 
-	public void persistir(Cliente cliente, int numPuesto, String tipo) {
+	public void persistir(Cliente cliente, int numPuesto) {
 		ClienteAtendido clienteAtendido = new ClienteAtendido(cliente.getNombre(),cliente.getDni(),numPuesto);
-		if (tipo.equalsIgnoreCase("TXT")) 
+		if (tipoDePersistencia.equalsIgnoreCase(persistirTXT)) 
 				persistirTXT(clienteAtendido,"ClientesAtendidos.txt");
 	}
 	
