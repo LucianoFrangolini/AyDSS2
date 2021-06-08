@@ -18,14 +18,11 @@ public abstract class ColaDeEspera implements IColaStrategy, Serializable{
 
 	/**
 	 * Método encargado de agregar un elemento la cola de espera.<br>
-	 * <b> Pre: </b> el String de dni enviado debe ser distinto de null.<br>
-	 * 
-	 * @return devuelve un String con el dni del proximo cliente en la cola y lo
-	 *         retira de la misma, o null si estaba vacía.<br>
+	 * <b> Pre: </b> el cliente de dni enviado debe ser distinto de null y no debe encontrarse ya en la cola.<br>
+	 * <b> Post: </b> se agrega un cliente a la cola de espera.<br>
 	 */
 	public void add(Cliente cliente) {
-		if(!this.contains(cliente))
-			this.cola.add(cliente);
+		this.cola.add(cliente);
 	}
 
 	/**
@@ -37,12 +34,12 @@ public abstract class ColaDeEspera implements IColaStrategy, Serializable{
 	 * @return devuelve true si el elemento se encontraba en la cola, false en caso
 	 *         contrario.<br>
 	 */
-	public Boolean contains(Cliente cliente) {
+	public Boolean contains(String dni) {
 		Boolean res = false;
 		Iterator<Cliente> it = cola.iterator();
 		while(it.hasNext()) {
 			String aux = it.next().getDni();
-			if(aux.equals(cliente.getDni()))
+			if(aux.equals(dni))
 				res = true;
 		}
 		return res;

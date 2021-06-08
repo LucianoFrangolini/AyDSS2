@@ -48,4 +48,15 @@ public class Turno {
 	public String getNombre() {
 		return cliente.getNombre();
 	}
+	
+	/**
+	 * Método getter del cliente.<br>
+	 * 
+	 * @return Devuelve el cliente como un objeto de ese tipo.<br>
+	 */
+	public Cliente getCliente() {
+		return cliente;
+	}
+	
+	
 }

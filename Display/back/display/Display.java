@@ -114,7 +114,7 @@ public class Display implements Visualizacion, Latido {
 				} catch (IOException e) {
 					Toolkit.getDefaultToolkit().beep();
 					JOptionPane.showMessageDialog(null, Latido.MENSAJE_SIN_CONEXION);
-
+					e.printStackTrace();
 				} catch (ClassNotFoundException e) {
 					e.printStackTrace();
 				}

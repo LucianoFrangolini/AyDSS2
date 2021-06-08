@@ -3,6 +3,8 @@ package front.display.interfaces;
 import java.util.Iterator;
 import java.util.Map.Entry;
 
+import back.servidor.Cliente;
+
 /**
  * @author Grupo12<br>
  *         * Clase que representa una interfaz que será implementada por
@@ -19,7 +21,7 @@ public interface IVistaDisplay{
 	 * @param it de tipo Iterator<Entry<Integer,String>>: Representa el iterador de
 	 *           la lista a actualizar.<br>
 	 */
-	void actualizarLista(Iterator<Entry<Integer, String>> it);
+	void actualizarLista(Iterator<Entry<Integer, Cliente>> it);
 	
 	/**
 	 * Método encargado de abrir una vista.<br>

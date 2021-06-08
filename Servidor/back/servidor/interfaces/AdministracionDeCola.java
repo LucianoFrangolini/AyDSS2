@@ -1,7 +1,9 @@
 package back.servidor.interfaces;
 
+import back.servidor.Cliente;
+
 public interface AdministracionDeCola {
 
-	public String obtenerProximoCliente();
+	public Cliente obtenerProximoCliente();
 	public Boolean agregarDni(String dni);
 }

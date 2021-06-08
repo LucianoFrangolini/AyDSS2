@@ -37,11 +37,12 @@ public class Administrador implements PropertyChangeListener, ValidacionDNI, Adm
 		AdministracionDeLista, ActualizacionDisplay, ActualizacionPuesto, Latido {
 
 	private ListaDeTurnos listaDeTurnos = new ListaDeTurnos();
-	private ColaDeEspera colaDeEspera = new ColaDeEspera();
+	private ColaDeEspera colaDeEspera;
 	private PropertyChangeSupport pcs;
 
 	private String identificador;
 
+	private String politicaDeAtencion;
 	private String ipDisplay;
 	private String ipServidor;
 	private String ipMonitor;
@@ -77,7 +78,7 @@ public class Administrador implements PropertyChangeListener, ValidacionDNI, Adm
 		this.pcs.addPropertyChangeListener(this);
 		
 		cargarPropiedades(identificador);
-		
+		this.colaDeEspera = ColaDeEsperaFactory.crearColaDeEspera(politicaDeAtencion);
 		this.realizarBackup = true;
 
 	}
@@ -127,7 +128,7 @@ public class Administrador implements PropertyChangeListener, ValidacionDNI, Adm
 				this.puertoServidorBackup = Integer.parseInt(p.getProperty("PUERTO_SERVIDOR_2_BACKUP"));
 				this.puertoServidorSincronizacion = Integer.parseInt(p.getProperty("PUERTO_SERVIDOR_2_SINCRONIZACION"));
 				this.tiempoHeartbeat = Integer.parseInt(p.getProperty("TIEMPO_HEARTBEAT"));
-				
+				this.politicaDeAtencion = p.getProperty("POLITICA_DE_ATENCION");
 			} else if (identificador.equalsIgnoreCase("Servidor2")) {
 				p.load(new FileReader("Libreria/propiedades/segundoServidor.properties"));
 				this.ipDisplay = p.getProperty("IP_DISPLAY");
@@ -142,6 +143,7 @@ public class Administrador implements PropertyChangeListener, ValidacionDNI, Adm
 				this.puertoServidorBackup = Integer.parseInt(p.getProperty("PUERTO_SERVIDOR_1_BACKUP"));
 				this.puertoServidorSincronizacion = Integer.parseInt(p.getProperty("PUERTO_SERVIDOR_1_SINCRONIZACION"));
 				this.tiempoHeartbeat = Integer.parseInt(p.getProperty("TIEMPO_HEARTBEAT"));
+				this.politicaDeAtencion = p.getProperty("POLITICA_DE_ATENCION");
 			}
 		} catch (FileNotFoundException e) {
 			Toolkit.getDefaultToolkit().beep();
@@ -203,7 +205,8 @@ public class Administrador implements PropertyChangeListener, ValidacionDNI, Adm
 	public Boolean agregarDni(String dni) {
 		Boolean ret = false;
 		if (validarDni(dni)) {
-			this.colaDeEspera.add(dni);
+			Cliente cliente = new Cliente(dni);
+			this.colaDeEspera.add(cliente);
 			backup();
 			ret = true;
 		}
@@ -224,10 +227,10 @@ public class Administrador implements PropertyChangeListener, ValidacionDNI, Adm
 	 * @return true si pudo agregar el dni en la cola, falso en caso contrario.
 	 */
 	@Override
-	public Boolean agregarTurno(Integer puesto, String dni) {
+	public Boolean agregarTurno(Integer puesto, Cliente cliente) {
 		Boolean ret = false;
-		if (dni != null) {
-			Turno turno = new Turno(puesto, dni);
+		if (cliente != null) {
+			Turno turno = new Turno(puesto, cliente);
 			this.listaDeTurnos.agregarTurno(turno);
 			pcs.firePropertyChange("listaActualizada", null, turno);
 			ret = true;
@@ -258,8 +261,8 @@ public class Administrador implements PropertyChangeListener, ValidacionDNI, Adm
 	 *         retira de la misma, o null si estaba vacía.
 	 */
 	@Override
-	public String obtenerProximoCliente() {
-		return this.colaDeEspera.poll();
+	public Cliente obtenerProximoCliente() {
+		return this.colaDeEspera.obtenerSiguiente();
 	}
 
 	/**

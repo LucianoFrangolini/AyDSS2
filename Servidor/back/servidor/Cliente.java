@@ -1,6 +1,11 @@
 package back.servidor;
 
-public class Cliente {
+import java.io.Serializable;
+
+public class Cliente implements Serializable {
+
+	private static final long serialVersionUID = 5183470916035129940L;
+	
 	private String dni, nombre;
 	private Integer prioridad;
 	

@@ -14,6 +14,7 @@ import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
+import back.servidor.Cliente;
 import front.display.interfaces.IVistaDisplay;
 
 /**
@@ -90,16 +91,20 @@ public class VistaDisplay extends JFrame implements IVistaDisplay {
 	 *           la lista a actualizar.<br>
 	 */
 	@Override
-	public void actualizarLista(Iterator<Entry<Integer, String>> it) {
+	public void actualizarLista(Iterator<Entry<Integer, Cliente>> it) {
 		this.listModelTurnos.clear();
-		Entry<Integer, String> entry;
+		Entry<Integer, Cliente> entry;
 		while (it.hasNext()) {
 			entry = it.next();
 			StringBuilder sb = new StringBuilder();
 			for (int i = 0; i < 27; i++) {
 				sb.append(" ");
 			}
-			sb.append(entry.getValue());
+			Cliente cliente = entry.getValue();
+			String identificacionCliente = cliente.getNombre();
+			if(identificacionCliente==null)
+				identificacionCliente = cliente.getDni();
+			sb.append(identificacionCliente);
 			for (int i = 0; i < 58; i++) {
 				sb.append(" ");
 			}

@@ -38,7 +38,7 @@ public class ControladorDisplay implements PropertyChangeListener {
 	@Override
 	public void propertyChange(PropertyChangeEvent arg0) {
 		ListaDeTurnos listaDeLlamados = (ListaDeTurnos) arg0.getNewValue();
-		this.vista.actualizarLista(listaDeLlamados.getItTurnos());
+		this.vista.actualizarLista(listaDeLlamados.getIteratorTurnos());
 	}
 
 }

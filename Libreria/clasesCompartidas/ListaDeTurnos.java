@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map.Entry;
 
+import back.servidor.Cliente;
+
 /**
  * @author Grupo12 <br>
  *         Clase ListaDeTurnos que representa una lista de turnos a mostrar en
@@ -13,7 +15,7 @@ import java.util.Map.Entry;
  */
 public class ListaDeTurnos implements Serializable {
 	private static final long serialVersionUID = -6925984720747589926L;
-	private HashMap<Integer, String> lista = new HashMap<Integer, String>();
+	private HashMap<Integer, Cliente> lista = new HashMap<Integer, Cliente>();
 
 	/**
 	 * Método encargado de agregar un turno a la lista de turnos.<br>
@@ -25,7 +27,7 @@ public class ListaDeTurnos implements Serializable {
 	 *              lista.<br>
 	 */
 	public void agregarTurno(Turno turno) {
-		this.lista.put(turno.getPuesto(), turno.getDni());
+		this.lista.put(turno.getPuesto(), turno.getCliente());
 	}
 
 	/**
@@ -64,7 +66,7 @@ public class ListaDeTurnos implements Serializable {
 	 * 
 	 * @return iterador sobre la lista de turnos.<br>
 	 */
-	public Iterator<Entry<Integer, String>> getItTurnos() {
+	public Iterator<Entry<Integer, Cliente>> getIteratorTurnos() {
 		return this.lista.entrySet().iterator();
 	}
 
@@ -75,14 +77,19 @@ public class ListaDeTurnos implements Serializable {
 	 */
 	@Override
 	public String toString() {
+		String auxIdentificador;
 		StringBuilder sb = new StringBuilder();
 		if (this.lista.isEmpty())
 			sb.append("");
 		else {
-			Iterator<Entry<Integer, String>> it = this.lista.entrySet().iterator();
+			Iterator<Entry<Integer, Cliente>> it = this.lista.entrySet().iterator();
 			while (it.hasNext()) {
-				Entry<Integer, String> entry = it.next();
-				sb.append(entry.getKey() + "                               " + entry.getValue() + "\n");
+				Entry<Integer, Cliente> entry = it.next();
+				Cliente cliente = entry.getValue();
+				auxIdentificador = cliente.getNombre();
+				if(auxIdentificador==null)
+					auxIdentificador = cliente.getDni(); 
+				sb.append(entry.getKey() + "                               " + auxIdentificador + "\n");
 			}
 		}
 		return sb.toString();
