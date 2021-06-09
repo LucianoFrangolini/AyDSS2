@@ -39,7 +39,7 @@ import back.servidor.persistencia.Mapper;
  *         Singleton. <br>
  */
 public class Administrador implements PropertyChangeListener, ValidacionDNI, AdministracionDeCola,
-		AdministracionDeLista, ActualizacionDisplay, ActualizacionPuesto, Latido, Redundancia {
+		AdministracionDeLista, ActualizacionDisplay, ActualizacionPuesto, Latido {
 
 	private ListaDeTurnos listaDeTurnos = new ListaDeTurnos();
 	private ColaDeEspera colaDeEspera;
@@ -60,7 +60,7 @@ public class Administrador implements PropertyChangeListener, ValidacionDNI, Adm
 	private int puertoServidorBackup;
 	private int puertoServidorSincronizacion;
 
-	private Boolean realizarBackup;
+	private Redundancia estado;
 
 	private ServerTotem servidorTotem;
 	private ServerPuestos servidorPuestos;
@@ -86,13 +86,9 @@ public class Administrador implements PropertyChangeListener, ValidacionDNI, Adm
 		
 		cargarPropiedades(identificador);
 		this.colaDeEspera = ColaDeEsperaFactory.crearColaDeEspera(politicaDeAtencion);
-		this.realizarBackup = true;
+		this.estado = new EstadoSincronizado(this);
 		this.mapeador = new Mapper();
 
-	}
-
-	protected void setRealizarBackup(Boolean backup) {
-		this.realizarBackup = backup;
 	}
 
 	protected void setListaDeTurnos(ListaDeTurnos listaDeTurnos) {
@@ -123,6 +119,26 @@ public class Administrador implements PropertyChangeListener, ValidacionDNI, Adm
 		return this.mapeador;
 	}
 	
+	public String getIpServidor() {
+		return ipServidor;
+	}
+
+	public int getPuertoServidorBackup() {
+		return puertoServidorBackup;
+	}
+
+	public int getPuertoServidorSincronizacion() {
+		return puertoServidorSincronizacion;
+	}
+	
+	public Redundancia getEstado() {
+		return estado;
+	}
+
+	public void cambiarEstado(Redundancia estado) {
+		this.estado = estado;
+	}
+
 	private void cargarPropiedades(String identificador) {
 		try {
 			Properties p = new Properties();
@@ -165,7 +181,7 @@ public class Administrador implements PropertyChangeListener, ValidacionDNI, Adm
 			JOptionPane.showMessageDialog(null, "Se encontró un problema leyendo el archivo de configuración");
 		}
 	}
-
+	
 	/**
 	 * Método encargado de enviar la orden de para abrir los puertos de conexión del
 	 * totem y de los puestos de trabajo.<br>
@@ -186,7 +202,7 @@ public class Administrador implements PropertyChangeListener, ValidacionDNI, Adm
 		this.servidorSincronizacion = new ServerSincronizacion(this,this.puertoEntradaSincronizacion);
 		this.servidorSincronizacion.start();
 
-		intentarSincronizar();
+		this.estado.intentarSincronizar();
 		scheduler = Executors.newSingleThreadScheduledExecutor();
 		scheduler.scheduleAtFixedRate(this, this.tiempoHeartbeat, this.tiempoHeartbeat, TimeUnit.SECONDS);
 	}
@@ -220,7 +236,7 @@ public class Administrador implements PropertyChangeListener, ValidacionDNI, Adm
 			Cliente cliente = new Cliente(dni);
 			this.colaDeEspera.add(cliente);
 			this.mapeador.persistir(dni);
-			backup();
+			this.estado.backup();
 			ret = true;
 		}
 		return ret;
@@ -300,25 +316,7 @@ public class Administrador implements PropertyChangeListener, ValidacionDNI, Adm
 	public void propertyChange(PropertyChangeEvent arg0) {
 		if (arg0.getPropertyName().equals("listaActualizada")) {
 			actualizacionDisplay(this.puertoDisplay);
-			backup();
-		}
-	}
-
-	@Override
-	public void backup() {
-		if (realizarBackup) {
-			try {
-				Socket socket = new Socket(this.ipServidor, this.puertoServidorBackup);
-				ObjectOutputStream myObjectOutput = new ObjectOutputStream(socket.getOutputStream());
-				myObjectOutput.writeObject(this.listaDeTurnos);
-				myObjectOutput.writeObject(this.colaDeEspera);
-				myObjectOutput.writeObject(this.puestosDeTrabajo);
-				myObjectOutput.close();
-				socket.close();
-			} catch (UnknownHostException e) {
-			} catch (IOException e) {
-				this.realizarBackup = false;
-			}
+			this.estado.backup();
 		}
 	}
 
@@ -341,26 +339,6 @@ public class Administrador implements PropertyChangeListener, ValidacionDNI, Adm
 			socket.close();
 		} catch (UnknownHostException e) {
 		} catch (IOException e) {
-		}
-	}
-
-	@Override
-	public void intentarSincronizar() {
-		ObjectInputStream obInput;
-		Socket socket;
-		try {
-			socket = new Socket(this.ipServidor, this.puertoServidorSincronizacion);
-			obInput = new ObjectInputStream(socket.getInputStream());
-			this.setListaDeTurnos((ListaDeTurnos) obInput.readObject());
-			this.setColaDeEspera((ColaDeEspera) obInput.readObject());
-			this.setPuestosDeTrabajo((Integer[]) obInput.readObject());
-			obInput.close();
-			socket.close();
-		} catch (ClassNotFoundException e) {
-		} catch (UnknownHostException e) {
-		} catch (IOException e) {
-			//ACA CAMBIA ESTADO
-			this.realizarBackup = false;
 		}
 	}
 

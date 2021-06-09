@@ -27,7 +27,7 @@ public class ServerSincronizacion implements Runnable {
 			sincronizacionServerSocket = new ServerSocket(this.puerto);
 			while (true) {
 				socket = sincronizacionServerSocket.accept();
-				this.admin.setRealizarBackup(true);
+				this.admin.cambiarEstado(new EstadoSincronizado(admin));
 				//ACA CAMBIA ESTADO
 				ObjectOutputStream obOutput = new ObjectOutputStream(socket.getOutputStream());
 				obOutput.writeObject(this.admin.getListaDeTurnos());
