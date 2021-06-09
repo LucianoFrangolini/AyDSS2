@@ -56,6 +56,7 @@ public class ServerPuestos implements Runnable {
 					numeroPuesto = Integer.parseInt(myInput.readLine());
 
 					if (accion.equals(ListaDeAcciones.LLAMAR_CLIENTE)) {
+						admin.actualizarCola();
 						Cliente cliente = admin.obtenerProximoCliente();
 						if (admin.agregarTurno(numeroPuesto, cliente)) {
 							myOutput.println(cliente.getDni());

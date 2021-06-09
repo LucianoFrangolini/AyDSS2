@@ -3,7 +3,6 @@ package back.servidor;
 import java.io.Serializable;
 import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.Queue;
 
 import back.servidor.interfaces.IColaStrategy;
 
@@ -14,7 +13,7 @@ import back.servidor.interfaces.IColaStrategy;
 public abstract class ColaDeEspera implements IColaStrategy, Serializable{
 
 	private static final long serialVersionUID = -8359156628507108488L;
-	protected Queue<Cliente> cola = new LinkedList<Cliente>();
+	protected LinkedList<Cliente> cola = new LinkedList<Cliente>();
 
 	/**
 	 * Método encargado de agregar un elemento la cola de espera.<br>
@@ -43,5 +42,14 @@ public abstract class ColaDeEspera implements IColaStrategy, Serializable{
 				res = true;
 		}
 		return res;
+	}
+	
+	public void actualizarCliente(Cliente nuevoCliente,Cliente viejoCliente) {
+		int posicion = this.cola.indexOf(viejoCliente);
+		this.cola.set(posicion, nuevoCliente);
+	}
+	
+	public Iterator<Cliente> getIteradorClientes(){
+		return this.cola.iterator();
 	}
 }

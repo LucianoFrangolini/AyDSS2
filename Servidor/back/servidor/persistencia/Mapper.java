@@ -43,7 +43,7 @@ public class Mapper {
 		}
 	}
 	
-	public Cliente buscar(String dni) {
+	public Cliente buscarCliente(String dni) {
 		Cliente cliente = null;
 		try {
 			this.persistidorTXT.abrirInput("ClientesRegistrados.txt");

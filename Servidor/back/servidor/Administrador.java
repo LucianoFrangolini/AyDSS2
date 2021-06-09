@@ -12,6 +12,7 @@ import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.Iterator;
 import java.util.Properties;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -27,6 +28,7 @@ import back.servidor.interfaces.ActualizacionPuesto;
 import back.servidor.interfaces.AdministracionDeCola;
 import back.servidor.interfaces.AdministracionDeLista;
 import back.servidor.interfaces.ValidacionDNI;
+import back.servidor.persistencia.Mapper;
 
 /**
  * @author Grupo12 <br>
@@ -62,6 +64,8 @@ public class Administrador implements PropertyChangeListener, ValidacionDNI, Adm
 	private ServerBackup servidorBackup;
 	private ServerSincronizacion servidorSincronizacion;
 
+	private Mapper mapeador;
+	
 	private Integer[] puestosDeTrabajo = { 0, 0, 0, 0, 0, 0, 0, 0 };
 
 	private ScheduledExecutorService scheduler;
@@ -80,6 +84,7 @@ public class Administrador implements PropertyChangeListener, ValidacionDNI, Adm
 		cargarPropiedades(identificador);
 		this.colaDeEspera = ColaDeEsperaFactory.crearColaDeEspera(politicaDeAtencion);
 		this.realizarBackup = true;
+		this.mapeador = new Mapper("TXT");
 
 	}
 
@@ -263,6 +268,17 @@ public class Administrador implements PropertyChangeListener, ValidacionDNI, Adm
 	@Override
 	public Cliente obtenerProximoCliente() {
 		return this.colaDeEspera.obtenerSiguiente();
+	}
+	
+	public void actualizarCola() {
+		Iterator<Cliente> iteradorClientes = this.colaDeEspera.getIteradorClientes();
+		Cliente nuevoCliente=null,viejoCliente=null;
+		while (iteradorClientes.hasNext()) {
+			viejoCliente = iteradorClientes.next();
+			nuevoCliente = this.mapeador.buscarCliente(viejoCliente.getDni());
+			if (nuevoCliente!=null) 
+				this.colaDeEspera.actualizarCliente(nuevoCliente,viejoCliente);
+		}
 	}
 
 	/**
