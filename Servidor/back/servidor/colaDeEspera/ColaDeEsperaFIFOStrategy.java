@@ -1,4 +1,6 @@
-package back.servidor;
+package back.servidor.colaDeEspera;
+
+import back.servidor.Cliente;
 
 public class ColaDeEsperaFIFOStrategy extends ColaDeEspera {
 

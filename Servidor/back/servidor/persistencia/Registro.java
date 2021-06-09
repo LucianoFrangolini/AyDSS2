@@ -33,7 +33,7 @@ public class Registro implements Serializable{
 
 	@Override
 	public String toString() {
-		return "[ Dni : " + dni + " || Fecha = " + fecha + " ]";
+		return "[ Dni : " + dni + " || Fecha = " + fecha +" ]";
 	}
 	
 	

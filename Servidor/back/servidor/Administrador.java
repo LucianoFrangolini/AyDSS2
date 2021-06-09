@@ -23,10 +23,13 @@ import javax.swing.JOptionPane;
 import interfacesCompartidas.Latido;
 import clasesCompartidas.ListaDeTurnos;
 import clasesCompartidas.Turno;
+import back.servidor.colaDeEspera.ColaDeEspera;
+import back.servidor.colaDeEspera.ColaDeEsperaFactory;
 import back.servidor.interfaces.ActualizacionDisplay;
 import back.servidor.interfaces.ActualizacionPuesto;
 import back.servidor.interfaces.AdministracionDeCola;
 import back.servidor.interfaces.AdministracionDeLista;
+import back.servidor.interfaces.Redundancia;
 import back.servidor.interfaces.ValidacionDNI;
 import back.servidor.persistencia.Mapper;
 
@@ -36,7 +39,7 @@ import back.servidor.persistencia.Mapper;
  *         Singleton. <br>
  */
 public class Administrador implements PropertyChangeListener, ValidacionDNI, AdministracionDeCola,
-		AdministracionDeLista, ActualizacionDisplay, ActualizacionPuesto, Latido {
+		AdministracionDeLista, ActualizacionDisplay, ActualizacionPuesto, Latido, Redundancia {
 
 	private ListaDeTurnos listaDeTurnos = new ListaDeTurnos();
 	private ColaDeEspera colaDeEspera;
@@ -84,7 +87,7 @@ public class Administrador implements PropertyChangeListener, ValidacionDNI, Adm
 		cargarPropiedades(identificador);
 		this.colaDeEspera = ColaDeEsperaFactory.crearColaDeEspera(politicaDeAtencion);
 		this.realizarBackup = true;
-		this.mapeador = new Mapper("TXT");
+		this.mapeador = new Mapper();
 
 	}
 
@@ -114,6 +117,10 @@ public class Administrador implements PropertyChangeListener, ValidacionDNI, Adm
 
 	protected Integer[] getPuestosDeTrabajo() {
 		return puestosDeTrabajo;
+	}
+	
+	protected Mapper getMapper() {
+		return this.mapeador;
 	}
 	
 	private void cargarPropiedades(String identificador) {
@@ -212,12 +219,13 @@ public class Administrador implements PropertyChangeListener, ValidacionDNI, Adm
 		if (validarDni(dni)) {
 			Cliente cliente = new Cliente(dni);
 			this.colaDeEspera.add(cliente);
+			this.mapeador.persistir(dni);
 			backup();
 			ret = true;
 		}
 		return ret;
 	}
-
+	
 	/**
 	 * Método encargado de agregar un turno en la lista de turnos.<br>
 	 * 
@@ -296,6 +304,7 @@ public class Administrador implements PropertyChangeListener, ValidacionDNI, Adm
 		}
 	}
 
+	@Override
 	public void backup() {
 		if (realizarBackup) {
 			try {
@@ -335,6 +344,7 @@ public class Administrador implements PropertyChangeListener, ValidacionDNI, Adm
 		}
 	}
 
+	@Override
 	public void intentarSincronizar() {
 		ObjectInputStream obInput;
 		Socket socket;
@@ -349,6 +359,7 @@ public class Administrador implements PropertyChangeListener, ValidacionDNI, Adm
 		} catch (ClassNotFoundException e) {
 		} catch (UnknownHostException e) {
 		} catch (IOException e) {
+			//ACA CAMBIA ESTADO
 			this.realizarBackup = false;
 		}
 	}
@@ -365,5 +376,4 @@ public class Administrador implements PropertyChangeListener, ValidacionDNI, Adm
 		} catch (IOException e) {
 		}
 	}
-
 }

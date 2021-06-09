@@ -10,6 +10,8 @@ public class ClienteAtendido implements Serializable {
 	private int numeroPuesto;
 	private String fecha;
 	
+	public ClienteAtendido() {}
+	
 	public ClienteAtendido(String nombre, String dni, int numeroPuesto) {
 		super();
 		this.nombre = nombre;

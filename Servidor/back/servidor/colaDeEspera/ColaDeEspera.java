@@ -1,9 +1,10 @@
-package back.servidor;
+package back.servidor.colaDeEspera;
 
 import java.io.Serializable;
 import java.util.Iterator;
 import java.util.LinkedList;
 
+import back.servidor.Cliente;
 import back.servidor.interfaces.IColaStrategy;
 
 /**

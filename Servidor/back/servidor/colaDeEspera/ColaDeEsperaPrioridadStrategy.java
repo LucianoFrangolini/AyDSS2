@@ -1,6 +1,8 @@
-package back.servidor;
+package back.servidor.colaDeEspera;
 
 import java.util.Iterator;
+
+import back.servidor.Cliente;
 
 public class ColaDeEsperaPrioridadStrategy extends ColaDeEspera {
 

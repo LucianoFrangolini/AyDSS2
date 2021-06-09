@@ -59,6 +59,7 @@ public class ServerPuestos implements Runnable {
 						admin.actualizarCola();
 						Cliente cliente = admin.obtenerProximoCliente();
 						if (admin.agregarTurno(numeroPuesto, cliente)) {
+							admin.getMapper().persistir(cliente, numeroPuesto);
 							myOutput.println(cliente.getDni());
 						} else
 							myOutput.println(ListaDeMensajes.SIN_CLIENTES);

@@ -1,4 +1,4 @@
-package back.servidor;
+package back.servidor.colaDeEspera;
 
 public class ColaDeEsperaFactory {
 	

@@ -28,6 +28,7 @@ public class ServerSincronizacion implements Runnable {
 			while (true) {
 				socket = sincronizacionServerSocket.accept();
 				this.admin.setRealizarBackup(true);
+				//ACA CAMBIA ESTADO
 				ObjectOutputStream obOutput = new ObjectOutputStream(socket.getOutputStream());
 				obOutput.writeObject(this.admin.getListaDeTurnos());
 				obOutput.writeObject(this.admin.getColaDeEspera());
