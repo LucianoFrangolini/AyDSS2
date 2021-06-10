@@ -7,7 +7,6 @@ import java.beans.PropertyChangeSupport;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
 import java.net.Socket;
@@ -20,9 +19,6 @@ import java.util.concurrent.TimeUnit;
 
 import javax.swing.JOptionPane;
 
-import interfacesCompartidas.Latido;
-import clasesCompartidas.ListaDeTurnos;
-import clasesCompartidas.Turno;
 import back.servidor.colaDeEspera.ColaDeEspera;
 import back.servidor.colaDeEspera.ColaDeEsperaFactory;
 import back.servidor.interfaces.ActualizacionDisplay;
@@ -32,6 +28,9 @@ import back.servidor.interfaces.AdministracionDeLista;
 import back.servidor.interfaces.Redundancia;
 import back.servidor.interfaces.ValidacionDNI;
 import back.servidor.persistencia.Mapper;
+import clasesCompartidas.ListaDeTurnos;
+import clasesCompartidas.Turno;
+import interfacesCompartidas.Latido;
 
 /**
  * @author Grupo12 <br>

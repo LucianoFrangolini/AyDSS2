@@ -54,7 +54,7 @@ public class VistaDisplay extends JFrame implements IVistaDisplay {
 		panel_1.add(panel);
 		panel.setLayout(new GridLayout(1, 2, 0, 0));
 
-		JLabel lbl_Dni = new JLabel("DNI");
+		JLabel lbl_Dni = new JLabel("NOMBRE / DNI");
 		lbl_Dni.setHorizontalAlignment(SwingConstants.CENTER);
 		panel.add(lbl_Dni);
 

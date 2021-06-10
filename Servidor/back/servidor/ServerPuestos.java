@@ -30,7 +30,7 @@ public class ServerPuestos implements Runnable {
 		BufferedReader myInput;
 		PrintWriter myOutput;
 		int numeroPuesto;
-		String dni, accion;
+		String accion;
 
 		try {
 			puestosServerSocket = new ServerSocket(this.puerto);
