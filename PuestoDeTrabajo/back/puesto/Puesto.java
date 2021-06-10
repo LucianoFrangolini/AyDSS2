@@ -58,7 +58,7 @@ public class Puesto implements SolicitudDeActualizacion, Latido {
 		this.puertoConexionActual = this.puertoServidor1;
 		this.ipConexionActual = this.ipServidor1;		
 		scheduler = Executors.newSingleThreadScheduledExecutor();
-		scheduler.scheduleAtFixedRate(this, this.tiempoHeartbeat, this.tiempoHeartbeat, TimeUnit.MILLISECONDS);
+		scheduler.scheduleAtFixedRate(this, this.tiempoHeartbeat, this.tiempoHeartbeat, TimeUnit.SECONDS);
 	}
 
 	/**

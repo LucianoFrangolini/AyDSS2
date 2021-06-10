@@ -1,10 +1,5 @@
 package back.servidor;
 
-import java.io.IOException;
-import java.io.ObjectOutputStream;
-import java.net.Socket;
-import java.net.UnknownHostException;
-
 import back.servidor.interfaces.Redundancia;
 
 
