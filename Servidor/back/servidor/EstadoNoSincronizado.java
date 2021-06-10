@@ -17,17 +17,7 @@ Administrador admin;
 	
 	@Override
 	public void backup() {
-		try {
-			Socket socket = new Socket(admin.getIpServidor(), admin.getPuertoServidorBackup());
-			ObjectOutputStream myObjectOutput = new ObjectOutputStream(socket.getOutputStream());
-			myObjectOutput.writeObject(admin.getListaDeTurnos());
-			myObjectOutput.writeObject(admin.getColaDeEspera());
-			myObjectOutput.writeObject(admin.getPuestosDeTrabajo());
-			myObjectOutput.close();
-			socket.close();
-		} catch (UnknownHostException e) {
-		} catch (IOException e) {
-		}
+		//Este estado no hace backups
 	}
 	
 	/**

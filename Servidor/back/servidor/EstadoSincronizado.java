@@ -49,6 +49,7 @@ public class EstadoSincronizado implements Redundancia {
 		} catch (UnknownHostException e) {
 		} catch (IOException e) {
 			admin.cambiarEstado(new EstadoNoSincronizado(admin));
+			System.out.println("no sincronizo");
 		}
 	}
 	
