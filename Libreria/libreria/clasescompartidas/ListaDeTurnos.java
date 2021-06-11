@@ -1,4 +1,4 @@
-package libreria.clasesCompartidas;
+package libreria.clasescompartidas;
 
 import java.io.Serializable;
 import java.util.HashMap;

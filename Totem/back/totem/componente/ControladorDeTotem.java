@@ -16,8 +16,8 @@ import java.util.concurrent.TimeUnit;
 
 import javax.swing.JOptionPane;
 
-import libreria.clasesCompartidas.ListaDeMensajes;
-import libreria.interfacesCompartidas.Latido;
+import libreria.clasescompartidas.ListaDeMensajes;
+import libreria.interfacescompartidas.Latido;
 import back.totem.interfaces.EnvioDNI;
 
 /**

@@ -5,7 +5,7 @@ import java.beans.PropertyChangeListener;
 
 import back.display.componente.Display;
 import front.display.interfaces.IVistaDisplay;
-import libreria.clasesCompartidas.ListaDeTurnos;
+import libreria.clasescompartidas.ListaDeTurnos;
 
 /**
  * @author Grupo12 <br>

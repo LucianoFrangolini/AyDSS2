@@ -17,9 +17,9 @@ import java.util.concurrent.TimeUnit;
 import javax.swing.JOptionPane;
 
 import back.puesto.excepciones.PuestosAgotadosException;
-import libreria.clasesCompartidas.ListaDeAcciones;
-import libreria.clasesCompartidas.ListaDeMensajes;
-import libreria.interfacesCompartidas.Latido;
+import libreria.clasescompartidas.ListaDeAcciones;
+import libreria.clasescompartidas.ListaDeMensajes;
+import libreria.interfacescompartidas.Latido;
 import back.puesto.interfaces.SolicitudDeActualizacion;
 
 /**

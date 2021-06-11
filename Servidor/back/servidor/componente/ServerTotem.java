@@ -7,7 +7,7 @@ import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-import libreria.clasesCompartidas.ListaDeMensajes;
+import libreria.clasescompartidas.ListaDeMensajes;
 
 public class ServerTotem implements Runnable {
 

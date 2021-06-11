@@ -6,7 +6,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 import back.servidor.colaDeEspera.ColaDeEspera;
-import libreria.clasesCompartidas.ListaDeTurnos;
+import libreria.clasescompartidas.ListaDeTurnos;
 
 public class ServerBackup implements Runnable {
 

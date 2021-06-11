@@ -17,8 +17,8 @@ import java.util.concurrent.TimeUnit;
 
 import javax.swing.JOptionPane;
 
-import libreria.clasesCompartidas.ListaDeTurnos;
-import libreria.interfacesCompartidas.Latido;
+import libreria.clasescompartidas.ListaDeTurnos;
+import libreria.interfacescompartidas.Latido;
 import back.display.interfaces.Visualizacion;
 
 /**

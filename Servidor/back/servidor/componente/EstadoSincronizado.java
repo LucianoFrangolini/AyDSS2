@@ -8,7 +8,7 @@ import java.net.UnknownHostException;
 
 import back.servidor.colaDeEspera.ColaDeEspera;
 import back.servidor.interfaces.Redundancia;
-import libreria.clasesCompartidas.ListaDeTurnos;
+import libreria.clasescompartidas.ListaDeTurnos;
 
 public class EstadoSincronizado implements Redundancia {
 	Administrador admin;

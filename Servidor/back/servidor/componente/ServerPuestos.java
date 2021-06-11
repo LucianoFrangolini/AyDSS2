@@ -7,8 +7,8 @@ import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-import libreria.clasesCompartidas.ListaDeAcciones;
-import libreria.clasesCompartidas.ListaDeMensajes;
+import libreria.clasescompartidas.ListaDeAcciones;
+import libreria.clasescompartidas.ListaDeMensajes;
 
 public class ServerPuestos implements Runnable {
 

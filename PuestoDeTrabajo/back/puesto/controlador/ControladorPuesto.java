@@ -7,7 +7,7 @@ import java.beans.PropertyChangeListener;
 
 import back.puesto.componente.Puesto;
 import front.puesto.interfaces.IVistaPuesto;
-import libreria.clasesCompartidas.ListaDeAcciones;
+import libreria.clasescompartidas.ListaDeAcciones;
 
 /**
  * @author Grupo12 <br>
