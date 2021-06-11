@@ -6,7 +6,7 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
-import back.servidor.colaDeEspera.ColaDeEspera;
+import back.servidor.coladeespera.ColaDeEspera;
 import back.servidor.interfaces.Redundancia;
 import libreria.clasescompartidas.ListaDeTurnos;
 

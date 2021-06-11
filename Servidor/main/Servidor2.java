@@ -2,7 +2,7 @@ package main;
 
 import back.servidor.componente.Administrador;
 import front.servidor.interfaces.IVista;
-import front.servidor.vista.VistaServidor;
+import front.servidor.vistas.VistaServidor;
 
 public class Servidor2 {
 
