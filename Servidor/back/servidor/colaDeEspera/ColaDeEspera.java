@@ -4,8 +4,8 @@ import java.io.Serializable;
 import java.util.Iterator;
 import java.util.LinkedList;
 
-import back.servidor.componente.Cliente;
 import back.servidor.interfaces.IColaStrategy;
+import libreria.clasescompartidas.Cliente;
 
 /**
  * @author Grupo12 <br>

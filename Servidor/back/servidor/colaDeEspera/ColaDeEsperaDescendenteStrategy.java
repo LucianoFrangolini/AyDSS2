@@ -2,7 +2,7 @@ package back.servidor.colaDeEspera;
 
 import java.util.Iterator;
 
-import back.servidor.componente.Cliente;
+import libreria.clasescompartidas.Cliente;
 
 public class ColaDeEsperaDescendenteStrategy extends ColaDeEspera {
 

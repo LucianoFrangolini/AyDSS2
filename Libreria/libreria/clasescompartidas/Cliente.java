@@ -1,4 +1,4 @@
-package back.servidor.componente;
+package libreria.clasescompartidas;
 
 import java.io.Serializable;
 

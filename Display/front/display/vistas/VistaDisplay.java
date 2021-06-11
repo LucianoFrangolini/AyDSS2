@@ -14,8 +14,8 @@ import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
-import back.servidor.componente.Cliente;
 import front.display.interfaces.IVistaDisplay;
+import libreria.clasescompartidas.Cliente;
 
 /**
  * @author Grupo12.<br>

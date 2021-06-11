@@ -7,6 +7,7 @@ import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+import libreria.clasescompartidas.Cliente;
 import libreria.clasescompartidas.ListaDeAcciones;
 import libreria.clasescompartidas.ListaDeMensajes;
 

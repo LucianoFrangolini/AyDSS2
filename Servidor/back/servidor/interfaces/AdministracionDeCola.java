@@ -1,6 +1,6 @@
 package back.servidor.interfaces;
 
-import back.servidor.componente.Cliente;
+import libreria.clasescompartidas.Cliente;
 
 public interface AdministracionDeCola {
 

@@ -1,7 +1,5 @@
 package libreria.clasescompartidas;
 
-import back.servidor.componente.Cliente;
-
 /**
  * @author Grupo12 <br>
  *         Clase para encapsular los atributos de un turno <br>

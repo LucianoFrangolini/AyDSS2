@@ -8,7 +8,7 @@ import java.util.Properties;
 
 import javax.swing.JOptionPane;
 
-import back.servidor.componente.Cliente;
+import libreria.clasescompartidas.Cliente;
 
 public class Mapper {
 	

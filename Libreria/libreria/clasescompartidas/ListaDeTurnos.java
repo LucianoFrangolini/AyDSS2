@@ -5,8 +5,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map.Entry;
 
-import back.servidor.componente.Cliente;
-
 /**
  * @author Grupo12 <br>
  *         Clase ListaDeTurnos que representa una lista de turnos a mostrar en

@@ -28,6 +28,7 @@ import back.servidor.interfaces.AdministracionDeLista;
 import back.servidor.interfaces.Redundancia;
 import back.servidor.interfaces.ValidacionDNI;
 import back.servidor.persistencia.Mapper;
+import libreria.clasescompartidas.Cliente;
 import libreria.clasescompartidas.ListaDeTurnos;
 import libreria.clasescompartidas.Turno;
 import libreria.interfacescompartidas.Latido;
