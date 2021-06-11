@@ -3,7 +3,7 @@ package front.display.interfaces;
 import java.util.Iterator;
 import java.util.Map.Entry;
 
-import back.servidor.Cliente;
+import back.servidor.componente.Cliente;
 
 /**
  * @author Grupo12<br>

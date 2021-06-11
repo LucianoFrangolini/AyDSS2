@@ -3,7 +3,7 @@ package back.monitor.controlador;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
-import back.monitor.Monitor;
+import back.monitor.componente.Monitor;
 import front.monitor.interfaces.IVistaMonitor;
 
 public class ControladorMonitor implements PropertyChangeListener{

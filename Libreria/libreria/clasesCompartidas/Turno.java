@@ -1,6 +1,6 @@
-package clasesCompartidas;
+package libreria.clasesCompartidas;
 
-import back.servidor.Cliente;
+import back.servidor.componente.Cliente;
 
 /**
  * @author Grupo12 <br>

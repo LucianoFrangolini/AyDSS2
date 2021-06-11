@@ -1,6 +1,6 @@
 package main;
 
-import back.monitor.Monitor;
+import back.monitor.componente.Monitor;
 import back.monitor.controlador.ControladorMonitor;
 import front.monitor.interfaces.IVistaMonitor;
 import front.monitor.vistas.VistaMonitorDeSistema;

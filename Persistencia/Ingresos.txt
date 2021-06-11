@@ -56,3 +56,7 @@
 [ Dni : 99999999 || Fecha = Thu Jun 10 15:31:06 ART 2021 ]
 [ Dni : 95555555 || Fecha = Thu Jun 10 15:31:26 ART 2021 ]
 [ Dni : 33333333 || Fecha = Thu Jun 10 15:55:22 ART 2021 ]
+[ Dni : 55555555 || Fecha = Fri Jun 11 10:26:58 ART 2021 ]
+[ Dni : 11111111 || Fecha = Fri Jun 11 10:27:01 ART 2021 ]
+[ Dni : 33333333 || Fecha = Fri Jun 11 10:27:03 ART 2021 ]
+[ Dni : 99999999 || Fecha = Fri Jun 11 10:27:13 ART 2021 ]

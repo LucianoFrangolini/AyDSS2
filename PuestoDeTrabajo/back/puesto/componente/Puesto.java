@@ -1,4 +1,4 @@
-package back.totem;
+package back.puesto.componente;
 
 import java.awt.Toolkit;
 import java.io.BufferedReader;
@@ -16,18 +16,21 @@ import java.util.concurrent.TimeUnit;
 
 import javax.swing.JOptionPane;
 
-import clasesCompartidas.ListaDeMensajes;
-import interfacesCompartidas.Latido;
-import back.totem.interfaces.EnvioDNI;
+import back.puesto.excepciones.PuestosAgotadosException;
+import libreria.clasesCompartidas.ListaDeAcciones;
+import libreria.clasesCompartidas.ListaDeMensajes;
+import libreria.interfacesCompartidas.Latido;
+import back.puesto.interfaces.SolicitudDeActualizacion;
 
 /**
  * @author Grupo12 <br>
- *         Clase ControladorDeTotem con la lógica del Tótem. Se extiende de
- *         ConexiónSocket. <br>
+ *         Clase para un Puesto de trabajo, extiende de ConexionSocket. <br>
  */
-public class ControladorDeTotem implements EnvioDNI, Latido {
+public class Puesto implements SolicitudDeActualizacion, Latido {
+
+	private int numeroPuesto;
+	private String clienteActual;
 	
-	private String estado;
 	private String ipConexionActual;
 	private String ipServidor1;
 	private String ipServidor2;
@@ -37,36 +40,49 @@ public class ControladorDeTotem implements EnvioDNI, Latido {
 	private int puertoServidor2;
 	private int puertoMonitor;
 	private int tiempoHeartbeat;
+
 	private ScheduledExecutorService scheduler;
+	
 	private BufferedReader myInput;
 	private PrintWriter myOutput;
 	private Socket socket;
 
 	/**
-	 * Constructor del ControladorDeTotem.<br>
+	 * Constructor para un Puesto de trabajo.<br>
+	 * 
+	 * @param numeroPuesto de tipo Integer: representa el numero de puesto que se va
+	 *                     a crear.<br>
 	 */
-	public ControladorDeTotem() {
+	public Puesto() {
 		cargarPropiedades();
-		this.estado = "";
 		this.puertoConexionActual = this.puertoServidor1;
-		this.ipConexionActual = this.ipServidor1;
+		this.ipConexionActual = this.ipServidor1;		
 		scheduler = Executors.newSingleThreadScheduledExecutor();
 		scheduler.scheduleAtFixedRate(this, this.tiempoHeartbeat, this.tiempoHeartbeat, TimeUnit.SECONDS);
 	}
 
 	/**
-	 * Método getter del estado del display del Totem<br>
+	 * Método getter del numero de puesto.<br>
 	 * 
-	 * @return estado del display del totem.<br>
+	 * @return Devuelve el numero del puesto.<br>
 	 */
-	public String getEstado() {
-		return estado;
+	public int getNumeroPuesto() {
+		return numeroPuesto;
 	}
-	
+
+	/**
+	 * Método getter del dni del cliente actual.<br>
+	 * 
+	 * @return Devuelve el dni del cliente.<br>
+	 */
+	public String getClienteActual() {
+		return clienteActual;
+	}
+
 	private void cargarPropiedades() {
 		try {
 			Properties p = new Properties();
-			p.load(new FileReader("Libreria/propiedades/totem.properties"));			
+			p.load(new FileReader("Libreria/propiedades/puestoDeTrabajo.properties"));			
 			this.ipMonitor=p.getProperty("IP_MONITOR");
 			this.ipServidor1=p.getProperty("IP_SERVIDOR_1");
 			this.ipServidor2=p.getProperty("IP_SERVIDOR_2");
@@ -82,34 +98,22 @@ public class ControladorDeTotem implements EnvioDNI, Latido {
 			JOptionPane.showMessageDialog(null, "Se encontró un problema leyendo el archivo de configuración");
 		}
 	}
-
+	
 	/**
-	 * Método encargado de decidir si el estado del tótem es aceptable o no para
-	 * enviar un nuevo mensaje por socket.<br>
+	 * Método que establece una conexion por Socket con un host a traves de un
+	 * puerto determinado y que puede realizar distintas acciones dependiente del
+	 * parametro de entrada.<br>
 	 * 
-	 * @return true si el estado es aceptable, false si el estado no es
-	 *         aceptable.<br>
-	 */
-	private Boolean estadoAceptable() throws NullPointerException {
-		Boolean ret = false;
-		if (estado.equals(ListaDeMensajes.REGISTRO_EXITOSO) || estado.equals(ListaDeMensajes.DNI_EXISTENTE))
-			ret = true;
-		return ret;
-	}
-
-	/**
-	 * Método encargado de enviar un mensaje por socket.<br>
+	 * <b> Post: </b> Se abre un socket para enviar un mensaje y dependiendo el
+	 * mensaje tambien recibir uno.<br>
 	 * 
-	 * <b> Post: </b> Se envía un mensaje al servidor por socket y se recibe una
-	 * respuesta.<br>
-	 * 
-	 * @param DNI de tipo String: Representa el DNI a enviar por socket.<br>
+	 * @param accion de tipo String: representa la accion que se quiere
+	 *               realizar.<br>
 	 */
 	@Override
-	public void enviarMensaje(String DNI) {
-		this.estado = "";
+	public void enviarMensaje(String accion) {
 		establecerConexion();
-		intercambio(DNI);
+		intercambio(accion);
 		cerrarConexion();
 	}
 
@@ -132,7 +136,7 @@ public class ControladorDeTotem implements EnvioDNI, Latido {
 		} catch (IOException e) {
 			try {
 				resincronizacion();
-				this.socket = new Socket(this.ipConexionActual, this.puertoConexionActual);			
+				this.socket = new Socket(this.ipConexionActual, this.puertoConexionActual);
 				this.myInput = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 				this.myOutput = new PrintWriter(socket.getOutputStream(), true);
 			} catch (IOException e2) {
@@ -142,21 +146,32 @@ public class ControladorDeTotem implements EnvioDNI, Latido {
 		}
 	}
 
-	private void intercambio(String DNI) {
-		myOutput.println(DNI);
-		while (!estadoAceptable()) {
-			try {
-				this.estado = myInput.readLine();
-			} catch (IOException e) {
-				Toolkit.getDefaultToolkit().beep();
-				JOptionPane.showMessageDialog(null, Latido.MENSAJE_SIN_CONEXION);
-			} catch (NullPointerException e) {
-				Toolkit.getDefaultToolkit().beep();
-				JOptionPane.showMessageDialog(null, Latido.MENSAJE_SIN_CONEXION);
+	private void intercambio(String accion) {
+		try {
+			myOutput.println(accion);
+			if (accion.equals(ListaDeAcciones.ABRIR_PUESTO)) {
+				String aux = myInput.readLine();
+				if (aux.equalsIgnoreCase(ListaDeMensajes.ERROR))
+					throw new PuestosAgotadosException(ListaDeMensajes.LIMITE_PUESTOS);
+				this.numeroPuesto = Integer.parseInt(aux);
+
+			} else if (accion.equals(ListaDeAcciones.LLAMAR_CLIENTE)) {
+				myOutput.println(this.numeroPuesto);
+				this.clienteActual = myInput.readLine();
+				
+			} else if (accion.equals(ListaDeAcciones.ELIMINAR_TURNO)
+					|| accion.equalsIgnoreCase(ListaDeAcciones.CERRAR_PUESTO)) {
+				myOutput.println(this.numeroPuesto);
 			}
+		} catch (IOException e) {
+			Toolkit.getDefaultToolkit().beep();
+			JOptionPane.showMessageDialog(null, Latido.MENSAJE_SIN_CONEXION);
+		} catch (PuestosAgotadosException e) {
+			Toolkit.getDefaultToolkit().beep();
+			JOptionPane.showMessageDialog(null, e.getMessage());
 		}
 	}
-	
+
 	private void cerrarConexion() {
 		try {
 			myInput.close();
@@ -168,12 +183,22 @@ public class ControladorDeTotem implements EnvioDNI, Latido {
 		}
 	}
 
+	/**
+	 * Método toString de la clase puesto.<br>
+	 * 
+	 * @return Devuelve el string que representa el objeto.<br>
+	 */
+	@Override
+	public String toString() {
+		return "Puesto numero:  " + numeroPuesto;
+	}
+
 	@Override
 	public void run() {
 		try {
             Socket socket = new Socket(this.ipMonitor,this.puertoMonitor);
             PrintWriter  pr = new PrintWriter(socket.getOutputStream(), true);
-            pr.println("Totem");
+            pr.println("Puesto" + Integer.toString(numeroPuesto));
             pr.close();
             socket.close();
         } catch (UnknownHostException e) {

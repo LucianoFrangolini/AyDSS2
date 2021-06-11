@@ -1,6 +1,6 @@
 package back.display.interfaces;
 
-import clasesCompartidas.ListaDeTurnos;
+import libreria.clasesCompartidas.ListaDeTurnos;
 
 public interface Visualizacion {
 

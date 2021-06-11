@@ -1,4 +1,4 @@
-package back.display;
+package back.display.componente;
 
 import java.awt.Toolkit;
 import java.beans.PropertyChangeSupport;
@@ -17,9 +17,9 @@ import java.util.concurrent.TimeUnit;
 
 import javax.swing.JOptionPane;
 
-import interfacesCompartidas.Latido;
+import libreria.clasesCompartidas.ListaDeTurnos;
+import libreria.interfacesCompartidas.Latido;
 import back.display.interfaces.Visualizacion;
-import clasesCompartidas.ListaDeTurnos;
 
 /**
  * @author Grupo12 <br>

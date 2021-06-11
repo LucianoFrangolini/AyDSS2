@@ -1,4 +1,4 @@
-package back.servidor;
+package back.servidor.componente;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -7,8 +7,8 @@ import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-import clasesCompartidas.ListaDeAcciones;
-import clasesCompartidas.ListaDeMensajes;
+import libreria.clasesCompartidas.ListaDeAcciones;
+import libreria.clasesCompartidas.ListaDeMensajes;
 
 public class ServerPuestos implements Runnable {
 

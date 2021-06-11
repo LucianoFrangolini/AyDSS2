@@ -5,9 +5,9 @@ import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
-import back.puesto.Puesto;
-import clasesCompartidas.ListaDeAcciones;
+import back.puesto.componente.Puesto;
 import front.puesto.interfaces.IVistaPuesto;
+import libreria.clasesCompartidas.ListaDeAcciones;
 
 /**
  * @author Grupo12 <br>

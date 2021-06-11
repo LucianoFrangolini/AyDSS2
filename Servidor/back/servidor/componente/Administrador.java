@@ -1,4 +1,4 @@
-package back.servidor;
+package back.servidor.componente;
 
 import java.awt.Toolkit;
 import java.beans.PropertyChangeEvent;
@@ -28,9 +28,9 @@ import back.servidor.interfaces.AdministracionDeLista;
 import back.servidor.interfaces.Redundancia;
 import back.servidor.interfaces.ValidacionDNI;
 import back.servidor.persistencia.Mapper;
-import clasesCompartidas.ListaDeTurnos;
-import clasesCompartidas.Turno;
-import interfacesCompartidas.Latido;
+import libreria.clasesCompartidas.ListaDeTurnos;
+import libreria.clasesCompartidas.Turno;
+import libreria.interfacesCompartidas.Latido;
 
 /**
  * @author Grupo12 <br>

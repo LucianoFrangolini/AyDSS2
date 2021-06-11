@@ -3,9 +3,9 @@ package back.display.controlador;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
-import back.display.Display;
-import clasesCompartidas.ListaDeTurnos;
+import back.display.componente.Display;
 import front.display.interfaces.IVistaDisplay;
+import libreria.clasesCompartidas.ListaDeTurnos;
 
 /**
  * @author Grupo12 <br>

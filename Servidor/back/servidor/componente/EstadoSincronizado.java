@@ -1,4 +1,4 @@
-package back.servidor;
+package back.servidor.componente;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -8,7 +8,7 @@ import java.net.UnknownHostException;
 
 import back.servidor.colaDeEspera.ColaDeEspera;
 import back.servidor.interfaces.Redundancia;
-import clasesCompartidas.ListaDeTurnos;
+import libreria.clasesCompartidas.ListaDeTurnos;
 
 public class EstadoSincronizado implements Redundancia {
 	Administrador admin;

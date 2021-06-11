@@ -1,6 +1,6 @@
 package main;
 
-import back.servidor.Administrador;
+import back.servidor.componente.Administrador;
 import front.servidor.interfaces.IVista;
 import front.servidor.vista.VistaServidor;
 

@@ -3,7 +3,7 @@ package back.totem.controlador;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import back.totem.ControladorDeTotem;
+import back.totem.componente.ControladorDeTotem;
 import back.totem.interfaces.ActualizacionTotem;
 import front.totem.interfaces.Inscripcion;
 

@@ -1,4 +1,4 @@
-package clasesCompartidas;
+package libreria.clasesCompartidas;
 
 /**
  * @author Grupo12 <br>

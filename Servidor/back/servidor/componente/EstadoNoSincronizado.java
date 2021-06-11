@@ -1,4 +1,4 @@
-package back.servidor;
+package back.servidor.componente;
 
 import back.servidor.interfaces.Redundancia;
 

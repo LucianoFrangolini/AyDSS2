@@ -14,7 +14,7 @@ import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
-import back.servidor.Cliente;
+import back.servidor.componente.Cliente;
 import front.display.interfaces.IVistaDisplay;
 
 /**

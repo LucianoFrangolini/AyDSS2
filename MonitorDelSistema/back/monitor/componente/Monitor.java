@@ -1,4 +1,4 @@
-package back.monitor;
+package back.monitor.componente;
 
 import java.awt.Toolkit;
 import java.beans.PropertyChangeSupport;

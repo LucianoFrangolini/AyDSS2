@@ -9,7 +9,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-import back.servidor.Cliente;
+import back.servidor.componente.Cliente;
 
 @SuppressWarnings("rawtypes")
 public class PersistenciaTXT implements IPersistencia{
