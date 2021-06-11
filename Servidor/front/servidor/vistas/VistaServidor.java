@@ -1,4 +1,4 @@
-package front.servidor.vista;
+package front.servidor.vistas;
 
 import java.awt.BorderLayout;
 import java.awt.Font;

@@ -1,4 +1,4 @@
-package back.servidor.colaDeEspera;
+package back.servidor.coladeespera;
 
 import libreria.clasescompartidas.Cliente;
 

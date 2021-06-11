@@ -1,4 +1,4 @@
-package back.servidor.colaDeEspera;
+package back.servidor.coladeespera;
 
 import java.io.Serializable;
 import java.util.Iterator;

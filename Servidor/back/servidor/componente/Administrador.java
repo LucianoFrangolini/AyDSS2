@@ -19,8 +19,8 @@ import java.util.concurrent.TimeUnit;
 
 import javax.swing.JOptionPane;
 
-import back.servidor.colaDeEspera.ColaDeEspera;
-import back.servidor.colaDeEspera.ColaDeEsperaFactory;
+import back.servidor.coladeespera.ColaDeEspera;
+import back.servidor.coladeespera.ColaDeEsperaFactory;
 import back.servidor.interfaces.ActualizacionDisplay;
 import back.servidor.interfaces.ActualizacionPuesto;
 import back.servidor.interfaces.AdministracionDeCola;
