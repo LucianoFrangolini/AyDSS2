@@ -4,6 +4,7 @@ Grupo de Análisis y Diseño de Sistemas 2
 <h1>Instrucciones de Instalación y Configuración</h1>
   <p> Descargar los ejecutables .jar de la carpeta "Ejecutables" perteneciente al proyecto.<br>
   Ejecutarlos uno a uno.</p>
+  <p> En la carpeta "Ejecutables" hay una carpeta "Propiedades" en la cual se encuentran los archivos de propiedades del proyecto. La mayoría de estas propiedades son modificables y afectarán el funcionamiento del sistema. </p>
   
 <h1>Requisitos para un buen funcionamiento</h1>
   <p>Tener instalado el Java Development Kit versión 9.0 en adelante.<br>
