@@ -7,8 +7,9 @@ Grupo de Análisis y Diseño de Sistemas 2
   
 <h1>Requisitos para un buen funcionamiento</h1>
   <p>Tener instalado el Java Development Kit versión 9.0 en adelante.<br>
-    Utilizar en un único dispositivo o dispositivos conectados por una red LAN</p>
-  <p> Para lograr una correcta funcionalidad, se recomienda siempre tener un servidor en ejecución al abrir y cerrar otros componentes</p>
+    Utilizar en un único dispositivo o dispositivos conectados por una red LAN.
+    Los archivos de configuración deben encontrarse en una carpeta "Propiedades" junto a los .jar</p>
+  <p> Para lograr una correcta funcionalidad, se recomienda siempre tener un servidor en ejecución al abrir y cerrar otros componentes.</p>
 
 <h1>Instrucciones de operación</h1>
   <p>Abrir los archivos .jar ejecutables incluidos en la carpeta "Ejecutables"<br></p>
