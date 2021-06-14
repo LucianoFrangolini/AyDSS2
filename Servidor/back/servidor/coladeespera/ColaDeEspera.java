@@ -11,14 +11,15 @@ import libreria.clasescompartidas.Cliente;
  * @author Grupo12 <br>
  *         Clase para la cola de espera que encapsula el uso de un Queue. <br>
  */
-public abstract class ColaDeEspera implements IColaStrategy, Serializable{
+public abstract class ColaDeEspera implements IColaStrategy, Serializable {
 
 	private static final long serialVersionUID = -8359156628507108488L;
 	protected LinkedList<Cliente> cola = new LinkedList<Cliente>();
 
 	/**
 	 * Método encargado de agregar un elemento la cola de espera.<br>
-	 * <b> Pre: </b> el cliente de dni enviado debe ser distinto de null y no debe encontrarse ya en la cola.<br>
+	 * <b> Pre: </b> el cliente de dni enviado debe ser distinto de null y no debe
+	 * encontrarse ya en la cola.<br>
 	 * <b> Post: </b> se agrega un cliente a la cola de espera.<br>
 	 */
 	public void add(Cliente cliente) {
@@ -37,20 +38,26 @@ public abstract class ColaDeEspera implements IColaStrategy, Serializable{
 	public Boolean contains(String dni) {
 		Boolean res = false;
 		Iterator<Cliente> it = cola.iterator();
-		while(it.hasNext()) {
+		while (it.hasNext()) {
 			String aux = it.next().getDni();
-			if(aux.equals(dni))
+			if (aux.equals(dni))
 				res = true;
 		}
 		return res;
 	}
-	
-	public void actualizarCliente(Cliente nuevoCliente,Cliente viejoCliente) {
+
+	/**
+	 * Reemplaza un cliente de la cola por otro.
+	 * 
+	 * @param nuevoCliente Cliente que reemplazara.
+	 * @param viejoCliente Cliente que sera reemplazado.
+	 */
+	public void actualizarCliente(Cliente nuevoCliente, Cliente viejoCliente) {
 		int posicion = this.cola.indexOf(viejoCliente);
 		this.cola.set(posicion, nuevoCliente);
 	}
-	
-	public Iterator<Cliente> getIteradorClientes(){
+
+	public Iterator<Cliente> getIteradorClientes() {
 		return this.cola.iterator();
 	}
 }

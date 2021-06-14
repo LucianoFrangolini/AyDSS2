@@ -10,13 +10,27 @@ import back.servidor.coladeespera.ColaDeEspera;
 import back.servidor.interfaces.Redundancia;
 import libreria.clasescompartidas.ListaDeTurnos;
 
+/**
+ * @author Grupo 12 <br>
+ *         La Clase EstadoSincronizado es utilizada para implementar el patron
+ *         State, en este estado se puede realizar backup y sincronizar.
+ */
 public class EstadoSincronizado implements Redundancia {
 	Administrador admin;
-	
+
+	/**
+	 * Contructor de EstadoNoSincronizado.</br>
+	 * 
+	 * @param admin referencia al mismo administrador que lo contiene.
+	 */
 	public EstadoSincronizado(Administrador admin) {
 		this.admin = admin;
 	}
-	
+
+	/**
+	 * Metodo encargado de enviar los datos de la lista de turnos, cola de espera, y
+	 * puestos de trabajo al servidor que sea backup.
+	 */
 	@Override
 	public void backup() {
 		try {
@@ -33,6 +47,12 @@ public class EstadoSincronizado implements Redundancia {
 		}
 	}
 
+	/**
+	 * Metodo encargado de cargar la lista de turnos, cola de espera, y puestos de
+	 * trabajo desde el otro servidor, en caso de no ser posible se pasara a estado
+	 * no sincronizado.
+	 *
+	 */
 	@Override
 	public void intentarSincronizar() {
 		ObjectInputStream obInput;
@@ -51,5 +71,5 @@ public class EstadoSincronizado implements Redundancia {
 			admin.cambiarEstado(new EstadoNoSincronizado(admin));
 		}
 	}
-	
+
 }
