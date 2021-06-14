@@ -13,6 +13,12 @@ import java.util.Properties;
 
 import javax.swing.JOptionPane;
 
+/**
+ * @author Grupo12<br>
+ *         Clase que representa el monitor que se encargará de monitorear el
+ *         estado de los demás componentes del sistema<br>
+ *
+ */
 public class Monitor implements Runnable {
 	private static Monitor instance;
 	private Thread servidor;
@@ -33,6 +39,9 @@ public class Monitor implements Runnable {
 	private HiloTimeOut puesto7;
 	private HiloTimeOut puesto8;
 
+	/**
+	 * Constructor de clase.<br>
+	 */
 	private Monitor() {
 		cargarPropiedades();
 		servidor = new Thread(this, "Monitor");
@@ -40,6 +49,11 @@ public class Monitor implements Runnable {
 		servidor.start();
 	}
 
+	/**
+	 * Implementación del patrón singleton<br>
+	 * 
+	 * @return instance de tipo Monitor: Representa la instancia del Monitor<br>
+	 */
 	public static Monitor getInstance() {
 		if (instance == null)
 			instance = new Monitor();
@@ -49,11 +63,14 @@ public class Monitor implements Runnable {
 	public PropertyChangeSupport getPcs() {
 		return this.pcs;
 	}
-	
+
+	/**
+	 * Método encargado de cargar las propiedades del monitor desde un archivo.<br>
+	 */
 	private void cargarPropiedades() {
 		try {
 			Properties p = new Properties();
-			p.load(new FileReader("Libreria/propiedades/monitor.properties"));	
+			p.load(new FileReader("Libreria/propiedades/monitor.properties"));
 			this.puerto = Integer.parseInt(p.getProperty("PUERTO_ENTRADA"));
 			this.tiempoTimeOut = Integer.parseInt(p.getProperty("TIEMPO_TIMEOUT"));
 		} catch (FileNotFoundException e) {
@@ -65,19 +82,23 @@ public class Monitor implements Runnable {
 		}
 	}
 
+	/**
+	 * Método encargado de inicializar los contadores que monitorean los
+	 * componentes<br>
+	 */
 	public void abrirTimers() {
-		totem = new HiloTimeOut("Totem",this.tiempoTimeOut);
-		servidor1 = new HiloTimeOut("Servidor1",this.tiempoTimeOut);
-		servidor2 = new HiloTimeOut("Servidor2",this.tiempoTimeOut);
-		display = new HiloTimeOut("Display",this.tiempoTimeOut);
-		puesto1 = new HiloTimeOut("Puesto1",this.tiempoTimeOut);
-		puesto2 = new HiloTimeOut("Puesto2",this.tiempoTimeOut);
-		puesto3 = new HiloTimeOut("Puesto3",this.tiempoTimeOut);
-		puesto4 = new HiloTimeOut("Puesto4",this.tiempoTimeOut);
-		puesto5 = new HiloTimeOut("Puesto5",this.tiempoTimeOut);
-		puesto6 = new HiloTimeOut("Puesto6",this.tiempoTimeOut);
-		puesto7 = new HiloTimeOut("Puesto7",this.tiempoTimeOut);
-		puesto8 = new HiloTimeOut("Puesto8",this.tiempoTimeOut);
+		totem = new HiloTimeOut("Totem", this.tiempoTimeOut);
+		servidor1 = new HiloTimeOut("Servidor1", this.tiempoTimeOut);
+		servidor2 = new HiloTimeOut("Servidor2", this.tiempoTimeOut);
+		display = new HiloTimeOut("Display", this.tiempoTimeOut);
+		puesto1 = new HiloTimeOut("Puesto1", this.tiempoTimeOut);
+		puesto2 = new HiloTimeOut("Puesto2", this.tiempoTimeOut);
+		puesto3 = new HiloTimeOut("Puesto3", this.tiempoTimeOut);
+		puesto4 = new HiloTimeOut("Puesto4", this.tiempoTimeOut);
+		puesto5 = new HiloTimeOut("Puesto5", this.tiempoTimeOut);
+		puesto6 = new HiloTimeOut("Puesto6", this.tiempoTimeOut);
+		puesto7 = new HiloTimeOut("Puesto7", this.tiempoTimeOut);
+		puesto8 = new HiloTimeOut("Puesto8", this.tiempoTimeOut);
 	}
 
 	@Override
@@ -94,66 +115,66 @@ public class Monitor implements Runnable {
 				myInput = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 				aux = myInput.readLine();
 				switch (aux) {
-					case "Totem": {
-						totem.setLatido("TotemEnLinea");
-						pcs.firePropertyChange("TotemEnLinea", null, null);
-						break;
-					}
-					case "Servidor1": {
-						servidor1.setLatido("Servidor1EnLinea");
-						pcs.firePropertyChange("Servidor1EnLinea", null, null);
-						break;
-					}
-					case "Servidor2": {
-						servidor2.setLatido("Servidor2EnLinea");
-						pcs.firePropertyChange("Servidor2EnLinea", null, null);
-						break;
-					}
-					case "Display": {
-						display.setLatido("DisplayEnLinea");
-						pcs.firePropertyChange("DisplayEnLinea", null, null);
-						break;
-					}
-					case "Puesto1": {
-						puesto1.setLatido("Puesto1EnLinea");
-						pcs.firePropertyChange("Puesto1EnLinea", null, null);
-						break;
-					}
-					case "Puesto2": {
-						puesto2.setLatido("Puesto2EnLinea");
-						pcs.firePropertyChange("Puesto2EnLinea", null, null);
-						break;
-					}
-					case "Puesto3": {
-						puesto3.setLatido("Puesto3EnLinea");
-						pcs.firePropertyChange("Puesto3EnLinea", null, null);
-						break;
-					}
-					case "Puesto4": {
-						puesto4.setLatido("Puesto4EnLinea");
-						pcs.firePropertyChange("Puesto4EnLinea", null, null);
-						break;
-					}
-					case "Puesto5": {
-						puesto5.setLatido("Puesto5EnLinea");
-						pcs.firePropertyChange("Puesto5EnLinea", null, null);
-						break;
-					}
-					case "Puesto6": {
-						puesto6.setLatido("Puesto6EnLinea");
-						pcs.firePropertyChange("Puesto6EnLinea", null, null);
-						break;
-					}
-					case "Puesto7": {
-						puesto7.setLatido("Puesto7EnLinea");
-						pcs.firePropertyChange("Puesto7EnLinea", null, null);
-						break;
-					}
-					case "Puesto8": {
-						puesto8.setLatido("Puesto8EnLinea");
-						pcs.firePropertyChange("Puesto8EnLinea", null, null);
-						break;
-					}
+				case "Totem": {
+					totem.setLatido("TotemEnLinea");
+					pcs.firePropertyChange("TotemEnLinea", null, null);
+					break;
+				}
+				case "Servidor1": {
+					servidor1.setLatido("Servidor1EnLinea");
+					pcs.firePropertyChange("Servidor1EnLinea", null, null);
+					break;
+				}
+				case "Servidor2": {
+					servidor2.setLatido("Servidor2EnLinea");
+					pcs.firePropertyChange("Servidor2EnLinea", null, null);
+					break;
+				}
+				case "Display": {
+					display.setLatido("DisplayEnLinea");
+					pcs.firePropertyChange("DisplayEnLinea", null, null);
+					break;
+				}
+				case "Puesto1": {
+					puesto1.setLatido("Puesto1EnLinea");
+					pcs.firePropertyChange("Puesto1EnLinea", null, null);
+					break;
+				}
+				case "Puesto2": {
+					puesto2.setLatido("Puesto2EnLinea");
+					pcs.firePropertyChange("Puesto2EnLinea", null, null);
+					break;
+				}
+				case "Puesto3": {
+					puesto3.setLatido("Puesto3EnLinea");
+					pcs.firePropertyChange("Puesto3EnLinea", null, null);
+					break;
+				}
+				case "Puesto4": {
+					puesto4.setLatido("Puesto4EnLinea");
+					pcs.firePropertyChange("Puesto4EnLinea", null, null);
+					break;
+				}
+				case "Puesto5": {
+					puesto5.setLatido("Puesto5EnLinea");
+					pcs.firePropertyChange("Puesto5EnLinea", null, null);
+					break;
+				}
+				case "Puesto6": {
+					puesto6.setLatido("Puesto6EnLinea");
+					pcs.firePropertyChange("Puesto6EnLinea", null, null);
+					break;
+				}
+				case "Puesto7": {
+					puesto7.setLatido("Puesto7EnLinea");
+					pcs.firePropertyChange("Puesto7EnLinea", null, null);
+					break;
+				}
+				case "Puesto8": {
+					puesto8.setLatido("Puesto8EnLinea");
+					pcs.firePropertyChange("Puesto8EnLinea", null, null);
+					break;
+				}
 				}
 				socket.close();
 			}

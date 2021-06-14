@@ -2,6 +2,12 @@ package back.servidor.persistencia;
 
 import java.io.Serializable;
 
+/**
+ * @author Grupo12 <br>
+ *         La Clase ClienteAtendido encapsula el nombre, dni, numero de puesto y
+ *         momento en que fue atendido. Implementa Serializable para su
+ *         persistencia<br>
+ */
 public class ClienteAtendido implements Serializable {
 
 	private static final long serialVersionUID = -8164820107088907633L;
@@ -9,9 +15,10 @@ public class ClienteAtendido implements Serializable {
 	private String dni;
 	private int numeroPuesto;
 	private String fecha;
-	
-	public ClienteAtendido() {}
-	
+
+	public ClienteAtendido() {
+	}
+
 	public ClienteAtendido(String nombre, String dni, int numeroPuesto) {
 		super();
 		this.nombre = nombre;
@@ -46,10 +53,8 @@ public class ClienteAtendido implements Serializable {
 
 	@Override
 	public String toString() {
-		return "[ Nombre : " + nombre + " || DNI : " + dni + " || Numero de Puesto : " + numeroPuesto + " || Fecha de atención : " + fecha + " ]";
+		return "[ Nombre : " + nombre + " || DNI : " + dni + " || Numero de Puesto : " + numeroPuesto
+				+ " || Fecha de atención : " + fecha + " ]";
 	}
-	
-	
-	
-	
+
 }

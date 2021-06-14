@@ -8,6 +8,12 @@ import java.net.Socket;
 import back.servidor.colaDeEspera.ColaDeEspera;
 import libreria.clasescompartidas.ListaDeTurnos;
 
+/**
+ * @author Grupo 12 Clase encargada de realizar backup del servidor.</br>
+ *         Se recibe la lista de turnos, la cola de espera, y los puestos de
+ *         trabajo del otro servidor mediante socket y se asignan al propio
+ *         servidor.
+ */
 public class ServerBackup implements Runnable {
 
 	private Administrador admin;

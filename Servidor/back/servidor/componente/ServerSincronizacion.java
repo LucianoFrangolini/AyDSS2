@@ -5,6 +5,11 @@ import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+/**
+ * @author Grupo 12 Clase encargada de sincronizar el servidor.</br>
+ *         Se envia la lista de turnos, la cola de espera, y los puestos de
+ *         trabajo al otro servidor mediante socket.
+ */
 public class ServerSincronizacion implements Runnable {
 
 	private Administrador admin;
@@ -28,7 +33,6 @@ public class ServerSincronizacion implements Runnable {
 			while (true) {
 				socket = sincronizacionServerSocket.accept();
 				this.admin.cambiarEstado(new EstadoSincronizado(admin));
-				//ACA CAMBIA ESTADO
 				ObjectOutputStream obOutput = new ObjectOutputStream(socket.getOutputStream());
 				obOutput.writeObject(this.admin.getListaDeTurnos());
 				obOutput.writeObject(this.admin.getColaDeEspera());
@@ -37,7 +41,7 @@ public class ServerSincronizacion implements Runnable {
 				socket.close();
 			}
 		} catch (IOException e) {
-		} 
+		}
 	}
 
 	public void start() {

@@ -35,8 +35,8 @@ import libreria.interfacescompartidas.Latido;
 
 /**
  * @author Grupo12 <br>
- *         Clase del Administrador de Puestos que implementa el patrón
- *         Singleton. <br>
+ *         Clase Administrador encargada de instanciar el servidor y sus
+ *         funcionalidades.<br>
  */
 public class Administrador implements PropertyChangeListener, ValidacionDNI, AdministracionDeCola,
 		AdministracionDeLista, ActualizacionDisplay, ActualizacionPuesto, Latido {
@@ -68,14 +68,14 @@ public class Administrador implements PropertyChangeListener, ValidacionDNI, Adm
 	private ServerSincronizacion servidorSincronizacion;
 
 	private Mapper mapeador;
-	
+
 	private Integer[] puestosDeTrabajo = { 0, 0, 0, 0, 0, 0, 0, 0 };
 
 	private ScheduledExecutorService scheduler;
 	private int tiempoHeartbeat;
 
 	/**
-	 * Constructor para el administrador de turnos.<br>
+	 * Constructor para el administrador.<br>
 	 */
 	public Administrador(String identificador) {
 
@@ -83,7 +83,7 @@ public class Administrador implements PropertyChangeListener, ValidacionDNI, Adm
 
 		this.pcs = new PropertyChangeSupport(this);
 		this.pcs.addPropertyChangeListener(this);
-		
+
 		cargarPropiedades(identificador);
 		this.colaDeEspera = ColaDeEsperaFactory.crearColaDeEspera(politicaDeAtencion);
 		this.estado = new EstadoSincronizado(this);
@@ -114,11 +114,11 @@ public class Administrador implements PropertyChangeListener, ValidacionDNI, Adm
 	protected Integer[] getPuestosDeTrabajo() {
 		return puestosDeTrabajo;
 	}
-	
+
 	protected Mapper getMapper() {
 		return this.mapeador;
 	}
-	
+
 	public String getIpServidor() {
 		return ipServidor;
 	}
@@ -130,7 +130,7 @@ public class Administrador implements PropertyChangeListener, ValidacionDNI, Adm
 	public int getPuertoServidorSincronizacion() {
 		return puertoServidorSincronizacion;
 	}
-	
+
 	public Redundancia getEstado() {
 		return estado;
 	}
@@ -139,6 +139,14 @@ public class Administrador implements PropertyChangeListener, ValidacionDNI, Adm
 		this.estado = estado;
 	}
 
+	/**
+	 * Metodo encargado de cargar la configuracion del servidor desde<br>
+	 * el archivo de propiedades determinado. Se asignan las direcciones IP,
+	 * puertos, tiempo de heartbeat, y metodo de atencion a utilizar.<br>
+	 * 
+	 * @param identificador Parametro utilizado para decidir cual implementacion de
+	 *                      propiedades se utilizara.<br>
+	 */
 	private void cargarPropiedades(String identificador) {
 		try {
 			Properties p = new Properties();
@@ -181,7 +189,7 @@ public class Administrador implements PropertyChangeListener, ValidacionDNI, Adm
 			JOptionPane.showMessageDialog(null, "Se encontró un problema leyendo el archivo de configuración");
 		}
 	}
-	
+
 	/**
 	 * Método encargado de enviar la orden de para abrir los puertos de conexión del
 	 * totem y de los puestos de trabajo.<br>
@@ -198,8 +206,8 @@ public class Administrador implements PropertyChangeListener, ValidacionDNI, Adm
 
 		this.servidorBackup = new ServerBackup(this, this.puertoEntradaBackup);
 		this.servidorBackup.start();
-		
-		this.servidorSincronizacion = new ServerSincronizacion(this,this.puertoEntradaSincronizacion);
+
+		this.servidorSincronizacion = new ServerSincronizacion(this, this.puertoEntradaSincronizacion);
 		this.servidorSincronizacion.start();
 
 		this.estado.intentarSincronizar();
@@ -241,7 +249,7 @@ public class Administrador implements PropertyChangeListener, ValidacionDNI, Adm
 		}
 		return ret;
 	}
-	
+
 	/**
 	 * Método encargado de agregar un turno en la lista de turnos.<br>
 	 * 
@@ -293,15 +301,20 @@ public class Administrador implements PropertyChangeListener, ValidacionDNI, Adm
 	public Cliente obtenerProximoCliente() {
 		return this.colaDeEspera.obtenerSiguiente();
 	}
-	
+
+	/**
+	 * Metodo encargado de actualizar la cola de clientes con los respectivos
+	 * nombres si esta registrado
+	 * 
+	 */
 	public void actualizarCola() {
 		Iterator<Cliente> iteradorClientes = this.colaDeEspera.getIteradorClientes();
-		Cliente nuevoCliente=null,viejoCliente=null;
+		Cliente nuevoCliente = null, viejoCliente = null;
 		while (iteradorClientes.hasNext()) {
 			viejoCliente = iteradorClientes.next();
 			nuevoCliente = this.mapeador.buscarCliente(viejoCliente.getDni());
-			if (nuevoCliente!=null) 
-				this.colaDeEspera.actualizarCliente(nuevoCliente,viejoCliente);
+			if (nuevoCliente != null)
+				this.colaDeEspera.actualizarCliente(nuevoCliente, viejoCliente);
 		}
 	}
 
